@@ -1,0 +1,7 @@
+syntax = "proto3";
+option go_package = ".;proto"; // 新版必须要有  决定pd.go文件的包名
+
+message Empty{}
+message Pong{
+  string id = 1;
+}

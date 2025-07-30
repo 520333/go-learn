@@ -1,0 +1,105 @@
+//@Library('devops@test') _
+@Library('test') _
+def msg = new org.devops.Msg()
+def myTools = new org.devops.Tools()
+
+pipeline {
+    agent {label "build1"}
+    parameters {
+        string(name: 'JAVA_VERSION', defaultValue: '8', description: 'JDK版本')
+        string(name: 'JAVA_BUILD_CMD', defaultValue: 'mvn -U clean package -f pom.xml -Dmaven.test.failure.ignore=true -Dmaven.test.skip=true dependency:list -T 1C -q', description: '构建命令')
+        choice(name: 'JAVA_BUILD_TYPE', choices: ['bin', 'docker'], description: '构建类型')
+        string(name: 'HARBOR_HOSTS', defaultValue: 'harbor.cu-sc.com', description: 'docker镜仓')
+        string(name: 'HARBOR_PROJECT', defaultValue: 'com-test', description: 'docker镜仓路径')
+        string(name: 'kubeconfig', defaultValue: 'com-test', description: 'K8S配置文件')
+        // string(name: 'ENV', defaultValue: 'test', description: 'k8s部署模板')
+    }
+    stages {
+        stage('拉取代码') {
+            steps {
+                script {
+                    msg.PrintMes("拉取代码...")
+                    myTools.GetCode("${GIT_BRANCH}", "${GIT_URL}", "deploy") //选项参数
+                }
+            }
+        }
+        
+        stage('代码编译') {
+            steps {
+                script {
+                    if (!fileExists("${MODULE}/pom.xml")) {
+                        error "POM file ${MODULE}/pom.xml does not exist"
+                    }else {
+                        env.APP_NAME = "${JOB_BASE_NAME.split("_")[0]}"
+                        env.ENV = "${JOB_BASE_NAME.split("_")[1]}"
+                        def finalName = sh(script: "mvn help:evaluate -Dexpression=project.build.finalName -q -DforceStdout --file ${MODULE}/pom.xml", returnStdout: true).trim()
+                        def packaging = sh(script: "mvn help:evaluate -Dexpression=project.packaging -q -DforceStdout --file ${MODULE}/pom.xml", returnStdout: true).trim()
+                        env.JARNAME = "${finalName}.${packaging}"
+                    }
+                    BUILD(
+                        buildType: params.JAVA_BUILD_TYPE,
+                        javaVersion: params.JAVA_VERSION,
+                        buildCmd: params.JAVA_BUILD_CMD
+                    )()
+
+                }
+            }
+        }
+
+        stage('制品并行上传') {
+            parallel {
+                stage('上传二进制包'){
+                    when { environment name: 'ACTION', value: 'Deploy' }
+                    steps{
+                        withCredentials([usernamePassword(credentialsId: 'artifactory', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
+                            script{
+                                sh 'curl -s -u"${USERNAME}:${PASSWORD}" -T ${MODULE}/target/${JARNAME} http://10.166.4.113:8081/artifactory/test/tms/${MODULE}/${GIT_BRANCH}/${MODULE}.jar |jq "{repo,size,createdBy,created,downloadUri}"'
+                            }
+                        }
+                    }
+                }
+
+                stage('上传容器镜像') {
+                    when { environment name: 'ACTION', value: 'Deploy' }
+                    steps {
+                        withCredentials([usernamePassword(credentialsId: 'artifactory', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
+                            script{
+                                
+                                sh '''
+                                    cd ${MODULE}
+                                    wget --auth-no-challenge  --http-user="${USERNAME}" --http-password="${PASSWORD}" \
+                                    http://10.166.4.113:8081/artifactory/test/Dockerfile-Jar -O Dockerfile
+                                    docker build --build-arg JAR_FILE=${JARNAME} -f Dockerfile -t ${HARBOR_HOSTS}/${HARBOR_PROJECT}/${APP_NAME}:${GIT_BRANCH} . --push
+                                    docker rmi ${HARBOR_HOSTS}/${HARBOR_PROJECT}/${APP_NAME}:${GIT_BRANCH}
+                                '''
+                            }
+                        }
+                    }
+                }
+                
+            }
+        }
+
+        stage('部署'){
+		    when { environment name: 'ACTION', value: 'Deploy' }
+            steps{
+                withCredentials([usernamePassword(credentialsId: 'artifactory', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
+                    script{
+                        sh '''
+                            wget --auth-no-challenge --http-user="${USERNAME}" --http-password="${PASSWORD}" \
+                            http://10.166.4.113:8081/artifactory/k8s/template/${APP_NAME}-Deployment-${ENV}.yml -O ${APP_NAME}-Deployment-${ENV}.yml
+                            
+                            sed -i "s#{HARBOR_HOSTS}#${HARBOR_HOSTS}#g" ${APP_NAME}-Deployment-${ENV}.yml
+                            sed -i "s#{HARBOR_PROJECT}#${HARBOR_PROJECT}#g" ${APP_NAME}-Deployment-${ENV}.yml
+                            sed -i "s#{APP_NAME}#${APP_NAME}#g" ${APP_NAME}-Deployment-${ENV}.yml
+                            sed -i "s#{GIT_BRANCH}#${GIT_BRANCH}#g" ${APP_NAME}-Deployment-${ENV}.yml
+                            kubectl apply -f ${APP_NAME}-Deployment-${ENV}.yml  --kubeconfig  /root/.kube/${kubeconfig}
+                        '''
+                    }
+                }
+            }
+        }
+        
+        
+    }
+}

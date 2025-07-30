@@ -1,0 +1,16 @@
+syntax = "proto3";
+package proto;
+
+option go_package = ".;proto"; // 新版必须要有  决定pd.go文件的包名
+
+service Greeter{
+  rpc SayHello(HelloRequest) returns(HelloReply); // Hello接口
+}
+
+message HelloRequest {
+  string name = 1;
+}
+
+message HelloReply{
+  string messgae =1;
+}
