@@ -7,17 +7,17 @@ import (
 
 func testReflect(i interface{}) {
 	reType := reflect.TypeOf(i)
-	fmt.Println(reType)
-	fmt.Printf("reType类型:%v\n", reType)
 
 	reValue := reflect.ValueOf(i)
-	fmt.Println(reValue)
-	fmt.Printf("reValue类型:%v\n", reValue)
+	k1 := reType.Kind()
+	fmt.Println(k1)
+	k2 := reValue.Kind()
+	fmt.Println(k2)
 
 	i2 := reValue.Interface()
 	n, flag := i2.(Student)
 	if flag {
-		fmt.Printf("学生名字:%v 年龄:%v\n", n.Name, n.Age)
+		fmt.Println(n.Name, n.Age)
 	}
 
 }
@@ -30,4 +30,6 @@ type Student struct {
 func main() {
 	var s Student = Student{Name: "派大星", Age: 18}
 	testReflect(s)
+	var num = 100
+	testReflect(num)
 }
