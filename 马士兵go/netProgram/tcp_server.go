@@ -172,23 +172,28 @@ func HandleConnConcurrency(conn net.Conn) {
 
 	//并发的写
 	wg.Add(1)
-	go SerWrite(conn, &wg)
+	go SerWrite(conn, &wg, "abcd\n")
+	wg.Add(1)
+	go SerWrite(conn, &wg, "efgh\n")
+	wg.Add(1)
+	go SerWrite(conn, &wg, "ijkl\n")
+
 	//并发的读
 	wg.Add(1)
 	go SerRead(conn, &wg)
 	wg.Wait()
 }
 
-func SerWrite(conn net.Conn, wg *sync.WaitGroup) {
+func SerWrite(conn net.Conn, wg *sync.WaitGroup, data string) {
 	//向客户端发送数据Write
 	defer wg.Done()
 	for {
-		wn, err := conn.Write([]byte("send some data from server" + "\n"))
+		wn, err := conn.Write([]byte(data))
 		if err != nil {
 			log.Println(err)
 		}
 		log.Printf("server write len is %d bytes\n", wn)
-		time.Sleep(time.Millisecond * 200)
+		time.Sleep(time.Millisecond * 1000)
 	}
 }
 func SerRead(conn net.Conn, wg *sync.WaitGroup) {

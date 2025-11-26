@@ -160,7 +160,7 @@ func CliWrite(conn net.Conn, wg *sync.WaitGroup) {
 			log.Println(err)
 		}
 		log.Printf("client write len is %d \n", wn)
-		time.Sleep(time.Millisecond * 500)
+		time.Sleep(time.Millisecond * 3000)
 	}
 }
 
