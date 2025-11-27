@@ -1,7 +1,10 @@
 package netProgram
 
 import (
+	"encoding/gob"
+	"encoding/json"
 	"log"
+	"math/rand/v2"
 	"net"
 	"sync"
 	"time"
@@ -183,7 +186,6 @@ func HandleConnConcurrency(conn net.Conn) {
 	go SerRead(conn, &wg)
 	wg.Wait()
 }
-
 func SerWrite(conn net.Conn, wg *sync.WaitGroup, data string) {
 	//向客户端发送数据Write
 	defer wg.Done()
@@ -206,5 +208,67 @@ func SerRead(conn net.Conn, wg *sync.WaitGroup) {
 			log.Println(err)
 		}
 		log.Println("received from server data is :", string(buf[:rn]))
+	}
+}
+
+// 格式化传输
+func TcpServerFormat() {
+	//基于地址建立监听
+	//address := "127.0.0.1:5678"
+	address := ":5678"
+	listener, err := net.Listen(tcp, address)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	defer listener.Close()
+	log.Printf("listening on %s\n", address)
+	//接受连接请求
+	for {
+		conn, err := listener.Accept()
+		if err != nil {
+			log.Fatalln(err)
+		}
+		go HandleConnFormat(conn)
+	}
+}
+func HandleConnFormat(conn net.Conn) {
+	log.Printf("accept connection from %s\n", conn.RemoteAddr())
+	defer conn.Close()
+	wg := sync.WaitGroup{}
+
+	//发送端写
+	wg.Add(1)
+	go SerWriteFormat(conn, &wg)
+
+	wg.Wait()
+}
+func SerWriteFormat(conn net.Conn, wg *sync.WaitGroup) {
+	defer wg.Done()
+	for {
+		//向客户端发送数据Write
+		// 数据编码后发送
+		type Message struct {
+			Id      uint   `json:"id,omitempty"`
+			Code    string `json:"code,omitempty"`
+			Content string `json:"content,omitempty"`
+		}
+		var message = Message{Id: uint(rand.Int()), Code: "SERVER-STANDARD", Content: "message from server"}
+		//1.JSON 文本编码
+		encoder := json.NewEncoder(conn)
+		if err := encoder.Encode(message); err != nil {
+			log.Println(err)
+			continue
+		}
+		log.Println("message was send json")
+		time.Sleep(time.Millisecond * 1000)
+
+		//2.GOB 二进制编码
+		g := gob.NewEncoder(conn)
+		if err := g.Encode(message); err != nil {
+			log.Println(err)
+			continue
+		}
+		log.Println("message was send gob")
+		time.Sleep(time.Millisecond * 1000)
 	}
 }

@@ -1,6 +1,8 @@
 package netProgram
 
 import (
+	"encoding/gob"
+	"encoding/json"
 	"log"
 	"net"
 	"sync"
@@ -163,7 +165,6 @@ func CliWrite(conn net.Conn, wg *sync.WaitGroup) {
 		time.Sleep(time.Millisecond * 3000)
 	}
 }
-
 func CliRead(conn net.Conn, wg *sync.WaitGroup) {
 	// 从客户端接受数据Read
 	defer wg.Done()
@@ -174,5 +175,55 @@ func CliRead(conn net.Conn, wg *sync.WaitGroup) {
 			log.Println(err)
 		}
 		log.Println("received from server data is :", string(buf[:rn]))
+	}
+}
+
+// 格式化输出
+func TcpClientFormat() {
+	server_address := ":5678"
+	conn, err := net.DialTimeout(tcp, server_address, time.Second)
+	if err != nil {
+		log.Fatalln(err)
+		return
+	}
+	defer conn.Close()
+	log.Printf("dial connection establish,client addr %s\n", conn.LocalAddr())
+	conn.LocalAddr()
+
+	wg := sync.WaitGroup{}
+
+	//接收端
+	wg.Add(1)
+	go CliReadFormat(conn, &wg)
+	wg.Wait()
+
+}
+func CliReadFormat(conn net.Conn, wg *sync.WaitGroup) {
+	defer wg.Done()
+	for {
+		// 从客户端接受数据Read
+		// 从服务端接收数据
+		type Message struct {
+			Id      uint   `json:"id,omitempty"`
+			Code    string `json:"code,omitempty"`
+			Content string `json:"content,omitempty"`
+		}
+		var message = Message{}
+		//1.JSON 文本解码
+		decoder := json.NewDecoder(conn)
+		if err := decoder.Decode(&message); err != nil {
+			log.Println(err)
+			continue
+		}
+		log.Println("json", message)
+
+		//2.GOB 二进制解码
+		g := gob.NewDecoder(conn)
+		if err := g.Decode(&message); err != nil {
+			log.Println(err)
+			continue
+		}
+		log.Println("gob", message)
+
 	}
 }

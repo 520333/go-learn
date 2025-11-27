@@ -30,10 +30,13 @@ func TestTcpClientRW(t *testing.T) {
 func TestTcpW(t *testing.T) {
 	TcpW()
 }
-
 func TestTcpServerRWConcurrency(t *testing.T) {
 	TcpServerRWConcurrency()
 }
-func TestTcpClientRWConcurrency(t *testing.T) {
-	TcpClientRWConcurrency()
+
+func TestTcpServerFormat(t *testing.T) {
+	TcpServerFormat()
+}
+func TestTcpClientFormat(t *testing.T) {
+	TcpClientFormat()
 }
