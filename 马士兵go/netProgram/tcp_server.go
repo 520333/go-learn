@@ -1,8 +1,11 @@
 package netProgram
 
 import (
+	"context"
 	"encoding/gob"
 	"encoding/json"
+	"errors"
+	"io"
 	"log"
 	"math/rand/v2"
 	"net"
@@ -325,4 +328,83 @@ func SerWriteShort(conn net.Conn, wg *sync.WaitGroup) {
 	return
 }
 
-// 长连接
+// 心跳检测
+func TcpServerHB() {
+	//基于地址建立监听
+	//address := "127.0.0.1:5678"
+	address := ":5678"
+	listener, err := net.Listen(tcp, address)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	defer listener.Close()
+	log.Printf("listening on %s\n", address)
+	//接受连接请求
+	for {
+		conn, err := listener.Accept()
+		if err != nil {
+			log.Fatalln(err)
+		}
+		go HandleConnHB(conn)
+	}
+}
+func HandleConnHB(conn net.Conn) {
+	log.Printf("accept connection from %s\n", conn.RemoteAddr())
+	defer func() {
+		conn.Close()
+		log.Println("connection be closed")
+	}()
+	//独立的 goroutine 连接建立后周期性发送Ping
+	wg := sync.WaitGroup{}
+	//发送端写
+	wg.Add(1)
+	go SerPing(conn, &wg)
+	wg.Wait()
+}
+func SerPing(conn net.Conn, wg *sync.WaitGroup) {
+	defer wg.Done()
+	//接受Pong
+	ctx, cancel := context.WithCancel(context.Background())
+	go SerReadPong(conn, ctx)
+
+	const maxPingNum = 3
+	var pingErrCounter = 0
+	ticker := time.NewTicker(time.Second * 3)
+	for t := range ticker.C {
+		var pingMsg = MessageHB{ID: uint(rand.Int()), Code: "PING-SERVER", Time: t}
+		//2.GOB 二进制编码
+		g := gob.NewEncoder(conn)
+		if err := g.Encode(pingMsg); err != nil {
+			log.Println(err)
+			//连接有问题的情况
+			pingErrCounter++
+			if pingErrCounter == maxPingNum {
+				cancel()
+				return
+			}
+		}
+		log.Printf("ping send to %v ping id is %v\n", conn.RemoteAddr(), pingMsg.ID)
+	}
+}
+func SerReadPong(conn net.Conn, ctx context.Context) {
+	for {
+		select {
+		case <-ctx.Done():
+			return
+		default:
+			var message = MessageHB{}
+			g := gob.NewDecoder(conn)
+			err := g.Decode(&message)
+			if err != nil && errors.Is(err, io.EOF) {
+				log.Println(err)
+				break
+			}
+			//判断是否为pong类型消息
+			if message.Code == "PONG-CLIENT" {
+				log.Printf("receive pong from %s,%v\n", conn.RemoteAddr(), message.Content)
+			}
+		}
+	}
+}
+
+//长连接

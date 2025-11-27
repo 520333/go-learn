@@ -40,10 +40,17 @@ func TestTcpServerFormat(t *testing.T) {
 func TestTcpClientFormat(t *testing.T) {
 	TcpClientFormat()
 }
+
 func TestTcpServerShort(t *testing.T) {
 	TcpServerShort()
 }
-
 func TestTcpClientShort(t *testing.T) {
 	TcpClientShort()
+}
+
+func TestTcpServerHB(t *testing.T) {
+	TcpServerHB()
+}
+func TestTcpClientHB(t *testing.T) {
+	TcpClientHB()
 }

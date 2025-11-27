@@ -4,8 +4,10 @@ import (
 	"encoding/gob"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"log"
+	"math/rand/v2"
 	"net"
 	"sync"
 	"time"
@@ -273,4 +275,63 @@ func CliReadShort(conn net.Conn, wg *sync.WaitGroup) {
 	}
 }
 
-// 长连接
+// 响应服务端的心跳检测
+type MessageHB struct {
+	ID      uint      `json:"id,omitempty"`
+	Code    string    `json:"code,omitempty"`
+	Content string    `json:"content,omitempty"`
+	Time    time.Time `json:"time,omitempty"`
+}
+
+func TcpClientHB() {
+	server_address := ":5678"
+	conn, err := net.DialTimeout(tcp, server_address, time.Second)
+	if err != nil {
+		log.Fatalln(err)
+		return
+	}
+	defer conn.Close()
+	log.Printf("dial connection establish,client addr %s\n", conn.LocalAddr())
+	conn.LocalAddr()
+	wg := sync.WaitGroup{}
+
+	//接收端
+	wg.Add(1)
+	go CliReadPing(conn, &wg)
+	wg.Wait()
+
+}
+func CliReadPing(conn net.Conn, wg *sync.WaitGroup) {
+	defer wg.Done()
+	var message = MessageHB{}
+	for {
+		g := gob.NewDecoder(conn)
+		err := g.Decode(&message)
+		if err != nil && errors.Is(err, io.EOF) {
+			log.Println(err)
+			break
+		}
+		//判断是否为ping类型消息
+		if message.Code == "PING-SERVER" {
+			log.Println("receive ping from", conn.RemoteAddr())
+			CliWritePong(conn, message)
+		}
+	}
+}
+func CliWritePong(conn net.Conn, pingMsg MessageHB) {
+
+	var pongMsg = MessageHB{
+		ID:      uint(rand.Int()),
+		Code:    "PONG-CLIENT",
+		Content: fmt.Sprintf("pingID:%v", pingMsg.ID),
+		Time:    time.Now(),
+	}
+
+	g := gob.NewEncoder(conn)
+	if err := g.Encode(pongMsg); err != nil {
+		log.Println(err)
+		return
+	}
+	log.Println("pong was send to", conn.RemoteAddr())
+	return
+}
