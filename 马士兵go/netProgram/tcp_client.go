@@ -3,6 +3,8 @@ package netProgram
 import (
 	"encoding/gob"
 	"encoding/json"
+	"errors"
+	"io"
 	"log"
 	"net"
 	"sync"
@@ -227,3 +229,48 @@ func CliReadFormat(conn net.Conn, wg *sync.WaitGroup) {
 
 	}
 }
+
+// 短连接
+func TcpClientShort() {
+	server_address := ":5678"
+	conn, err := net.DialTimeout(tcp, server_address, time.Second)
+	if err != nil {
+		log.Fatalln(err)
+		return
+	}
+	defer conn.Close()
+	log.Printf("dial connection establish,client addr %s\n", conn.LocalAddr())
+	conn.LocalAddr()
+
+	wg := sync.WaitGroup{}
+
+	//接收端
+	wg.Add(1)
+	go CliReadShort(conn, &wg)
+	wg.Wait()
+
+}
+func CliReadShort(conn net.Conn, wg *sync.WaitGroup) {
+	defer wg.Done()
+	type Message struct {
+		Id      uint   `json:"id,omitempty"`
+		Code    string `json:"code,omitempty"`
+		Content string `json:"content,omitempty"`
+	}
+	var message = Message{}
+	for {
+		// 从客户端接受数据Read
+		// 从服务端接收数据
+		//2.GOB 二进制解码
+		g := gob.NewDecoder(conn)
+		err := g.Decode(&message)
+		if err != nil && errors.Is(err, io.EOF) {
+			log.Println(err)
+			log.Println("link was closed")
+			break
+		}
+		log.Println("gob", message)
+	}
+}
+
+// 长连接
