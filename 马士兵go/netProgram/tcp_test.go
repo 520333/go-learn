@@ -78,3 +78,11 @@ func TestTcpServerStickyCoder(t *testing.T) {
 func TestTcpClientStickyCoder(t *testing.T) {
 	TcpClientStickyCoder()
 }
+
+// 粘包现象测试
+func TestTcpServerSpecial(t *testing.T) {
+	TcpServerSpecial()
+}
+func TestTcpClientSpecial(t *testing.T) {
+	TcpClientSpecial()
+}

@@ -498,3 +498,37 @@ func HandleConnStickyCoder(conn net.Conn) {
 		}
 	}
 }
+
+// TCP专用方法
+func TcpServerSpecial() {
+	laddr, err := net.ResolveTCPAddr(tcp, ":5678")
+	if err != nil {
+		log.Fatalln(err)
+	}
+	tcpListener, err := net.ListenTCP(tcp, laddr)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	defer tcpListener.Close()
+	log.Printf("%v server is listening on %v\n", tcp, tcpListener.Addr())
+	for {
+		tcpConn, err := tcpListener.AcceptTCP()
+		if err != nil {
+			log.Fatalln(err)
+			continue
+		}
+		go HandlerTcpConnSpecial(tcpConn)
+	}
+
+}
+
+func HandlerTcpConnSpecial(tcpConn *net.TCPConn) {
+	log.Printf("accept connection from %s\n", tcpConn.RemoteAddr())
+	data := "tcp message."
+	n, err := tcpConn.Write([]byte(data))
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	log.Println("send len:", n)
+}

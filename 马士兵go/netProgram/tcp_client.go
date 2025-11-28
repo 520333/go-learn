@@ -414,3 +414,26 @@ func TcpClientStickyCoder() {
 		i++
 	}
 }
+
+// TcpClientSpecial TCP专用客户端拨号方法
+func TcpClientSpecial() {
+	raddr, err := net.ResolveTCPAddr(tcp, ":5678")
+	if err != nil {
+		log.Fatalln(err)
+	}
+	tcpConn, err := net.DialTCP(tcp, nil, raddr)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	defer tcpConn.Close()
+	log.Printf("dial connection establish,client addr %s\n", tcpConn.LocalAddr())
+	for {
+		buf := make([]byte, 1024)
+		rn, err := tcpConn.Read(buf)
+		if err != nil {
+			log.Println(err)
+			return
+		}
+		log.Printf("received data:%v     len:%v", string(buf[:rn]), len(buf[:rn]))
+	}
+}
