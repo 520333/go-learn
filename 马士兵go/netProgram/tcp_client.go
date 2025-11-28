@@ -335,3 +335,36 @@ func CliWritePong(conn net.Conn, pingMsg MessageHB) {
 	log.Println("pong was send to", conn.RemoteAddr())
 	return
 }
+
+// 连接池客户端
+func TcpClientPool() {
+	server_address := ":5678"
+	//建立连接池
+	pool, err := NewTcpPool(server_address, PoolConfig{
+		Factory:     &TcpConnFactory{},
+		InitConnNum: 4,
+	})
+	if err != nil {
+		log.Fatalln(err)
+	}
+	log.Println("pool created", pool.Len())
+	wg := sync.WaitGroup{}
+	clientNum := 50
+	wg.Add(clientNum)
+	for i := 0; i < clientNum; i++ {
+		go func(wg *sync.WaitGroup) {
+			defer wg.Done()
+			conn, err := pool.Get()
+			if err != nil {
+				log.Println(err)
+				return
+			}
+			//log.Println(conn)
+			_ = pool.Put(conn)
+		}(&wg)
+	}
+	wg.Wait()
+	//释放连接池
+	_ = pool.Release()
+	log.Println(pool, pool.idleList)
+}

@@ -54,3 +54,11 @@ func TestTcpServerHB(t *testing.T) {
 func TestTcpClientHB(t *testing.T) {
 	TcpClientHB()
 }
+
+// 连接池测试
+func TestTcpServerPool(t *testing.T) {
+	TcpServerPool()
+}
+func TestTcpClientPool(t *testing.T) {
+	TcpClientPool()
+}

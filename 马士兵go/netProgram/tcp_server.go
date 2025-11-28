@@ -407,4 +407,28 @@ func SerReadPong(conn net.Conn, ctx context.Context) {
 	}
 }
 
-//长连接
+// 测试连接池服务端
+func TcpServerPool() {
+	address := ":5678"
+	listener, err := net.Listen(tcp, address)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	defer listener.Close()
+	for {
+		conn, err := listener.Accept()
+		if err != nil {
+			log.Fatalln(err)
+		}
+		go HandleConnPool(conn)
+	}
+	log.Printf("%s server is listening on %s\n", tcp, listener.Addr())
+}
+func HandleConnPool(conn net.Conn) {
+	log.Printf("accept connection from %s\n", conn.RemoteAddr())
+	defer func() {
+		conn.Close()
+		log.Println("connection be closed")
+	}()
+	select {}
+}
