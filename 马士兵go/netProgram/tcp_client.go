@@ -368,3 +368,25 @@ func TcpClientPool() {
 	_ = pool.Release()
 	log.Println(pool, pool.idleList)
 }
+
+// 粘包现象
+func TcpClientSticky() {
+	server_address := ":5678"
+	conn, err := net.DialTimeout(tcp, server_address, time.Second)
+	if err != nil {
+		log.Fatalln(err)
+		return
+	}
+	defer conn.Close()
+	log.Printf("dial connection establish,client addr %s\n", conn.LocalAddr())
+
+	buf := make([]byte, 1024)
+	for {
+		rn, err := conn.Read(buf)
+		if err != nil {
+			log.Println(err)
+			break
+		}
+		log.Println("received data:", string(buf[:rn]))
+	}
+}

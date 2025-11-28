@@ -422,13 +422,46 @@ func TcpServerPool() {
 		}
 		go HandleConnPool(conn)
 	}
-	log.Printf("%s server is listening on %s\n", tcp, listener.Addr())
+	log.Printf("%v server is listening on %v\n", tcp, listener.Addr())
 }
 func HandleConnPool(conn net.Conn) {
 	log.Printf("accept connection from %s\n", conn.RemoteAddr())
 	defer func() {
-		conn.Close()
+		_ = conn.Close()
 		log.Println("connection be closed")
 	}()
 	select {}
+}
+
+// 粘包现象
+func TcpServerSticky() {
+	address := ":5678"
+	listener, err := net.Listen(tcp, address)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	defer listener.Close()
+	log.Printf("%v server is listening on %v\n", tcp, listener.Addr())
+	for {
+		conn, err := listener.Accept()
+		if err != nil {
+			log.Fatalln(err)
+		}
+		go HandleConnSticky(conn)
+	}
+}
+func HandleConnSticky(conn net.Conn) {
+	log.Printf("accept connection from %s\n", conn.RemoteAddr())
+	defer func() {
+		_ = conn.Close()
+		log.Println("connection be closed")
+	}()
+	//连续发送数据
+	data := "package data."
+	for i := 0; i < 50; i++ {
+		_, err := conn.Write([]byte(data))
+		if err != nil {
+			log.Println(err)
+		}
+	}
 }

@@ -62,3 +62,11 @@ func TestTcpServerPool(t *testing.T) {
 func TestTcpClientPool(t *testing.T) {
 	TcpClientPool()
 }
+
+// 粘包现象测试
+func TestTcpServerSticky(t *testing.T) {
+	TcpServerSticky()
+}
+func TestTcpClientSticky(t *testing.T) {
+	TcpClientSticky()
+}
