@@ -465,3 +465,36 @@ func HandleConnSticky(conn net.Conn) {
 		}
 	}
 }
+
+// 粘包现象编解码器
+func TcpServerStickyCoder() {
+	address := ":5678"
+	listener, err := net.Listen(tcp, address)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	defer listener.Close()
+	log.Printf("%v server is listening on %v\n", tcp, listener.Addr())
+	for {
+		conn, err := listener.Accept()
+		if err != nil {
+			log.Fatalln(err)
+		}
+		go HandleConnStickyCoder(conn)
+	}
+}
+func HandleConnStickyCoder(conn net.Conn) {
+	log.Printf("accept connection from %s\n", conn.RemoteAddr())
+	defer func() {
+		_ = conn.Close()
+		log.Println("connection be closed")
+	}()
+	//连续发送数据
+	data := []string{"package data.", "package.", "packa"}
+	encoder := NewEncoder(conn)
+	for i := 0; i < 50; i++ {
+		if err := encoder.Encode(data[rand.IntN(len(data))]); err != nil {
+			log.Println(err)
+		}
+	}
+}

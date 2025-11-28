@@ -390,3 +390,27 @@ func TcpClientSticky() {
 		log.Println("received data:", string(buf[:rn]))
 	}
 }
+
+// 粘包现象编解码器
+func TcpClientStickyCoder() {
+	server_address := ":5678"
+	conn, err := net.DialTimeout(tcp, server_address, time.Second)
+	if err != nil {
+		log.Fatalln(err)
+		return
+	}
+	defer conn.Close()
+	log.Printf("dial connection establish,client addr %s\n", conn.LocalAddr())
+
+	decoder := NewDecoder(conn)
+	data := ""
+	i := 0
+	for {
+		if err := decoder.Decode(&data); err != nil {
+			log.Println(err)
+			break
+		}
+		log.Println(i, "received data:", data)
+		i++
+	}
+}
