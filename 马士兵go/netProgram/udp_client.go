@@ -1,9 +1,12 @@
 package netProgram
 
 import (
+	"errors"
 	"fmt"
+	"io"
 	"log"
 	"net"
+	"os"
 	"time"
 )
 
@@ -141,4 +144,59 @@ func UdpSenderBroadCast() {
 		log.Printf("send %s(%v) to %s\n", string(data), wn, raddr)
 		time.Sleep(time.Second)
 	}
+}
+
+// UdpFileUploadClient 文件传输(上传)
+func UdpFileUploadClient() {
+	// 1.获取文件信息
+	fileName := "D:/D/zhaochuan.mp3"
+	// 打开文件
+	file, err := os.Open(fileName)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	defer func(file *os.File) {
+		_ = file.Close()
+	}(file)
+	// 获取文件
+	fileInfo, _ := file.Stat()
+	//fileInfo.Size(), fileInfo.Name()
+	log.Println("send file size:", fileInfo.Size())
+	// 2.连接服务器
+	rAddress := "192.168.50.100:5678"
+	rAddr, _ := net.ResolveUDPAddr(udp, rAddress)
+	udpConn, _ := net.DialUDP(udp, nil, rAddr)
+	defer func(udpConn *net.UDPConn) {
+		_ = udpConn.Close()
+	}(udpConn)
+
+	// 3.发送文件名字
+	if _, err := udpConn.Write([]byte(fileInfo.Name())); err != nil {
+		log.Fatalln(err)
+	}
+
+	// 4.服务端确认
+	buf := make([]byte, 4*1024)
+	rn, _ := udpConn.Read(buf)
+	if "fileName ok" != string(buf[:rn]) {
+		log.Fatalln(errors.New("server not ready"))
+	}
+	// 5.发送文件内容
+	i := 0
+	for {
+		rn, err := file.Read(buf)
+		if err != nil {
+			if err == io.EOF {
+				break
+			}
+			log.Fatalln(err)
+		}
+		if _, err := udpConn.Write(buf[:rn]); err != nil {
+			log.Fatalln(err)
+		}
+		i++
+	}
+	log.Println(i)
+	log.Println("file upload complete.")
+	time.Sleep(time.Second * 2)
 }

@@ -3,6 +3,7 @@ package netProgram
 import (
 	"log"
 	"net"
+	"os"
 )
 
 const udp = "udp"
@@ -146,5 +147,49 @@ func UdpReceiverBroadCast() {
 	for {
 		rn, raddr, _ := udpConn.ReadFromUDP(buf)
 		log.Printf("receives from %s data %s\n", string(buf[:rn]), raddr)
+	}
+}
+
+// UdpFileUploadServer UDP文件上传
+func UdpFileUploadServer() {
+	// 1.建立UDP连接
+	lAddress := ":5678"
+	lAddr, _ := net.ResolveUDPAddr(udp, lAddress)
+	udpConn, _ := net.ListenUDP(udp, lAddr)
+	defer func(udpConn *net.UDPConn) {
+		_ = udpConn.Close()
+	}(udpConn)
+	log.Printf("%s server is listening on %s\n", udp, udpConn.LocalAddr())
+
+	// 2.接受文件名并确认
+	buf := make([]byte, 4*1024)
+	rn, raddr, err := udpConn.ReadFromUDP(buf)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	fileName := string(buf[:rn])
+	if _, err := udpConn.WriteToUDP([]byte("fileName ok"), raddr); err != nil {
+		log.Fatalln(err)
+	}
+	// 3.接受文件内容，并写入文件
+	file, err := os.Create(fileName)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	defer func(file *os.File) {
+		_ = file.Close()
+	}(file)
+	i := 0
+	for {
+		rn, _, err := udpConn.ReadFromUDP(buf)
+		if err != nil {
+			log.Println(err)
+		}
+		// 写入文件
+		if _, err := file.Write(buf[:rn]); err != nil {
+			log.Println(err)
+		}
+		i++
+		log.Println("file write some content", i)
 	}
 }

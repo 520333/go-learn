@@ -39,3 +39,11 @@ func TestUdpReceiverBroadCast(t *testing.T) {
 func TestUdpSenderBroadCast(t *testing.T) {
 	UdpSenderBroadCast()
 }
+
+// udp文件上传
+func TestUdpFileUploadServer(t *testing.T) {
+	UdpFileUploadServer()
+}
+func TestUdpFileUploadClient(t *testing.T) {
+	UdpFileUploadClient()
+}
