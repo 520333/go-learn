@@ -37,6 +37,7 @@ func GoroutineGo() {
 }
 
 func GoroutineWG() {
+	fmt.Println("当前CPU核心数:", runtime.NumCPU())
 	wg := sync.WaitGroup{}
 	// 定义输出奇数的函数
 	printOdd := func() {
@@ -120,4 +121,32 @@ func GoroutineAnts() {
 			log.Fatalln(err)
 		}
 	}
+}
+
+func GoroutineSched() {
+	//输出奇数
+	max := 100
+	wg := sync.WaitGroup{}
+	wg.Add(2)
+	//设置1个P调度G
+	runtime.GOMAXPROCS(1)
+	go func() {
+		defer wg.Done()
+		for i := 1; i <= max; i += 2 {
+			fmt.Print(i, " ")
+			//time.Sleep(time.Millisecond * 1)
+			// 主动让出调度
+			runtime.Gosched()
+		}
+	}()
+	//输出偶数
+	go func() {
+		defer wg.Done()
+		for i := 2; i <= max; i += 2 {
+			fmt.Print(i, " ")
+			//time.Sleep(time.Millisecond * 1)
+			runtime.Gosched()
+		}
+	}()
+	wg.Wait()
 }

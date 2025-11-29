@@ -18,3 +18,6 @@ func TestGoroutineNum(t *testing.T) {
 func TestGoroutineAnts(*testing.T) {
 	GoroutineAnts()
 }
+func TestGoroutineSched(*testing.T) {
+	GoroutineSched()
+}
