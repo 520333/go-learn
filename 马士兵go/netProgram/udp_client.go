@@ -1,8 +1,10 @@
 package netProgram
 
 import (
+	"fmt"
 	"log"
 	"net"
+	"time"
 )
 
 func UdpClientBasic() {
@@ -97,4 +99,29 @@ func UdpClientPeer() {
 		log.Fatalln(err)
 	}
 	log.Printf("receives from %s data %s\n", string(buf[:rn]), raddr)
+}
+
+// UdpSenderMultiCast 多播发送端
+func UdpSenderMultiCast() {
+	// 1建立连接
+	address := "224.1.1.2:6789"
+	raddr, err := net.ResolveUDPAddr(udp, address)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	udpConn, err := net.DialUDP(udp, nil, raddr)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	// 2发送数据 循环发送
+	for {
+		data := fmt.Sprintf("[%s]: %s", time.Now().Format("15:04:05.000"), "hello")
+		wn, err := udpConn.Write([]byte(data))
+		if err != nil {
+			log.Println(err)
+		}
+		log.Printf("send %s(%v) to %s\n", string(data), wn, raddr)
+		time.Sleep(time.Second)
+	}
+
 }

@@ -106,3 +106,28 @@ func UdpServerPeer() {
 	}
 	log.Printf("send %s(%v) from to %s\n", string(data), wn, raddr)
 }
+
+// UdpReceiverMultiCast 多播接收端
+func UdpReceiverMultiCast() {
+	// 1组播监听地址
+	address := "224.1.1.2:6789"
+	gaddr, err := net.ResolveUDPAddr(udp, address)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	// 2组播监听
+	udpConn, err := net.ListenMulticastUDP(udp, nil, gaddr)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	// 3接收数据 循环接受
+	buf := make([]byte, 1024)
+	for {
+		rn, raddr, err := udpConn.ReadFromUDP(buf)
+		if err != nil {
+			log.Println(err)
+		}
+		log.Printf("receives %s from data %s\n", string(buf[:rn]), raddr)
+	}
+}

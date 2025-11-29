@@ -23,3 +23,11 @@ func TestUdpServerPeer(t *testing.T) {
 func TestUdpClientPeer(t *testing.T) {
 	UdpClientPeer()
 }
+
+// 组播测试
+func TestUdpReceiverMultiCast(t *testing.T) {
+	UdpReceiverMultiCast()
+}
+func TestUdpSenderMultiCast(t *testing.T) {
+	UdpSenderMultiCast()
+}
