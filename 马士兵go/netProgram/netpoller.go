@@ -101,7 +101,7 @@ func NIONet() {
 	wg.Wait()
 }
 
-// BIOChannel channel go自管理数据的IO阻塞
+// NIOChannel channel go自管理数据的IO阻塞
 func NIOChannel() {
 	var wg = sync.WaitGroup{}
 	var ch = make(chan struct{ id uint }, 1)
