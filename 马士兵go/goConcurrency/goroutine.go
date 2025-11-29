@@ -35,7 +35,6 @@ func GoroutineGo() {
 func GoroutineWG() {
 	wg := sync.WaitGroup{}
 	// 定义输出奇数的函数
-
 	printOdd := func() {
 		defer wg.Done()
 		for i := 1; i <= 10; i += 2 {
@@ -43,7 +42,6 @@ func GoroutineWG() {
 			time.Sleep(time.Millisecond * 100)
 		}
 	}
-
 	// 定义输出偶数的函数
 	printEven := func() {
 		defer wg.Done()
