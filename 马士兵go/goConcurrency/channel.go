@@ -2,6 +2,7 @@ package goConcurrency
 
 import (
 	"fmt"
+	"runtime"
 	"time"
 )
 
@@ -18,4 +19,22 @@ func ChannelOperate() {
 		fmt.Println("Received from channel, value is:", v)
 	}()
 	time.Sleep(time.Second)
+}
+
+func ChannelGoroutineNumCtr() {
+	go func() {
+		for {
+			fmt.Println("NumGoroutine:", runtime.NumGoroutine())
+			time.Sleep(time.Millisecond * 500)
+		}
+	}()
+	const size = 1024
+	ch := make(chan struct{}, size)
+	for {
+		ch <- struct{}{}
+		go func() {
+			time.Sleep(time.Second * 10)
+			<-ch
+		}()
+	}
 }
