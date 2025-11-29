@@ -8,3 +8,7 @@ func TestBIONet(t *testing.T) {
 func TestBIOChannel(t *testing.T) {
 	BIOChannel()
 }
+
+func TestNIONet(t *testing.T) {
+	NIONet()
+}
