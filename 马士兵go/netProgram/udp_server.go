@@ -131,3 +131,20 @@ func UdpReceiverMultiCast() {
 		log.Printf("receives %s from data %s\n", string(buf[:rn]), raddr)
 	}
 }
+
+// UdpReceiverBroadCast 广播接收端
+func UdpReceiverBroadCast() {
+	// 1广播监听地址
+	laddr, _ := net.ResolveUDPAddr(udp, ":6789")
+
+	// 2广播监听
+	udpConn, _ := net.ListenUDP(udp, laddr)
+
+	// 3接受数据
+	// 4处理数据
+	buf := make([]byte, 1024)
+	for {
+		rn, raddr, _ := udpConn.ReadFromUDP(buf)
+		log.Printf("receives from %s data %s\n", string(buf[:rn]), raddr)
+	}
+}

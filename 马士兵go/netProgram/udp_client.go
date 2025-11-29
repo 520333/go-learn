@@ -125,3 +125,20 @@ func UdpSenderMultiCast() {
 	}
 
 }
+
+// UdpSenderBroadCast 广播发送端
+func UdpSenderBroadCast() {
+	// 1监听地址
+	// 2建立连接
+	laddr, _ := net.ResolveUDPAddr(udp, ":9876")
+	udpConn, _ := net.ListenUDP(udp, laddr)
+	// 3发送数据
+	rAddress := "192.168.50.255:6789"
+	raddr, _ := net.ResolveUDPAddr(udp, rAddress)
+	for {
+		data := fmt.Sprintf("[%s]: %s", time.Now().Format("15:04:05.000"), "hello!!!")
+		wn, _ := udpConn.WriteToUDP([]byte(data), raddr)
+		log.Printf("send %s(%v) to %s\n", string(data), wn, raddr)
+		time.Sleep(time.Second)
+	}
+}

@@ -31,3 +31,11 @@ func TestUdpReceiverMultiCast(t *testing.T) {
 func TestUdpSenderMultiCast(t *testing.T) {
 	UdpSenderMultiCast()
 }
+
+// 广播测试
+func TestUdpReceiverBroadCast(t *testing.T) {
+	UdpReceiverBroadCast()
+}
+func TestUdpSenderBroadCast(t *testing.T) {
+	UdpSenderBroadCast()
+}
