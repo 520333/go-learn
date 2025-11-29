@@ -130,3 +130,53 @@ func NIOChannel() {
 	}(&wg)
 	wg.Wait()
 }
+
+func NIONetChannel() {
+	addr := "127.0.0.1:5678"
+	var wg = sync.WaitGroup{}
+	// 1模拟读 体会读的阻塞状态
+	wg.Add(1)
+	go func(wg *sync.WaitGroup) {
+		defer wg.Done()
+		conn, _ := net.Dial("tcp", addr)
+		defer conn.Close()
+		log.Println("start read:", time.Now().Format("15:04:05.000"))
+
+		// 独立 goroutine 完成Read操作 将结果Send到channel中
+		wgwg := sync.WaitGroup{}
+		chRead := make(chan []byte, 1)
+		wgwg.Add(1)
+		go func(wgwg *sync.WaitGroup) {
+			defer wgwg.Done()
+			buf := make([]byte, 1024)
+			n, _ := conn.Read(buf)
+			chRead <- buf[:n]
+		}(&wgwg)
+		time.Sleep(time.Millisecond * 100)
+		var data []byte
+		select {
+		case data = <-chRead:
+		default:
+		}
+		log.Println("content:", string(data), time.Now().Format("15:04:05.000"))
+		wgwg.Wait()
+	}(&wg)
+
+	wg.Add(1)
+	// 2模拟写
+	go func(wg *sync.WaitGroup) {
+		defer wg.Done()
+		l, _ := net.Listen("tcp", addr)
+		defer l.Close()
+		for {
+			conn, _ := l.Accept()
+			go func(conn net.Conn) {
+				defer conn.Close()
+				log.Println("connected")
+				//time.Sleep(time.Second * 3)
+				conn.Write([]byte("Bloking I/ O"))
+			}(conn)
+		}
+	}(&wg)
+	wg.Wait()
+}

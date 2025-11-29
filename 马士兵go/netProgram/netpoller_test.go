@@ -15,3 +15,6 @@ func TestNIONet(t *testing.T) {
 func TestNIOChannel(t *testing.T) {
 	NIOChannel()
 }
+func TestNIONetChannel(t *testing.T) {
+	NIONetChannel()
+}
