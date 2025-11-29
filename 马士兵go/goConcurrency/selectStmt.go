@@ -20,7 +20,7 @@ func SelectChannelCloseSignal() {
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
-
+		i := 1
 		for {
 			select {
 			case <-ch:
@@ -28,7 +28,9 @@ func SelectChannelCloseSignal() {
 				return
 			default:
 			}
-			fmt.Println("业务逻辑处理中。。。")
+
+			fmt.Println("业务逻辑处理中。。。", i)
+			i++
 			time.Sleep(time.Millisecond * 300)
 		}
 	}()
