@@ -2,6 +2,8 @@ package goConcurrency
 
 import (
 	"fmt"
+	"os"
+	"os/signal"
 	"sync"
 	"time"
 )
@@ -35,4 +37,23 @@ func SelectChannelCloseSignal() {
 		}
 	}()
 	wg.Wait()
+}
+
+func SelectChannelSignal() {
+	go func() {
+		for true {
+			fmt.Println(time.Now().Format("15:04:05.000"))
+			time.Sleep(time.Millisecond * 300)
+		}
+	}()
+	//select {}
+	chSignal := make(chan os.Signal, 1)
+	signal.Notify(chSignal)
+	//signal.Notify(chSignal, os.Interrupt)
+	//signal.Notify(chSignal, os.Interrupt, os.Kill)
+	select {
+	case <-chSignal:
+		fmt.Println("receive os signal: Interrupt")
+	}
+
 }
