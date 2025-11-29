@@ -15,3 +15,11 @@ func TestUdpServerConnect(t *testing.T) {
 func TestUdpClientConnect(t *testing.T) {
 	UdpClientConnect()
 }
+
+// 对等连接
+func TestUdpServerPeer(t *testing.T) {
+	UdpServerPeer()
+}
+func TestUdpClientPeer(t *testing.T) {
+	UdpClientPeer()
+}
