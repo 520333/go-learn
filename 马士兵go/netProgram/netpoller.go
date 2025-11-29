@@ -100,3 +100,33 @@ func NIONet() {
 	}(&wg)
 	wg.Wait()
 }
+
+// BIOChannel channel go自管理数据的IO阻塞
+func NIOChannel() {
+	var wg = sync.WaitGroup{}
+	var ch = make(chan struct{ id uint }, 1)
+	// 1模拟读
+	wg.Add(1)
+	go func(wg *sync.WaitGroup) {
+		defer wg.Done()
+		log.Println("start read:", time.Now().Format("15:04:05.000"))
+		content := struct{ id uint }{}
+		select {
+		case content = <-ch:
+			log.Println("got content:", content, time.Now().Format("15:04:05.000"))
+			return
+		default:
+		}
+		log.Println("content:", content, time.Now().Format("15:04:05.000"))
+
+	}(&wg)
+
+	wg.Add(1)
+	// 2模拟写
+	go func(wg *sync.WaitGroup) {
+		defer wg.Done()
+		time.Sleep(time.Second * 3)
+		ch <- struct{ id uint }{42}
+	}(&wg)
+	wg.Wait()
+}

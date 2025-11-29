@@ -12,3 +12,6 @@ func TestBIOChannel(t *testing.T) {
 func TestNIONet(t *testing.T) {
 	NIONet()
 }
+func TestNIOChannel(t *testing.T) {
+	NIOChannel()
+}
