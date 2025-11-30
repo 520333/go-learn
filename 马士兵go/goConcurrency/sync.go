@@ -243,12 +243,12 @@ func SyncOnce() {
 	config := make(map[string]string)
 	once := sync.Once{}
 	loadConfig := func() {
-		once.Do(func() {
-			config = map[string]string{
-				"varInt": fmt.Sprintf("%d", rand.Int31()),
-			}
-			fmt.Println("config loaded")
-		})
+		//once.Do(func() {
+		config = map[string]string{
+			"varInt": fmt.Sprintf("%d", rand.Int31()),
+		}
+		fmt.Println("config loaded")
+		//})
 	}
 	workers := 10
 	wg := &sync.WaitGroup{}
@@ -256,8 +256,42 @@ func SyncOnce() {
 	for i := 0; i < workers; i++ {
 		go func() {
 			defer wg.Done()
-			loadConfig()
+			once.Do(func() {
+				loadConfig()
+			})
+
 			_ = config
+		}()
+	}
+	wg.Wait()
+}
+
+func SyncCond() {
+	wg := &sync.WaitGroup{}
+	var data []int
+	dataLen := 1024 * 1024
+	cond := sync.NewCond(&sync.Mutex{})
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		for i := 0; i < dataLen; i++ {
+			data = append(data, i*i)
+		}
+		cond.Broadcast()
+		fmt.Println("cond broadcast, len(data)=", len(data))
+	}()
+
+	const workers = 8
+	wg.Add(workers)
+	for i := 0; i < workers; i++ {
+		go func() {
+			defer wg.Done()
+			cond.L.Lock()
+			for len(data) < dataLen {
+				cond.Wait()
+			}
+			fmt.Println("处理数据,数据长度:", len(data))
+			cond.L.Unlock()
 		}()
 	}
 	wg.Wait()

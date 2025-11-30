@@ -40,3 +40,6 @@ func TestSyncPool(t *testing.T) {
 func TestSyncOnce(t *testing.T) {
 	SyncOnce()
 }
+func TestSyncCond(t *testing.T) {
+	SyncCond()
+}
