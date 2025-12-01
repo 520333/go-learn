@@ -24,3 +24,6 @@ func TestIAndCreate(t *testing.T) {
 func TestServiceCRUD(t *testing.T) {
 	ServiceCRUD()
 }
+func TestPaperCRUD(t *testing.T) {
+	PaperCRUD()
+}

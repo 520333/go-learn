@@ -164,3 +164,28 @@ func ServiceCRUD() {
 	s.QueryString = "kkk"
 	DB.Create(s)
 }
+
+type Paper struct {
+	gorm.Model
+	Subject string
+	Tags    []string `gorm:"serializer:json"` //使用Json序列化器进行处理
+}
+
+func PaperCRUD() {
+	if err := DB.AutoMigrate(&Paper{}); err != nil {
+		log.Fatal(err)
+	}
+	paper := &Paper{
+		Subject: "Subject",
+		Tags: []string{
+			"GO",
+			"MYSQL",
+			"Kubernetes",
+		},
+	}
+	_ = DB.Create(paper)
+	// 查询
+	newPaper := &Paper{}
+	DB.First(newPaper, 2)
+	fmt.Printf("%+v\n", newPaper)
+}
