@@ -42,7 +42,7 @@ func init() {
 			TablePrefix:   "go_", // 表名前缀
 			SingularTable: true,  // 表名使用单数形式
 			NameReplacer:  nil,   // 替换命名中某些字符
-			NoLowerCase:   true,  // 不将名称转为小写
+			NoLowerCase:   false, // 不将名称转为小写
 		}, // 设置默认的命名策略选项
 	})
 	if err != nil {
