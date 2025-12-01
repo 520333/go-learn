@@ -1,6 +1,6 @@
 module learn
 
-go 1.20
+go 1.22
 
 require (
 	github.com/envoyproxy/protoc-gen-validate v1.2.1 // indirect
