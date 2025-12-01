@@ -1,0 +1,4 @@
+2025/12/01 20:20:34 E:/go-project/go-learn/马士兵go/gorm/basic.go:87
+[7.497ms] [rows:1] INSERT INTO `articles` (`created_at`,`updated_at`,`deleted_at`,`subject`,`likes`,`published`,`publish_time`,`author_id`) VALUES ('2025-12-01 20:20:34.524','2025-12-01 20:20:34.524',NULL,'GORM的CRUD基础操作',0,true,'2025-12-01 20:20:34.523',42)
+2025/12/01 20:21:19 E:/go-project/go-learn/马士兵go/gorm/basic.go:97
+[5.004ms] [rows:1] SELECT * FROM `articles` WHERE `articles`.`id` = 2 AND `articles`.`deleted_at` IS NULL ORDER BY `articles`.`id` LIMIT 1
