@@ -46,7 +46,7 @@ type TypeMap struct {
 }
 
 func Migrate() {
-	if err := DB.AutoMigrate(&FieldTag{}, &TypeMap{}, &Post{}, &Category{}, &PostCategory{}, &Box{}); err != nil {
+	if err := DB.AutoMigrate(&IAndC{}, &FieldTag{}, &TypeMap{}, &Post{}, &Category{}, &PostCategory{}, &Box{}); err != nil {
 		log.Fatal(err)
 	}
 }
@@ -117,4 +117,30 @@ type FieldTag struct {
 	FColNotNull    string `gorm:"type:varchar(255);not null"`
 	FColDefault    string `gorm:"type:varchar(255);not null;default:'gorm middle ware'"`
 	FColComment    string `gorm:"type:varchar(255);comment:带有注释的字段"`
+}
+
+type IAndC struct {
+	ID    uint   `gorm:"primaryKey"`                                //主键索引
+	Email string `gorm:"type:varchar(255);uniqueIndex"`             // 唯一索引
+	Age   int8   `gorm:"index;check:age>=18 AND email is not null"` // 普通索引
+	// 复合索引
+	FirstName string `gorm:"index:name"`
+	LastName  string `gorm:"index:name"`
+
+	// 顺序关键索引 默认的priority: 10
+	FirstName1 string `gorm:"index:name1;priority:2"`
+	LastName1  string `gorm:"index:name1;priority:1"`
+
+	// 索引选项,前缀长度，排序方式,comment
+	Height      float32 `gorm:"index:,sort:desc"` //降序遍历
+	AddressHash string  `gorm:"index:,length:12,comment:前12个字符作为索引关键字"`
+}
+
+func IAndCreate() {
+	iac := &IAndC{}
+	iac.Age = 21
+	if err := DB.Create(iac).Error; err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf(": %+v\n", iac)
 }

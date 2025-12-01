@@ -16,3 +16,7 @@ func TestPointerDiff(t *testing.T) {
 func TestCustomType(t *testing.T) {
 	CustomType()
 }
+
+func TestIAndCreate(t *testing.T) {
+	IAndCreate()
+}
