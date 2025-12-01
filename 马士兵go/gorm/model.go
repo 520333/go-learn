@@ -46,7 +46,7 @@ type TypeMap struct {
 }
 
 func Migrate() {
-	if err := DB.AutoMigrate(&TypeMap{}, &Post{}, &Category{}, &PostCategory{}, &Box{}); err != nil {
+	if err := DB.AutoMigrate(&FieldTag{}, &TypeMap{}, &Post{}, &Category{}, &PostCategory{}, &Box{}); err != nil {
 		log.Fatal(err)
 	}
 }
@@ -102,4 +102,19 @@ func CustomType() {
 	} else {
 		fmt.Println("FNullString is NOT NULL")
 	}
+}
+
+type FieldTag struct {
+	gorm.Model
+	FStringDefault string `gorm:""`
+	FTypeChar      string `gorm:"type:char(32)"`
+	FTypeVarChar   string `gorm:"type:varchar(255)"`
+	FTypeText      string `gorm:"type:text"`
+	FTypeBlob      []byte `gorm:"type:blob"`
+	FTypeEnum      string `gorm:"type:enum('Go','GORM','MYSQL')"`
+	FTypeSet       string `gorm:"type:set('Go','GORM','MYSQL')"`
+	FColNum        string `gorm:"column:custom_column_name"`
+	FColNotNull    string `gorm:"type:varchar(255);not null"`
+	FColDefault    string `gorm:"type:varchar(255);not null;default:'gorm middle ware'"`
+	FColComment    string `gorm:"type:varchar(255);comment:带有注释的字段"`
 }
