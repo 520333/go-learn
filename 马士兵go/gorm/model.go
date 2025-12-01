@@ -1,10 +1,12 @@
 package gorm
 
 import (
+	"database/sql"
 	"fmt"
 	"log"
 	"time"
 
+	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
@@ -59,4 +61,45 @@ func PointerDiff() {
 	// 查询数据 数据库中NULL对应指针类型nil值
 	DB.First(typeMap, 1)
 	fmt.Printf("%+v\n", typeMap)
+}
+
+type CustomTypeModel struct {
+	gorm.Model
+	FTime       time.Time
+	FNullTime   sql.NullTime
+	FString     string
+	FNullString sql.NullString
+	FUuid       uuid.UUID
+	FNullUUID   uuid.NullUUID
+}
+
+func CustomType() {
+	//id:=uuid.UUID{}
+	//id.Scan()
+	//id.Value()
+	// 初始化模型
+	ctm := &CustomTypeModel{}
+	// 迁移数据表
+	DB.AutoMigrate(ctm)
+	// 创建
+	ctm.FTime = time.Now()             //当前时间
+	ctm.FNullTime = sql.NullTime{}     //nil零值
+	ctm.FString = ""                   //零值
+	ctm.FNullString = sql.NullString{} //nil零值
+	ctm.FUuid = uuid.New()             //零值
+	ctm.FNullUUID = uuid.NullUUID{}    //nil零值
+	DB.Create(ctm)
+	// 查询
+	DB.First(ctm, ctm.ID)
+	// 判断字段是否为Null
+	if ctm.FString == "" {
+		fmt.Println("FString is NULL")
+	} else {
+		fmt.Println("FString is NOT NULL ")
+	}
+	if ctm.FNullString.Valid == false {
+		fmt.Println("FNullString is NULL")
+	} else {
+		fmt.Println("FNullString is NOT NULL")
+	}
 }

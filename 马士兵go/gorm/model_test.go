@@ -12,3 +12,7 @@ func TestMigrate(t *testing.T) {
 func TestPointerDiff(t *testing.T) {
 	PointerDiff()
 }
+
+func TestCustomType(t *testing.T) {
+	CustomType()
+}
