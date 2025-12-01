@@ -46,7 +46,7 @@ type TypeMap struct {
 }
 
 func Migrate() {
-	if err := DB.AutoMigrate(&IAndC{}, &FieldTag{}, &TypeMap{}, &Post{}, &Category{}, &PostCategory{}, &Box{}); err != nil {
+	if err := DB.AutoMigrate(&Service{}, &IAndC{}, &FieldTag{}, &TypeMap{}, &Post{}, &Category{}, &PostCategory{}, &Box{}); err != nil {
 		log.Fatal(err)
 	}
 }
@@ -143,4 +143,24 @@ func IAndCreate() {
 		log.Fatal(err)
 	}
 	fmt.Printf(": %+v\n", iac)
+}
+
+type Service struct {
+	gorm.Model
+	//Url         string `gorm:"-"` //加上- 迁移、CRUD都会忽略字段无法创建表结构和查询
+	Url         string `gorm:"-:migration;type:varchar(255)"` //只忽略迁移不忽略CRUD
+	Schema      string
+	Host        string `gorm:"<-:false"`  //没有写权限
+	Path        string `gorm:"<-:update"` //无法写入 只能更新
+	QueryString string `gorm:"->:false"`  //无读取
+}
+
+func ServiceCRUD() {
+	s := &Service{}
+	s.Schema = "mysql"
+	s.Url = "https://g8s.me"
+	s.Host = "www.g8s.me"
+	s.Path = "/"
+	s.QueryString = "kkk"
+	DB.Create(s)
 }

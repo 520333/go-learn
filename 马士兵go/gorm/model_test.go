@@ -20,3 +20,7 @@ func TestCustomType(t *testing.T) {
 func TestIAndCreate(t *testing.T) {
 	IAndCreate()
 }
+
+func TestServiceCRUD(t *testing.T) {
+	ServiceCRUD()
+}
