@@ -1,7 +1,6 @@
 package gorm
 
 import (
-	"errors"
 	"time"
 
 	"gorm.io/gorm"
@@ -50,6 +49,6 @@ func (c *Content) BeforeCreate(db *gorm.DB) error {
 	return nil
 }
 
-func (c *Content) AfterCreate(db *gorm.DB) error {
-	return errors.New("custom error")
-}
+//func (c *Content) AfterCreate(db *gorm.DB) error {
+//	return errors.New("custom error")
+//}

@@ -26,3 +26,26 @@ func GetByPK() {
 		log.Println(err)
 	}
 }
+
+func GeOne() {
+	c := Content{}
+	if err := DB.First(&c, "id > ?", 42).Error; err != nil {
+		log.Println(err)
+	}
+	o := Content{}
+	if err := DB.Last(&o, "id > ?", 42).Error; err != nil {
+		log.Println(err)
+	}
+	n := Content{}
+	if err := DB.Take(&n, "id > ?", 42).Error; err != nil {
+		log.Println(err)
+	}
+	f := Content{}
+	if err := DB.Limit(1).Find(&f, "id > ?", 42).Error; err != nil {
+		log.Println(err)
+	}
+	fs := Content{}
+	if err := DB.Find(&fs, "id > ?", 42).Error; err != nil {
+		log.Println(err)
+	}
+}
