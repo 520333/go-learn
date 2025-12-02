@@ -37,7 +37,8 @@ type Content struct {
 	gorm.Model
 
 	Subject     string
-	Likes       uint
+	Likes       uint  `gorm:"default:99"`
+	Views       *uint `gorm:"default:99"`
 	PublishTime *time.Time
 }
 
@@ -165,4 +166,15 @@ func UpSert() {
 		Create(&c4).Error; err != nil {
 		log.Fatal(err)
 	}
+}
+
+func DefaultValue() {
+	DB.AutoMigrate(&Content{})
+	c1 := Content{}
+	c1.Subject = "标题"
+	c1.Likes = 0
+	views := uint(0)
+	c1.Views = &views
+	DB.Create(&c1)
+	fmt.Println(c1.Likes, *c1.Views)
 }

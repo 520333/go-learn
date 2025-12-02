@@ -19,3 +19,7 @@ func TestCreateBatch(t *testing.T) {
 func TestUpSert(t *testing.T) {
 	UpSert()
 }
+
+func TestDefaultValue(t *testing.T) {
+	DefaultValue()
+}
