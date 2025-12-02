@@ -15,6 +15,9 @@ type Content struct {
 	//Likes       uint `gorm:"default:99"`
 	//Views       *uint `gorm:"default:99"`
 	PublishTime *time.Time
+
+	// 禁用写操作
+	Sv string `gorm:"-:migration;<-:false"`
 }
 
 type ContentStrPK struct {

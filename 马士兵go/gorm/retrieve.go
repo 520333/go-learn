@@ -95,6 +95,7 @@ func GetPluck() {
 		}
 	}
 }
+
 func GetPluckExp() {
 	//使用切片存储
 	var subjects []sql.NullString
@@ -104,4 +105,98 @@ func GetPluckExp() {
 	for _, subject := range subjects {
 		fmt.Println(subject.String)
 	}
+}
+
+func GetSelect() {
+	var c Content
+	if err := DB.Select("subject", "likes", "concat(subject,'-',views)").First(&c, 13).Error; err != nil {
+		log.Fatalln(err)
+	}
+	fmt.Printf("%+v\n", c)
+}
+
+func GetDistinct() {
+	var c []Content
+	if err := DB.Distinct("*").Find(&c, 13).Error; err != nil {
+		log.Fatalln(err)
+	}
+	fmt.Printf("%+v\n", c)
+}
+
+func WhereMethod() {
+	var cs []Content
+	// inline条件，内联条件
+	//if err := DB.Find(&cs, "likes > ? AND subject like ?", 100, "gorm%").Error; err != nil {
+	//	log.Fatalln(err)
+	//}
+	//query := DB.Where("likes > ?", 100)
+	//subject := "gorm"
+	//if subject != "" {
+	//	query.Where("subject like ?", subject+"%")
+	//}
+	//if err := query.Find(&cs).Error; err != nil {
+	//	log.Fatalln(err)
+	//}
+
+	// OR 逻辑运算
+	//query := DB.Where("likes > ?", 100)
+	//subject := "gorm"
+	//if subject != "" {
+	//	query.Or("subject like ?", subject+"%")
+	//}
+	//if err := query.Find(&cs).Error; err != nil {
+	//	log.Fatalln(err)
+	//}
+	// Not 逻辑运算
+	query := DB.Where("likes > ?", 100)
+	subject := "gorm"
+	if subject != "" {
+		query.Not("subject like ?", subject+"%")
+		query.Or(DB.Not("subject like ?", subject+"%"))
+	}
+	if err := query.Find(&cs).Error; err != nil {
+		log.Fatalln(err)
+	}
+}
+
+func WhereType() {
+	var cs []Content
+	// (1 or 2) and (3 and (4 or 5))
+	//condA := DB.Where("likes > ?", 10).
+	//	Or("likes <= ?", 100)
+	//condB := DB.Where("views > ?", 100).
+	//	Where(DB.Where("views <= ?", 200).
+	//		Or("subject like ?", "gorm%"))
+	//query := DB.Where(condA).Where(condB)
+	//if err := query.Find(&cs).Error; err != nil {
+	//	log.Fatalln(err)
+	//}
+
+	// Map类型构建查询
+	//query := DB.Where(map[string]any{
+	//	"views": 100,
+	//	"id":    []uint{1, 2, 3, 4, 5},
+	//})
+	query := DB.Where(Content{
+		Views:   100,
+		Subject: "GORM",
+	})
+	if err := query.Find(&cs).Error; err != nil {
+		log.Fatalln(err)
+	}
+
+}
+
+func PlaceHolder() {
+	var cs []Content
+	// 匿名
+	//query := DB.Where("likes = ? AND subject like ?", 100, "gorm%")
+	query := DB.Where("likes = @like AND subject like @subject",
+		sql.Named("subject", "gorm%"),
+		sql.Named("like", 1000))
+
+	if err := query.Find(&cs).Error; err != nil {
+		log.Fatalln(err)
+	}
+
 }

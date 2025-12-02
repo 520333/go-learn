@@ -21,3 +21,23 @@ func TestGetPluck(t *testing.T) {
 func TestGetPluckExp(t *testing.T) {
 	GetPluckExp()
 }
+
+func TestGetSelect(t *testing.T) {
+	GetSelect()
+}
+
+func TestGetDistinct(t *testing.T) {
+	GetDistinct()
+}
+
+func TestWhereMethod(t *testing.T) {
+	WhereMethod()
+}
+
+func TestWhereType(t *testing.T) {
+	WhereType()
+}
+
+func TestPlaceHolder(t *testing.T) {
+	PlaceHolder()
+}
