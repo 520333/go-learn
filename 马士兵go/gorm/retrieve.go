@@ -1,6 +1,7 @@
 package gorm
 
 import (
+	"database/sql"
 	"fmt"
 	"log"
 	"time"
@@ -77,5 +78,30 @@ func GetToMap() {
 	}
 	for _, c := range cs {
 		fmt.Println(c["id"], c["subject"].(string), c["created_at"].(time.Time))
+	}
+}
+
+func GetPluck() {
+	//使用切片存储
+	var subject []sql.NullString
+	if err := DB.Model(&Content{}).Pluck("subject", &subject).Error; err != nil {
+		fmt.Println(err)
+	}
+	for _, subject := range subject {
+		if subject.Valid {
+			fmt.Println(subject.String)
+		} else {
+			fmt.Println("[NULL]")
+		}
+	}
+}
+func GetPluckExp() {
+	//使用切片存储
+	var subjects []sql.NullString
+	if err := DB.Model(&Content{}).Pluck("concat(subject,'-',likes)", &subjects).Error; err != nil {
+		fmt.Println(err)
+	}
+	for _, subject := range subjects {
+		fmt.Println(subject.String)
 	}
 }
