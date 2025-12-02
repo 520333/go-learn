@@ -50,7 +50,7 @@ type TypeMap struct {
 }
 
 func Migrate() {
-	if err := DB.AutoMigrate(&Service{}, &IAndC{}, &FieldTag{}, &TypeMap{}, &Post{}, &Category{}, &PostCategory{}, &Box{}); err != nil {
+	if err := DB.AutoMigrate(&Blog{}, &Service{}, &IAndC{}, &FieldTag{}, &TypeMap{}, &Post{}, &Category{}, &PostCategory{}, &Box{}); err != nil {
 		log.Fatal(err)
 	}
 }
@@ -242,4 +242,23 @@ func CustomSerializer() {
 	newPaper := &Paper{}
 	DB.First(newPaper, paper.ID)
 	fmt.Printf("%+v\n", newPaper)
+}
+
+type BlogPost struct {
+	BlogBasic
+}
+type Blog struct {
+	gorm.Model
+	// 嵌入结构体
+	BlogBasic
+	Author `gorm:"embeddedPrefix:author_"`
+}
+type BlogBasic struct {
+	Subject string
+	Summary string
+	Content string
+}
+type Author struct {
+	Name  string
+	Email string
 }
