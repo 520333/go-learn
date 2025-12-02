@@ -27,3 +27,7 @@ func TestServiceCRUD(t *testing.T) {
 func TestPaperCRUD(t *testing.T) {
 	PaperCRUD()
 }
+
+func TestCustomSerializer(t *testing.T) {
+	CustomSerializer()
+}

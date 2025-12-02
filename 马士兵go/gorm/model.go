@@ -1,13 +1,17 @@
 package gorm
 
 import (
+	"context"
 	"database/sql"
 	"fmt"
 	"log"
+	"reflect"
+	"strings"
 	"time"
 
 	"github.com/google/uuid"
 	"gorm.io/gorm"
+	"gorm.io/gorm/schema"
 )
 
 type Post struct {
@@ -167,8 +171,9 @@ func ServiceCRUD() {
 
 type Paper struct {
 	gorm.Model
-	Subject string
-	Tags    []string `gorm:"serializer:json"` //使用Json序列化器进行处理
+	Subject  string
+	Tags     []string `gorm:"serializer:json"` //使用Json序列化器进行处理
+	Category []string `gorm:"serializer:csv"`  // 使用自定义序列化器编码
 }
 
 func PaperCRUD() {
@@ -187,5 +192,54 @@ func PaperCRUD() {
 	// 查询
 	newPaper := &Paper{}
 	DB.First(newPaper, 2)
+	fmt.Printf("%+v\n", newPaper)
+}
+
+// CSVSerializer 定义实现了序列化接口的类型
+type CSVSerializer struct{}
+
+// Scan 实现Scan
+func (CSVSerializer) Scan(ctx context.Context, field *schema.Field, dst reflect.Value, dbValue interface{}) error {
+	var fieldValue []string
+	// 1.解析读取到的数据表的数据
+	if dbValue != nil {
+		var str string
+		switch v := dbValue.(type) {
+		case string:
+			str = v
+		case []byte:
+			str = string(v)
+		default:
+			return fmt.Errorf("failed to unmarshal CSV value: %#v", dbValue)
+		}
+		// 2.核心：将数据表中的字段使用逗号分割，形成[]string
+		fieldValue = strings.Split(str, ",")
+	}
+	// 3.将处理好的数据设置到dst上
+	field.ReflectValueOf(ctx, dst).Set(reflect.ValueOf(fieldValue))
+	return nil
+}
+
+// Value 实现value
+func (CSVSerializer) Value(ctx context.Context, field *schema.Field, dst reflect.Value, fieldValue interface{}) (interface{}, error) {
+	return strings.Join(fieldValue.([]string), ","), nil
+}
+
+// CustomSerializer 注册到GORM中
+func CustomSerializer() {
+	// 注册序列化器
+	schema.RegisterSerializer("csv", CSVSerializer{})
+	if err := DB.AutoMigrate(&Paper{}); err != nil {
+		log.Fatal(err)
+	}
+	paper := &Paper{
+		Subject:  "使用custom自定义的serializer操作Category字段",
+		Tags:     []string{"GO", "MYSQL", "Docker", "Kubernetes"},
+		Category: []string{"GO", "MYSQL", "Docker", "Kubernetes"},
+	}
+	_ = DB.Create(paper)
+	// 查询
+	newPaper := &Paper{}
+	DB.First(newPaper, paper.ID)
 	fmt.Printf("%+v\n", newPaper)
 }

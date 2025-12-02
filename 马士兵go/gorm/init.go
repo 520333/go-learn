@@ -49,4 +49,6 @@ func init() {
 		log.Fatal(err)
 	}
 	DB = db
+
+	// 注册自定义序列化器
 }
