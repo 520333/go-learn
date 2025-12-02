@@ -29,7 +29,7 @@ func init() {
 	// 自定义日志
 	logWriter, _ = os.OpenFile("./sql.log", os.O_CREATE|os.O_APPEND, 0644)
 	const dsn = "root:123456@tcp(192.168.50.100:3306)/gorm?charset=utf8mb4&parseTime=True&loc=Local"
-	customLogger := logger.New(log.New(logWriter, "", log.LstdFlags), logger.Config{
+	customLogger := logger.New(log.New(logWriter, "\n", log.LstdFlags), logger.Config{
 		SlowThreshold:             200 * time.Millisecond,
 		LogLevel:                  logger.Info,
 		IgnoreRecordNotFoundError: false,

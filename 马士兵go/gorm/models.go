@@ -18,6 +18,14 @@ type Content struct {
 	PublishTime *time.Time
 }
 
+type ContentStrPK struct {
+	ID          string `gorm:"primary_key"`
+	Subject     string
+	Likes       uint
+	Views       uint
+	PublishTime *time.Time
+}
+
 const (
 	DefaultLikes = 99
 	DefaultViews
