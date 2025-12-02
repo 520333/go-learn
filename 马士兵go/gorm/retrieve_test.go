@@ -8,3 +8,7 @@ func TestGetByPK(t *testing.T) {
 func TestGetOne(t *testing.T) {
 	GeOne()
 }
+
+func TestGetMap(t *testing.T) {
+	GetToMap()
+}
