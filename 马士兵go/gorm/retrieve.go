@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"log"
 	"time"
+
+	"gorm.io/gorm/clause"
 )
 
 func GetByPK() {
@@ -199,4 +201,23 @@ func PlaceHolder() {
 		log.Fatalln(err)
 	}
 
+}
+
+func OrderBy() {
+	var cs []Content
+	ids := []uint{2, 3, 1}
+	//query := DB.Order("Field(id,2,3,1)")
+	query := DB.Clauses(clause.OrderBy{
+		Expression: clause.Expr{
+			SQL:                "Field(id,?)",
+			Vars:               []any{ids},
+			WithoutParentheses: true,
+		},
+	})
+	if err := query.Find(&cs, ids).Error; err != nil {
+		log.Fatalln(err)
+	}
+	for _, c := range cs {
+		fmt.Println(c.ID)
+	}
 }

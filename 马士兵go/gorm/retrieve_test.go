@@ -41,3 +41,7 @@ func TestWhereType(t *testing.T) {
 func TestPlaceHolder(t *testing.T) {
 	PlaceHolder()
 }
+
+func TestOrderBy(t *testing.T) {
+	OrderBy()
+}
