@@ -33,15 +33,6 @@ func OperatorType() {
 	query.Find(&users)
 }
 
-type Content struct {
-	gorm.Model
-
-	Subject     string
-	Likes       uint  `gorm:"default:99"`
-	Views       *uint `gorm:"default:99"`
-	PublishTime *time.Time
-}
-
 func CreateBasic() {
 	DB.AutoMigrate(&Content{})
 
@@ -173,8 +164,46 @@ func DefaultValue() {
 	c1 := Content{}
 	c1.Subject = "标题"
 	c1.Likes = 0
-	views := uint(0)
-	c1.Views = &views
+	//views := uint(0)
+	//c1.Views = &views
 	DB.Create(&c1)
-	fmt.Println(c1.Likes, *c1.Views)
+	fmt.Println(c1.Likes, c1.Views)
+}
+
+// DefaultValueOften 生产推荐使用该方法进行零值覆盖默认值
+func DefaultValueOften() {
+	DB.AutoMigrate(&Content{})
+	c1 := NewContent()
+	c1.Subject = "标题"
+	c1.Likes = 0
+	c1.Views = 0
+	DB.Create(&c1)
+	fmt.Println(c1.Likes, c1.Views)
+}
+
+// SelectOmit 选择不需要操作的字段
+func SelectOmit() {
+	DB.AutoMigrate(&Content{})
+	c1 := Content{}
+	c1.Subject = "原始标题"
+	c1.Likes = 10
+	c1.Views = 99
+	now := time.Now()
+	c1.PublishTime = &now
+	// 更新字段
+	//DB.Select("Subject", "Likes", "UpdatedAt").Create(&c1)
+	//INSERT INTO `go_content` (`created_at`,`updated_at`,`subject`,`likes`) VALUES ('2025-12-02 20:18:03.991','2025-12-02 20:18:03.991','原始标题',10)
+
+	// 忽略字段
+	DB.Omit("Subject", "Likes", "UpdatedAt").Create(&c1)
+	//INSERT INTO `go_content` (`created_at`,`deleted_at`,`views`,`publish_time`) VALUES ('2025-12-02 20:19:29.817',NULL,99,'2025-12-02 20:19:29.816')
+}
+
+func CreateHook() {
+	DB.AutoMigrate(&Content{})
+	c1 := Content{}
+	err := DB.Create(&c1).Error
+	if err != nil {
+		log.Fatal(err)
+	}
 }

@@ -23,3 +23,15 @@ func TestUpSert(t *testing.T) {
 func TestDefaultValue(t *testing.T) {
 	DefaultValue()
 }
+
+func TestDefaultValueOften(t *testing.T) {
+	DefaultValueOften()
+}
+
+func TestSelectOmit(t *testing.T) {
+	SelectOmit()
+}
+
+func TestCreateHook(t *testing.T) {
+	CreateHook()
+}
