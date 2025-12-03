@@ -293,3 +293,24 @@ func PaginationScope(pager Pager) {
 		log.Fatalln(err)
 	}
 }
+
+func GroupHaving() {
+	DB.AutoMigrate(&Content{})
+	type Result struct {
+		AuthorID uint // 分组字段
+		// 合计字段
+		TotalViews int
+		TotalLikes int
+		AvgViews   float64
+	}
+	// 执行分组合计过滤查询
+	var rs []Result
+	if err := DB.Model(&Content{}).
+		Select("author_id", "SUM(views) as total_views", "SUM(likes) as total_likes", "AVG(views) as avg_views").
+		Group("author_id").Having("total_views > ?", 99).Find(&rs).Error; err != nil {
+		log.Fatalln(err)
+	}
+	for _, r := range rs {
+		fmt.Println(r.AuthorID, r.TotalViews, r.TotalLikes, r.AvgViews)
+	}
+}

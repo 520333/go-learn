@@ -17,7 +17,8 @@ type Content struct {
 	PublishTime *time.Time
 
 	// 禁用写操作
-	Sv string `gorm:"-:migration;<-:false"`
+	Sv       string `gorm:"-:migration;<-:false"`
+	AuthorID uint
 }
 
 type ContentStrPK struct {
