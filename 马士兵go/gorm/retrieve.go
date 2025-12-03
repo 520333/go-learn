@@ -6,6 +6,7 @@ import (
 	"log"
 	"time"
 
+	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 )
 
@@ -219,5 +220,76 @@ func OrderBy() {
 	}
 	for _, c := range cs {
 		fmt.Println(c.ID)
+	}
+}
+
+// Pager 定义分页必要数据结构
+type Pager struct {
+	Page, PageSize int
+}
+
+// 默认的值
+const (
+	DefaultPage     = 1
+	DefaultPageSize = 12
+)
+
+// Pagination 翻页查询
+func Pagination(pager Pager) {
+	// 确定 offset 和 pageSize
+	page := DefaultPage
+	if pager.Page != 0 {
+		page = pager.Page
+	}
+	pageSize := DefaultPageSize
+	if pager.PageSize != 0 {
+		pageSize = pager.PageSize
+	}
+	// 计算offset
+	// page pageSize offset
+	// 1,10,0
+	// 2,10,10
+	// 3,10,20
+	// 4,10,30
+	offset := pageSize * (page - 1)
+	var cs []Content
+	if err := DB.Offset(offset).Limit(pageSize).Find(&cs).Error; err != nil {
+		log.Fatalln(err)
+	}
+}
+
+// Paginate 分页复用
+func Paginate(pager Pager) func(db *gorm.DB) *gorm.DB {
+	var cs []Content
+	page := DefaultPage
+	if pager.Page != 0 {
+		page = pager.Page
+	}
+	pageSize := DefaultPageSize
+	if pager.PageSize != 0 {
+		pageSize = pager.PageSize
+	}
+	offset := pageSize * (page - 1)
+	if err := DB.Offset(offset).Limit(pageSize).Find(&cs).Error; err != nil {
+		log.Fatalln(err)
+	}
+	return func(db *gorm.DB) *gorm.DB {
+		// 使用闭包的变量实现翻页的逻辑
+		return db.Offset(offset).Limit(pageSize)
+	}
+}
+
+func PaginationScope(pager Pager) {
+	var cs []Content
+	if err := DB.Scopes(Paginate(pager)).Find(&cs).Error; err != nil {
+		log.Fatalln(err)
+	}
+	for _, c := range cs {
+		fmt.Println(c.ID, c.Subject, c.Likes)
+	}
+
+	var ps []Post
+	if err := DB.Scopes(Paginate(pager)).Find(&ps).Error; err != nil {
+		log.Fatalln(err)
 	}
 }

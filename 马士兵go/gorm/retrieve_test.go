@@ -45,3 +45,13 @@ func TestPlaceHolder(t *testing.T) {
 func TestOrderBy(t *testing.T) {
 	OrderBy()
 }
+
+func TestPagination(t *testing.T) {
+	req := Pager{3, 15}
+	Pagination(req)
+}
+
+func TestPaginationScope(t *testing.T) {
+	req := Pager{4, 5}
+	PaginationScope(req)
+}
