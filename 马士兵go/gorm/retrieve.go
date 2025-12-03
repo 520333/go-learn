@@ -314,3 +314,17 @@ func GroupHaving() {
 		fmt.Println(r.AuthorID, r.TotalViews, r.TotalLikes, r.AvgViews)
 	}
 }
+
+func Count(pager Pager) {
+	query := DB.Model(&Content{}).
+		Where("likes > ?", 99)
+	var count int64
+	if err := query.Count(&count).Error; err != nil {
+		log.Fatalln(err)
+	}
+	// 计算总页数 ceil(count / pageSize)
+	var cs []Content
+	if err := query.Scopes(Paginate(pager)).Find(&cs).Error; err != nil {
+		log.Fatalln(err)
+	}
+}

@@ -59,3 +59,8 @@ func TestPaginationScope(t *testing.T) {
 func TestGroupHaving(t *testing.T) {
 	GroupHaving()
 }
+
+func TestCount(t *testing.T) {
+	req := Pager{3, 15}
+	Count(req)
+}
