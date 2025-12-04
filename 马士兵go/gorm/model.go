@@ -258,7 +258,3 @@ type BlogBasic struct {
 	Summary string
 	Content string
 }
-type Author struct {
-	Name  string
-	Email string
-}

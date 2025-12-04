@@ -21,6 +21,14 @@ type Content struct {
 	AuthorID uint
 }
 
+type Author struct {
+	gorm.Model
+	Status int
+
+	Name  string
+	Email string
+}
+
 type ContentStrPK struct {
 	ID          string `gorm:"primary_key"`
 	Subject     string

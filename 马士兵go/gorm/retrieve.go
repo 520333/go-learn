@@ -364,3 +364,32 @@ func Locking() {
 		log.Fatalln(err)
 	}
 }
+
+func SubQuery() {
+	DB.AutoMigrate(&Content{}, &Author{})
+	// 条件型子查询
+	// SELECT * FROM `go_content` WHERE author_id IN (SELECT `id` FROM `go_author` WHERE status = 0 AND `go_author`.`deleted_at` IS NULL) AND `go_content`.`deleted_at` IS NULL
+	whereSubQuery := DB.Model(&Author{}).Where("status = ?", 0).
+		Select("id")
+	var cs []Content
+	if err := DB.Where("author_id IN (?)", whereSubQuery).
+		Find(&cs).Error; err != nil {
+		log.Fatalln(err)
+	}
+
+	// FROM子查询方案
+	// SELECT * FROM (SELECT `subject`,`likes` FROM `go_content` WHERE publish_time IS NULL AND `go_content`.`deleted_at` IS NULL) AS temp WHERE likes > 10
+
+	fromSubQuery := DB.Model(&Content{}).Where("publish_time IS NULL").
+		Select("subject", "likes")
+	type Result struct {
+		Subject string
+		Likes   int
+	}
+	var rs []Result
+	if err := DB.Table("(?) AS temp", fromSubQuery).
+		Where("likes > ?", 10).
+		Find(&rs).Error; err != nil {
+		log.Fatalln(err)
+	}
+}

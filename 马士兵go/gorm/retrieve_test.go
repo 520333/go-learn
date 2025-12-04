@@ -72,3 +72,7 @@ func TestIterator(t *testing.T) {
 func TestLocking(t *testing.T) {
 	Locking()
 }
+
+func TestSubQuery(t *testing.T) {
+	SubQuery()
+}
