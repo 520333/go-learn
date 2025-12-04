@@ -328,3 +328,39 @@ func Count(pager Pager) {
 		log.Fatalln(err)
 	}
 }
+
+func Iterator() {
+	// 利用DB.Rows() 获取Rows对象
+	rows, err := DB.Model(&Content{}).Rows()
+	if err != nil {
+		log.Fatalln(err)
+	}
+	defer func(rows *sql.Rows) {
+		_ = rows.Close()
+	}(rows)
+	fmt.Println(rows)
+	for rows.Next() {
+		var c Content
+		if err := DB.ScanRows(rows, &c); err != nil {
+			log.Fatalln(err)
+		}
+		fmt.Println(c.Subject)
+	}
+}
+
+func Locking() {
+	var cs []Content
+	// SELECT * FROM `go_content` WHERE `go_content`.`deleted_at` IS NULL FOR UPDATE
+	if err := DB.
+		Clauses(clause.Locking{Strength: "UPDATE"}).
+		Find(&cs).Error; err != nil {
+		log.Fatalln(err)
+	}
+
+	// SELECT * FROM `go_content` WHERE `go_content`.`deleted_at` IS NULL FOR SHARE
+	if err := DB.
+		Clauses(clause.Locking{Strength: "SHARE"}).
+		Find(&cs).Error; err != nil {
+		log.Fatalln(err)
+	}
+}

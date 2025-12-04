@@ -64,3 +64,11 @@ func TestCount(t *testing.T) {
 	req := Pager{3, 15}
 	Count(req)
 }
+
+func TestIterator(t *testing.T) {
+	Iterator()
+}
+
+func TestLocking(t *testing.T) {
+	Locking()
+}
