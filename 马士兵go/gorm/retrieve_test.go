@@ -76,3 +76,6 @@ func TestLocking(t *testing.T) {
 func TestSubQuery(t *testing.T) {
 	SubQuery()
 }
+func TestFindHook(t *testing.T) {
+	FindHook()
+}

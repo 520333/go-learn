@@ -393,3 +393,11 @@ func SubQuery() {
 		log.Fatalln(err)
 	}
 }
+
+func FindHook() {
+	var cs []Content
+	if err := DB.First(&cs, 13).Error; err != nil {
+		log.Fatalln(err)
+	}
+	fmt.Printf("%+v\n", cs)
+}

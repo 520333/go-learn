@@ -61,6 +61,13 @@ func (c *Content) BeforeCreate(db *gorm.DB) error {
 	return nil
 }
 
-//func (c *Content) AfterCreate(db *gorm.DB) error {
-//	return errors.New("custom error")
-//}
+//	func (c *Content) AfterCreate(db *gorm.DB) error {
+//		return errors.New("custom error")
+//	}
+
+func (c *Content) AfterFind(db *gorm.DB) error {
+	if c.AuthorID == 0 {
+		c.AuthorID = 1
+	}
+	return nil
+}
