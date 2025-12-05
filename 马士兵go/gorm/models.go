@@ -1,6 +1,7 @@
 package gorm
 
 import (
+	"log"
 	"time"
 
 	"gorm.io/gorm"
@@ -57,7 +58,7 @@ func (c *Content) BeforeCreate(db *gorm.DB) error {
 	}
 	// 配置
 	db.Statement.AddClause(clause.OnConflict{UpdateAll: true})
-
+	log.Println("Content BeforeCreate Hook")
 	return nil
 }
 
