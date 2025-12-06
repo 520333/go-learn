@@ -33,3 +33,7 @@ func TestAssocPreload(t *testing.T) {
 func TestAssocLevelPreload(t *testing.T) {
 	AssocLevelPreload()
 }
+
+func TestAssocOperate(t *testing.T) {
+	AssocOperate()
+}

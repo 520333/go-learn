@@ -3,6 +3,8 @@ package gorm
 import (
 	"fmt"
 	"log"
+
+	"gorm.io/gorm/clause"
 )
 
 func StdAssocModel() {
@@ -202,9 +204,11 @@ func AssocPreload() {
 
 	// 支持多次调用，同时预加载多个关联
 	e := Essay{}
-	if err := DB.Preload("Author").
-		Preload("EssayMate").
-		Preload("Tag").
+	if err := DB.
+		//Preload("Author").
+		//Preload("EssayMate").
+		//Preload("Tag").
+		Preload(clause.Associations).
 		First(&e, 1).Error; err != nil {
 		log.Fatalln(err)
 	}
@@ -221,4 +225,29 @@ func AssocLevelPreload() {
 	log.Println(a.Essay[0].Tag)
 	//log.Println(a.Essay[1].Tag)
 
+}
+
+func AssocOperate() {
+	var a Author
+	a.Name = "一位大佬"
+	if err := DB.Create(&a).Error; err != nil {
+		log.Println(err)
+	}
+	log.Println("a:", a.ID)
+	var e1, e2 Essay
+	e1.Subject = "师与徒"
+	e2.Subject = "影武者"
+	if err := DB.Create([]*Essay{&e1, &e2}).Error; err != nil {
+		log.Println(err)
+	}
+	log.Println("e1:", e1.ID, "e2:", e2.ID)
+
+	if err := DB.Model(&a).Association("Essay").Append([]Essay{e1, e2}); err != nil {
+		log.Println(err)
+	}
+	fmt.Println(len(a.Essay))
+
+	if err := DB.Delete(&a).Error; err != nil {
+		log.Fatalln(err)
+	}
 }

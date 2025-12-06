@@ -80,7 +80,10 @@ type Author struct {
 	Status int
 	Name   string
 	Email  string
-	Essay  []Essay // 拥有多个论文内容
+	// 自定义外键
+	Essay       []Essay `gorm:"constraint:OnDelete:SET NULL;"`
+	FirstEssay  []Essay `gorm:"foreignKey:FirstAuthorID;references:;"`  // 拥有多个论文内容
+	SecondEssay []Essay `gorm:"foreignKey:SecondAuthorID;references:;"` // 拥有多个论文内容
 	//EssayMate EssayMate // 拥有一个论文元信息
 
 }
@@ -101,12 +104,17 @@ type Author struct {
 // ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
 type Essay struct {
 	gorm.Model
-	Subject   string
-	Content   string
-	AuthorID  *uint  // 外键字段
-	Author    Author //属于某个作者
-	EssayMate EssayMate
-	Tag       []Tag `gorm:"many2many:essay_tag;"`
+	Subject        string
+	Content        string
+	FirstAuthorID  *uint
+	SecondAuthorID *uint
+
+	FirstAuthor  Author `gorm:"foreignKey:FirstAuthorID;references:;"`
+	SecondAuthor Author `gorm:"foreignKey:SecondAuthorID;references:;"`
+	AuthorID     *uint  // 外键字段
+	Author       Author
+	EssayMate    EssayMate
+	Tag          []Tag `gorm:"many2many:essay_tag;"`
 }
 
 // EssayMate 论文元信息
