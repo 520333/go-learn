@@ -163,5 +163,23 @@ func AssocFind() {
 	fmt.Println(e.Tag)
 	count := DB.Model(&e).Association("Tag").Count()
 	log.Println(count)
+}
 
+func AssocSave() {
+	var t1 Tag
+	DB.First(&t1, 10)
+
+	e := Essay{
+		Subject: "一条小龙",
+		Author:  Author{Name: "海绵宝宝"},
+		Tag: []Tag{
+			t1,
+			{Title: "云原生"},
+			{Title: "可观测"},
+		},
+	}
+	if err := DB.Save(&e).Error; err != nil {
+		log.Println(err)
+	}
+	log.Printf("%+v\n", e)
 }

@@ -21,3 +21,7 @@ func TestAssocDelete(t *testing.T) {
 func TestAssocFind(t *testing.T) {
 	AssocFind()
 }
+
+func TestAssocSave(t *testing.T) {
+	AssocSave()
+}
