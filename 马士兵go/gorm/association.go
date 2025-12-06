@@ -103,7 +103,6 @@ func AssocReplace() {
 }
 
 func AssocDelete() {
-
 	var a Author
 	a.Name = "一位大佬"
 	if err := DB.Create(&a).Error; err != nil {
@@ -152,5 +151,17 @@ func AssocDelete() {
 		log.Println(err)
 	}
 	fmt.Println(e1.Tag)
+}
+
+func AssocFind() {
+	e := Essay{}
+	DB.First(&e, 13)
+	// 查询关联的tags
+	if err := DB.Model(&e).Where("tag_id > ?", 7).Association("Tag").Find(&e.Tag); err != nil {
+		log.Println(err)
+	}
+	fmt.Println(e.Tag)
+	count := DB.Model(&e).Association("Tag").Count()
+	log.Println(count)
 
 }
