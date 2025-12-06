@@ -25,3 +25,11 @@ func TestAssocFind(t *testing.T) {
 func TestAssocSave(t *testing.T) {
 	AssocSave()
 }
+
+func TestAssocPreload(t *testing.T) {
+	AssocPreload()
+}
+
+func TestAssocLevelPreload(t *testing.T) {
+	AssocLevelPreload()
+}

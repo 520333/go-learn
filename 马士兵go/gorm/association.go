@@ -183,3 +183,42 @@ func AssocSave() {
 	}
 	log.Printf("%+v\n", e)
 }
+
+func AssocPreload() {
+	a := Author{}
+	// 直接一步查询Author对应的Essay
+	if err := DB.Preload("Essay").First(&a, 1).Error; err != nil {
+		log.Fatalln(err)
+	}
+	log.Println(a.Essay)
+
+	log.Println("===========================")
+
+	// 条件过滤
+	if err := DB.Preload("Essay", "id IN ?", []uint{3, 4, 5}).First(&a, 1).Error; err != nil {
+		log.Fatalln(err)
+	}
+	log.Println(a.Essay)
+
+	// 支持多次调用，同时预加载多个关联
+	e := Essay{}
+	if err := DB.Preload("Author").
+		Preload("EssayMate").
+		Preload("Tag").
+		First(&e, 1).Error; err != nil {
+		log.Fatalln(err)
+	}
+	log.Println(e)
+}
+
+func AssocLevelPreload() {
+	a := Author{}
+	// 多级关联
+	if err := DB.Preload("Essay.Tag").First(&a, 1).Error; err != nil {
+		log.Fatalln(err)
+	}
+
+	log.Println(a.Essay[0].Tag)
+	//log.Println(a.Essay[1].Tag)
+
+}
