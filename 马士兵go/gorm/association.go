@@ -71,5 +71,86 @@ func AssocAppend() {
 		log.Println(err)
 	}
 	log.Println("e3:", e3.Author.ID)
+}
+
+func AssocReplace() {
+	// 替换
+	var a Author
+	a.Name = "一位大佬"
+	if err := DB.Create(&a).Error; err != nil {
+		log.Println(err)
+	}
+	log.Println("a:", a.ID)
+	var e1, e2, e3 Essay
+	e1.Subject = "师与徒"
+	e2.Subject = "罪与罚"
+	e3.Subject = "影武者"
+	if err := DB.Create([]*Essay{&e1, &e2, &e3}).Error; err != nil {
+		log.Println(err)
+	}
+	log.Println("e1:", e1.ID, "e2:", e2.ID, "e3:", e3.ID)
+
+	// 替换关联
+	if err := DB.Model(&a).Association("Essay").Append([]Essay{e1, e3}); err != nil {
+		log.Println(err)
+	}
+	fmt.Println(a.Essay)
+
+	if err := DB.Model(&a).Association("Essay").Replace([]Essay{e2, e3}); err != nil {
+		log.Println(err)
+	}
+	fmt.Println(a.Essay)
+}
+
+func AssocDelete() {
+
+	var a Author
+	a.Name = "一位大佬"
+	if err := DB.Create(&a).Error; err != nil {
+		log.Println(err)
+	}
+	log.Println("a:", a.ID)
+	var e1, e2, e3 Essay
+	e1.Subject = "师与徒"
+	e2.Subject = "罪与罚"
+	e3.Subject = "影武者"
+	if err := DB.Create([]*Essay{&e1, &e2, &e3}).Error; err != nil {
+		log.Println(err)
+	}
+	log.Println("e1:", e1.ID, "e2:", e2.ID, "e3:", e3.ID)
+
+	// 添加关联
+	if err := DB.Model(&a).Association("Essay").Append([]Essay{e1, e2, e3}); err != nil {
+		log.Println(err)
+	}
+
+	// 替换关联
+	if err := DB.Model(&a).Association("Essay").Delete([]Essay{e1, e3}); err != nil {
+		log.Println(err)
+	}
+
+	fmt.Println(a.Essay)
+	fmt.Println("==========================")
+	var t1, t2, t3 Tag
+	t1.Title = "曼达洛人"
+	t2.Title = "波巴非特之书"
+	t3.Title = "安多"
+	if err := DB.Create([]*Tag{&t1, &t2, &t3}).Error; err != nil {
+		log.Println(err)
+	}
+	log.Println("t1,t2,t3:", t1.ID, t2.ID, t3.ID)
+	if err := DB.Model(&e1).Association("Tag").Append([]Tag{t1, t2, t3}); err != nil {
+		log.Println(err)
+	}
+
+	// 删除关联
+	if err := DB.Model(&e1).Association("Tag").Delete([]Tag{t1, t3}); err != nil {
+		log.Println(err)
+	}
+	// 清空关联
+	if err := DB.Model(&e1).Association("Tag").Clear(); err != nil {
+		log.Println(err)
+	}
+	fmt.Println(e1.Tag)
 
 }

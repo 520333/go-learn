@@ -9,3 +9,11 @@ func TestStdAssocModel(t *testing.T) {
 func TestAssocAppend(t *testing.T) {
 	AssocAppend()
 }
+
+func TestAssocReplace(t *testing.T) {
+	AssocReplace()
+}
+
+func TestAssocDelete(t *testing.T) {
+	AssocDelete()
+}
