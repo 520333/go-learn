@@ -149,3 +149,61 @@ func TXNested() {
 		log.Fatalln(err)
 	}
 }
+
+func TXSavePoint() {
+	if err := DB.AutoMigrate(&Author{}); err != nil {
+		log.Fatalln(err)
+	}
+	var a1, a2, a3 Author
+	a1.Name = "库里"
+	a2.Name = "莫兰特"
+	a3.Name = "欧文"
+
+	a1.Points = 1600
+	a2.Points = 200
+	a3.Points = 4000
+	if err := DB.Create([]*Author{&a1, &a2, &a3}).Error; err != nil {
+		log.Fatalln(err)
+	}
+	log.Println(a1.ID, a2.ID, a3.ID)
+
+	// 事务操作 a1赠送a2 2000积分
+	var p = 5000
+	// 开始事务
+	tx := DB.Begin()
+	if tx.Error != nil {
+		log.Fatalln(tx.Error)
+	}
+	// 赠送操作
+	a2.Points += p
+	if err := tx.Save(&a2).Error; err != nil {
+		tx.Rollback()
+		return
+	}
+	// 逻辑记录发送points是否成功
+	var flagSend bool
+	// a1先给a2 send
+	tx.SavePoint("beforeA1") // 设置一个savepoint
+	a1.Points -= p
+	if err := tx.Save(&a1).Error; err != nil || a1.Points < 0 {
+		tx.RollbackTo("beforeA1") //回滚到A1
+		// a3 to a2
+		tx.SavePoint("beforeA3")
+		a3.Points -= p
+		if err := tx.Save(&a3).Error; err != nil || a3.Points < 0 {
+			tx.RollbackTo("beforeA3") //回滚到A3
+		} else {
+			flagSend = true
+		}
+	} else {
+		flagSend = true
+	}
+	// 判断赠送积分是否成功
+	if flagSend {
+		if err := tx.Commit().Error; err != nil {
+			log.Fatalln(err)
+		}
+	} else {
+		tx.Rollback() // 回滚事务
+	}
+}

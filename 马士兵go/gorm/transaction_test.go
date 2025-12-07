@@ -13,3 +13,7 @@ func TestTXCallback(t *testing.T) {
 func TestTXNested(t *testing.T) {
 	TXNested()
 }
+
+func TestTXSavePoint(t *testing.T) {
+	TXSavePoint()
+}
