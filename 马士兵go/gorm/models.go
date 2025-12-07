@@ -80,12 +80,12 @@ type Author struct {
 	Status int
 	Name   string
 	Email  string
+	Points int //积分
 	// 自定义外键
 	Essay       []Essay `gorm:"constraint:OnDelete:SET NULL;"`
 	FirstEssay  []Essay `gorm:"foreignKey:FirstAuthorID;references:;"`  // 拥有多个论文内容
 	SecondEssay []Essay `gorm:"foreignKey:SecondAuthorID;references:;"` // 拥有多个论文内容
 	//EssayMate EssayMate // 拥有一个论文元信息
-
 }
 
 // Essay 论文内容
