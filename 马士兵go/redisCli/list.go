@@ -49,3 +49,31 @@ func ListPushPop() {
 	//fmt.Println(client.RPopCount(ctx, "subjects", 3).Result())
 	//fmt.Println(client.LRange(ctx, "subjects", 0, -1).Result())
 }
+
+func ListIndex() {
+	opt, err := redis.ParseURL("redis://default:123456@192.168.50.100:6379/0")
+	if err != nil {
+		log.Fatalln(err)
+	}
+	client := redis.NewClient(opt)
+	ctx := context.Background()
+	//client.LTrim(ctx, "subjects", -1, 0)
+	client.Del(ctx, "subjects")
+	// 基于索引查询
+	client.LPush(ctx, "subjects", "GO", "Redis", "MySQL", "GO-Redis", "GO-Redis", "Docker", "Kubernetes", "CI/CD")
+	fmt.Println(client.LRange(ctx, "subjects", 0, -1).Result())
+	fmt.Println(client.LIndex(ctx, "subjects", 3).Result())
+
+	// 基于索引设置
+	fmt.Println(client.LSet(ctx, "subjects", 3, "GO-Redis").Result())
+	fmt.Println(client.LRange(ctx, "subjects", 0, -1).Result())
+
+	fmt.Println(client.LInsert(ctx, "subjects", "BEFORE", "GO-Redis", "ArgoCD").Result())
+	fmt.Println(client.LInsert(ctx, "subjects", "AFTER", "GO-Redis", "ArgoCD").Result())
+
+	fmt.Println(client.LRange(ctx, "subjects", 0, -1).Result())
+
+	client.LTrim(ctx, "subjects", 2, 4)
+	fmt.Println(client.LRange(ctx, "subjects", 0, -1).Result())
+
+}
