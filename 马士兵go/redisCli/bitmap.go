@@ -51,3 +51,64 @@ func BitMapSetGet() {
 	//(integer) 671,088,688
 
 }
+
+func BitMapOP() {
+	opt, err := redis.ParseURL("redis://default:123456@192.168.50.100:6379/0")
+	if err != nil {
+		log.Fatalln(err)
+	}
+	client := redis.NewClient(opt)
+	ctx := context.Background()
+	client.Del(ctx, "keyOne")
+	client.Del(ctx, "keyTwo")
+	// 10011
+	client.SetBit(ctx, "keyOne", 0, 1)
+	client.SetBit(ctx, "keyOne", 1, 0)
+	client.SetBit(ctx, "keyOne", 2, 0)
+	client.SetBit(ctx, "keyOne", 3, 1)
+	client.SetBit(ctx, "keyOne", 4, 1)
+
+	client.SetBit(ctx, "keyTwo", 0, 1)
+	client.SetBit(ctx, "keyTwo", 1, 1)
+	client.SetBit(ctx, "keyTwo", 2, 0)
+	client.SetBit(ctx, "keyTwo", 3, 0)
+	client.SetBit(ctx, "keyTwo", 4, 1)
+	// and
+	//10011
+	//11001
+	//10001
+	fmt.Println("===========and============")
+	client.BitOpAnd(ctx, "destKey", "keyOne", "keyTwo")
+	for i := 0; i <= 4; i++ {
+		fmt.Println(client.GetBit(ctx, "destKey", int64(i)).Result())
+	}
+
+	// or
+	//10011
+	//11001
+	//11011
+	fmt.Println("===========or============")
+	client.BitOpOr(ctx, "destKey", "keyOne", "keyTwo")
+	for i := 0; i <= 4; i++ {
+		fmt.Println(client.GetBit(ctx, "destKey", int64(i)).Result())
+	}
+
+	// xor
+	//10011
+	//11001
+	//01010
+	fmt.Println("===========xor============")
+	client.BitOpXor(ctx, "destKey", "keyOne", "keyTwo")
+	for i := 0; i <= 4; i++ {
+		fmt.Println(client.GetBit(ctx, "destKey", int64(i)).Result())
+	}
+
+	//
+	//10011
+	//01100
+	fmt.Println("===========Not============")
+	client.BitOpNot(ctx, "destKey", "keyOne")
+	for i := 0; i <= 4; i++ {
+		fmt.Println(client.GetBit(ctx, "destKey", int64(i)).Result())
+	}
+}
