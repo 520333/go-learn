@@ -9,3 +9,11 @@ func TestListPushPop(t *testing.T) {
 func TestListIndex(t *testing.T) {
 	ListIndex()
 }
+
+func TestListTwo(t *testing.T) {
+	ListTwo()
+}
+
+func TestListBlock(t *testing.T) {
+	ListBlock()
+}

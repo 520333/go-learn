@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"time"
 
 	"github.com/redis/go-redis/v9"
 )
@@ -75,5 +76,49 @@ func ListIndex() {
 
 	client.LTrim(ctx, "subjects", 2, 4)
 	fmt.Println(client.LRange(ctx, "subjects", 0, -1).Result())
+
+}
+
+func ListTwo() {
+	opt, err := redis.ParseURL("redis://default:123456@192.168.50.100:6379/0")
+	if err != nil {
+		log.Fatalln(err)
+	}
+	client := redis.NewClient(opt)
+	ctx := context.Background()
+	//client.LTrim(ctx, "subjects", -1, 0)
+	client.Del(ctx, "list-src", "list-dest")
+	// 基于索引查询
+	client.LPush(ctx, "list-src", "GO", "Redis", "MySQL")
+	client.LPush(ctx, "list-dest", "Docker", "Kubernetes", "CI/CD")
+
+	// 从src弹出写入到dest
+	client.RPopLPush(ctx, "list-src", "list-dest")
+	fmt.Println(client.LRange(ctx, "list-src", 0, -1).Result())
+	fmt.Println(client.LRange(ctx, "list-dest", 0, -1).Result())
+
+	// move
+	client.LMove(ctx, "list-src", "list-dest", "RIGHT", "LEFT")
+	fmt.Println(client.LRange(ctx, "list-src", 0, -1).Result())
+	fmt.Println(client.LRange(ctx, "list-dest", 0, -1).Result())
+}
+
+func ListBlock() {
+	opt, err := redis.ParseURL("redis://default:123456@192.168.50.100:6379/0")
+	if err != nil {
+		log.Fatalln(err)
+	}
+	client := redis.NewClient(opt)
+	ctx := context.Background()
+	//client.LTrim(ctx, "subjects", -1, 0)
+	client.Del(ctx, "list-src", "list-dest")
+
+	fmt.Println(client.LPop(ctx, "list-src").Result())
+	// 阻塞操作
+	fmt.Println(client.BLPop(ctx, 10*time.Second, "list-src").Result())
+
+	// non-block
+	client.RPopLPush(ctx, "list-src", "list-dest")
+	fmt.Println(client.LRange(ctx, "list-src", 0, -1).Result())
 
 }
