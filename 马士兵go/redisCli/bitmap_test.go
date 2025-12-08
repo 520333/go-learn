@@ -9,3 +9,7 @@ func TestBitMapSetGet(t *testing.T) {
 func TestBitMapOP(t *testing.T) {
 	BitMapOP()
 }
+
+func TestBitMapString(t *testing.T) {
+	BitMapString()
+}

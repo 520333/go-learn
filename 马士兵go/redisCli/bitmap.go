@@ -112,3 +112,17 @@ func BitMapOP() {
 		fmt.Println(client.GetBit(ctx, "destKey", int64(i)).Result())
 	}
 }
+
+func BitMapString() {
+	opt, err := redis.ParseURL("redis://default:123456@192.168.50.100:6379/0")
+	if err != nil {
+		log.Fatalln(err)
+	}
+	client := redis.NewClient(opt)
+	ctx := context.Background()
+	client.Del(ctx, "keyString")
+
+	client.SetBit(ctx, "keyString", 1, 1)              // 01=01000000
+	fmt.Println(client.Get(ctx, "keyString").Result()) // 解析成字符串为:@
+
+}
