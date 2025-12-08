@@ -30,7 +30,8 @@ func ListPushPop() {
 
 	// 删除元素
 	fmt.Println(client.LRem(ctx, "subjects", 1, "MySQL").Result())
-
+	// 删除全部MySQL
+	fmt.Println(client.LRem(ctx, "subjects", 0, "MySQL").Result())
 	//client.RPush(ctx, "subjects", "Kubernetes", "CI/CD")
 
 	// 插入 前提key要存在
