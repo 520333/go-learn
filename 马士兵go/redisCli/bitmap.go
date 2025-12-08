@@ -124,5 +124,4 @@ func BitMapString() {
 
 	client.SetBit(ctx, "keyString", 1, 1)              // 01=01000000
 	fmt.Println(client.Get(ctx, "keyString").Result()) // 解析成字符串为:@
-
 }
