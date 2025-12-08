@@ -34,7 +34,6 @@ func Client() {
 	}
 	rdb := redis.NewClient(client2)
 	fmt.Println(rdb.Ping(context.Background()).Result())
-
 }
 
 func CmdString() {
