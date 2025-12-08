@@ -96,3 +96,18 @@ func CmdStringAppendIncrDecr() {
 	client.DecrBy(ctx, "counter", 10)
 	fmt.Println(client.Get(ctx, "counter"))
 }
+
+func CmdStringSub() {
+	opt, err := redis.ParseURL("redis://default:123456@192.168.50.100:6379/0")
+	if err != nil {
+		log.Fatalln(err)
+	}
+	client := redis.NewClient(opt)
+	ctx := context.Background()
+	client.Set(ctx, "name", "kubernetes", 0)
+
+	fmt.Println(client.GetRange(ctx, "name", 0, 4).Result())
+	fmt.Println(client.GetRange(ctx, "name", -4, -1).Result())
+
+	client.SetRange(ctx, "name", 0, "Go")
+}

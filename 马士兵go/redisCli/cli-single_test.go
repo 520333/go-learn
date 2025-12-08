@@ -13,3 +13,7 @@ func TestCmdString(t *testing.T) {
 func TestCmdStringAppendIncrDecr(t *testing.T) {
 	CmdStringAppendIncrDecr()
 }
+
+func TestCmdStringSub(t *testing.T) {
+	CmdStringSub()
+}
