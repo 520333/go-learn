@@ -2,8 +2,6 @@ package goKafka
 
 import (
 	"fmt"
-	"hash"
-	"hash/crc32"
 	"log"
 	"math/rand"
 	"os"
@@ -25,9 +23,9 @@ func SendPartition() {
 	//conf.Producer.Partitioner = sarama.NewRandomPartitioner //分区调度策略轮询
 	//conf.Producer.Partitioner = sarama.NewHashPartitioner   //Hash调度策略 基于特定的key
 	conf.Producer.Partitioner = sarama.NewManualPartitioner //指定分区调度策略 配合partition使用
-	conf.Producer.Partitioner = sarama.NewCustomHashPartitioner(func() hash.Hash32 {
-		return crc32.New(crc32.MakeTable(0xD5828281))
-	}) //自定义分区HASH调度策略
+	//conf.Producer.Partitioner = sarama.NewCustomHashPartitioner(func() hash.Hash32 {
+	//	return crc32.New(crc32.MakeTable(0xD5828281))
+	//}) //自定义分区HASH调度策略
 
 	producer, err := sarama.NewAsyncProducer(broker, conf)
 	if err != nil {
