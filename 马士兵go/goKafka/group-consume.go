@@ -61,7 +61,6 @@ func GroupConsume() {
 		// 终止
 		cancel()
 	}
-
 	wg.Wait()
 }
 
@@ -71,16 +70,21 @@ type GroupConsumerHandler struct {
 
 // Setup 重新消费时执行 增减组内消费者时
 func (GroupConsumerHandler) Setup(cgs sarama.ConsumerGroupSession) error {
+	log.Println("Setup")
+	log.Println(cgs.Claims()) //该消费者所分配的消费分区
+	cgs.ResetOffset("topic_more_partition_1", 0, 2048, "")
 	return nil
 }
 
 // Cleanup 当组内消费者推出时执行
 func (GroupConsumerHandler) Cleanup(sarama.ConsumerGroupSession) error {
+	log.Println("Cleanup")
 	return nil
 }
 
 // ConsumeClaim 组消费的核心方法
 func (GroupConsumerHandler) ConsumeClaim(cgs sarama.ConsumerGroupSession, cgc sarama.ConsumerGroupClaim) error {
+	log.Println("ConsumeClaim")
 	// 消费
 	for msg := range cgc.Messages() {
 		log.Printf("Consumed Message: partition:%v offset:%v topic:%v \n", msg.Partition, msg.Offset, msg.Topic)
