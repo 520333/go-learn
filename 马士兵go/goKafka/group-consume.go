@@ -18,6 +18,13 @@ func GroupConsume() {
 	conf.Consumer.Return.Errors = true
 	// 消费信道返回
 	group, err := sarama.NewConsumerGroup(addrs, groupID, conf)
+
+	// 设置分配策略
+	conf.Consumer.Group.Rebalance.GroupStrategies = []sarama.BalanceStrategy{
+		//sarama.NewBalanceStrategyRange(),//默认
+		//sarama.NewBalanceStrategyRoundRobin(), //轮询
+		sarama.BalanceStrategySticky, //粘性
+	}
 	if err != nil {
 		log.Fatalln(err)
 	}
