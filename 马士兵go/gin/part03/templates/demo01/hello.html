@@ -1,0 +1,18 @@
+{{define "demo01/hello.html"}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/s/css/css.css">
+</head>
+<body>
+form表单
+<form action="/getUserInfo" method="post">
+    用户名： <input type="text" name="username">
+    密码： <input type="password" name="pwd">
+    <input type="submit" value="提交">
+</form>
+</body>
+</html>
+{{end}}
