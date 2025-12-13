@@ -16,5 +16,7 @@ func main() {
 	// 路径中以键值对传入参数 在路由规则中不用做文章
 	r.GET("/demo3", myfunc.Hello3)
 	r.GET("/demo4", myfunc.Hello4)
+	r.GET("/demo5", myfunc.Hello5)
+	r.GET("/demo6", myfunc.Hello6)
 	r.Run(":8080")
 }
