@@ -1,0 +1,37 @@
+{{define "demo01/hello.html"}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/s/css/css.css">
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+</head>
+<body>
+    form表单
+    <form action="/savefile" method="post">
+        <input type="file" class="myfile" multiple>
+        <input type="button" value="提交" id="btn">
+    </form>
+    <script>
+        let btn=document.getElementById("btn");
+        btn.onclick=()=>{
+            console.log($(".myfile")[0].files[0])
+            let form_data = new FormData();
+            form_data.append("file",$(".myfile")[0].files[0])
+
+            $.ajax({
+                url:"/savefile",
+                type: "POST",
+                data: form_data,
+                contentType:false,
+                processData: false,
+                success: ()=>{
+
+                }
+            })
+        }
+    </script>
+</body>
+</html>
+{{end}}

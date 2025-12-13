@@ -1,7 +1,7 @@
 package main
 
 import (
-	"part02/myfunc"
+	"gin/part02/myfunc"
 
 	"github.com/gin-gonic/gin"
 )

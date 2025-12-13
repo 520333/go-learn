@@ -44,5 +44,20 @@ func Hello3(context *gin.Context) {
 
 	// 响应一个字符串
 	context.String(200, "文件上传成功")
+}
 
+func Hello4(context *gin.Context) {
+	form, _ := context.MultipartForm()
+	files := form.File["file"]
+	for _, file := range files {
+		time_int := time.Now().Unix()
+		time_str := strconv.FormatInt(time_int, 10)
+		err := context.SaveUploadedFile(file, "./"+time_str+file.Filename)
+		if err != nil {
+			log.Println("save file err:", err)
+		}
+	}
+
+	// 响应一个字符串
+	context.String(200, "文件上传成功")
 }

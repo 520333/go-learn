@@ -1,4 +1,4 @@
-module part05
+module gin
 
 go 1.25.4
 
