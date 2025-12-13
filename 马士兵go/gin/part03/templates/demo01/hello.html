@@ -9,8 +9,19 @@
 <body>
 form表单
 <form action="/getUserInfo" method="post">
-    用户名： <input type="text" name="username">
-    密码： <input type="password" name="pwd">
+    用户名:<input type="text" name="username"><br>
+    密码:<input type="password" name="pwd"><br>
+    年龄:<input type="text" name="age"><br>
+    兴趣爱好:
+    java<input type="checkbox" name="loveLangue" value="0">
+    go<input type="checkbox" name="loveLangue" value="1">
+    python<input type="checkbox" name="loveLangue" value="2">
+    docker<input type="checkbox" name="loveLangue" value="3">
+    kubernetes<input type="checkbox" name="loveLangue" value="4">
+    <br>
+    地址:<input type="text" name="user[addr]">
+    邮件:<input type="text" name="user[email]">
+    <br>
     <input type="submit" value="提交">
 </form>
 </body>
