@@ -15,5 +15,4 @@ func Red1(context *gin.Context) {
 func Red2(context *gin.Context) {
 	fmt.Println("Red2")
 	context.String(http.StatusOK, "重定向成功 red2页面")
-
 }
