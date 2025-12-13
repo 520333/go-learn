@@ -2,7 +2,7 @@ package main
 
 import (
 	"net/http"
-	"part03/myfunc"
+	"part04/myfunc"
 
 	"github.com/gin-gonic/gin"
 )
@@ -14,5 +14,6 @@ func main() {
 	r.StaticFS("/s", http.Dir("static"))
 	r.GET("/userindex", myfunc.Hello1)
 	r.POST("/getUserInfo", myfunc.Hello2)
+	r.POST("/ajaxpost", myfunc.Hello3)
 	r.Run(":8080")
 }

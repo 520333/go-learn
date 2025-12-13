@@ -1,0 +1,37 @@
+{{define "demo01/hello.html"}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/s/css/css.css">
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+</head>
+<body>
+form表单
+<form action="/getUserInfo" method="post">
+    用户名:<input type="text" name="username" id="username"> <span id="errmsg"></span><br>
+    密码:<input type="password" name="pwd"><br>
+    <br>
+    <input type="submit" value="提交">
+    <script>
+        let unameText=document.getElementById("username")
+        unameText.onblur=function () {
+            let uname= unameText.value
+            $.ajax({
+                url: "/ajaxpost",
+                type:"POST",
+                data:{
+                    "uname": uname 
+                },
+                success: function (info) {
+                    document.getElementById("errmsg").innerText=info["msg"]
+                },
+                fail: function (){}
+            })
+        }
+    </script>
+</form>
+</body>
+</html>
+{{end}}
