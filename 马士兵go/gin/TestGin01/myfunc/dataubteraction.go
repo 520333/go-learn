@@ -23,3 +23,8 @@ func Hello2(context *gin.Context) {
 	}
 	context.HTML(http.StatusOK, "demo01/hello01.html", s)
 }
+
+func Hello3(context *gin.Context) {
+	var array = [3]int{10, 20, 30}
+	context.HTML(http.StatusOK, "demo01/hello01.html", array)
+}

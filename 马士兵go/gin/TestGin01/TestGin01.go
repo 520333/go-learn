@@ -16,7 +16,7 @@ func main() {
 	//r.Static("/s", "static") // 指定静态文件：指定css文件
 	r.StaticFS("/s", http.Dir("static"))
 
-	r.GET("/hello", myfunc.Hello2)
+	r.GET("/hello", myfunc.Hello3)
 	err := r.Run(":9999")
 	if err != nil {
 		log.Fatalln(err)
