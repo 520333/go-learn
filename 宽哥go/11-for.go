@@ -1,6 +1,6 @@
 package main
 
-// func main() {
+// myfunc main() {
 // 	for { //每三秒执行一次代码
 // 		timeNow := time.Now()
 

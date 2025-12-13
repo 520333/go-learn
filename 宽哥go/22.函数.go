@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-// func 函数名(参数1,参数2,类型)(返回值1,返回值2 类型){代码块/函数体}
+// myfunc 函数名(参数1,参数2,类型)(返回值1,返回值2 类型){代码块/函数体}
 func max(i1, i2 int) int {
 	if i1 > i2 {
 		return i1
@@ -37,7 +37,7 @@ func hasName(s ...string) string {
 	return m
 }
 
-// func main() {
+// myfunc main() {
 // 	res := max(31, 2)
 // 	fmt.Println("最大值:", res) //stdout 最大值:31
 // 	res = qiuhe(5, 11)

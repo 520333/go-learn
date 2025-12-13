@@ -3,43 +3,43 @@ package main
 /*
 import "fmt"
 
-func add(a, b int) (sum int, err error) {
+myfunc add(a, b int) (sum int, err error) {
 	sum = a + b
 	return sum, err
 }
-func addany(item ...int) (sum int, err error) {
+myfunc addany(item ...int) (sum int, err error) {
 	for _, value := range item {
 		sum += value
 	}
 	return sum, err
 }
-func addany2(a, b int) {
+myfunc addany2(a, b int) {
 	fmt.Printf("sum is%d\r\n", a+b)
 }
 
-func calc(op string) func() {
+myfunc calc(op string) myfunc() {
 	switch op {
 	case "+":
-		return func() {
+		return myfunc() {
 			fmt.Println("这是加法")
 		}
 	case "-":
-		return func() {
+		return myfunc() {
 			fmt.Println("这是减法")
 		}
 	default:
-		return func() {
+		return myfunc() {
 			fmt.Println("不是加法也不是减法")
 		}
 	}
 }
 
-func callBack(y int, f func(int, int)) {
+myfunc callBack(y int, f myfunc(int, int)) {
 	f(y, 2)
 }
 
 
-func main() {
+myfunc main() {
 	sum, err := add(1, 2)
 	fmt.Println(sum, err)
 
@@ -50,7 +50,7 @@ func main() {
 	res1, _ := funcVar(5, 5, 5, 5)
 	fmt.Println(res1)
 
-	callBack(1, func(a, b int) {
+	callBack(1, myfunc(a, b int) {
 		fmt.Printf("total is:%d\r\n", a+b)
 	})
 

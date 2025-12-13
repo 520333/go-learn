@@ -3,16 +3,16 @@ package main
 //defer会在return之后执行
 /*import "fmt"
 
-func a() {
+myfunc a() {
 	fmt.Println("A")
 }
-func b() {
+myfunc b() {
 	fmt.Println("B")
 }
-func c() {
+myfunc c() {
 	fmt.Println("C")
 }
-func main() {
+myfunc main() {
 	defer fmt.Println("main end1") // 顺序：先进栈后出栈
 	defer fmt.Println("main end2") // 顺序：后进栈先出栈
 

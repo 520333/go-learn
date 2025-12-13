@@ -1,6 +1,6 @@
 package main
 
-// func main() {
+// myfunc main() {
 // 	//var 数组名 = [数组长度]数组的类型{数组的数据}
 // 	var teacherNameArray = [3]string{"阿宝", "dawn", "master"}
 // 	fmt.Println(teacherNameArray)

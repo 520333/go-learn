@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-func main() {
+myfunc main() {
 	// 长度计算
 	name := "china golang工程师一日成魔"
 	bytes := []rune(name)

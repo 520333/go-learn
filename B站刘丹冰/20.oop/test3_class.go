@@ -8,18 +8,18 @@ type HuMan struct {
 	sex  string
 }
 
-func (h *HuMan) Eat()  { fmt.Println("Human eat()...") }
-func (h *HuMan) Walk() { fmt.Println("Human walk()...") }
+myfunc (h *HuMan) Eat()  { fmt.Println("Human eat()...") }
+myfunc (h *HuMan) Walk() { fmt.Println("Human walk()...") }
 
 type SuperMan struct {
 	HuMan
 	level int
 }
 
-func (s *SuperMan) Eat() { fmt.Println("SuperMan Eat()...") }
-func (s *SuperMan) Fly() { fmt.Println("SuperMan Fly()...") }
+myfunc (s *SuperMan) Eat() { fmt.Println("SuperMan Eat()...") }
+myfunc (s *SuperMan) Fly() { fmt.Println("SuperMan Fly()...") }
 
-func main() {
+myfunc main() {
 	humen := HuMan{name: "abao", sex: "man"}
 	humen.Eat()
 	humen.Walk()

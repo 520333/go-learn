@@ -10,7 +10,7 @@ var gB int = 200
 
 //gC:= 300 # 全局变量无法使用语法糖
 
-func main() {
+myfunc main() {
 	var a int //方法1 声明变量 默认值为0
 	fmt.Println("a = ", a)
 	fmt.Printf("type of a = %T\n", a)

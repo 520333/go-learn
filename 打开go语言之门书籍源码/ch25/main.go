@@ -50,7 +50,7 @@ func main() {
 	// fmt.Println("使用泛型:", sum("3123", "23.123"))
 	// fmt.Println("使用泛型:", sum(MyInt(10), MyInt(20)))
 
-	// result := MapValues([]float64{1.1, 2.2, 3.3}, func(i float64) float64 {
+	// result := MapValues([]float64{1.1, 2.2, 3.3}, myfunc(i float64) float64 {
 	// 	return i * 2
 	// })
 	// fmt.Println(result)

@@ -17,11 +17,11 @@ import (
 )
 
 // 不要通过共享内存来通信，而要通过通信来实现内存共享
-func main() {
+myfunc main() {
 	// 无缓冲channel适用于通知、B要第一时间知道是否已经完成
 	var msg chan string
 	msg = make(chan string, 0) // chan的初始化值如果是0放值进去会被阻塞 无缓冲channel
-	go func(msg chan string) {
+	go myfunc(msg chan string) {
 		data := <-msg // 取值
 		fmt.Println(data)
 	}(msg)

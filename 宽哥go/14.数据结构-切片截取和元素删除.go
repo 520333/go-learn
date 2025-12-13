@@ -1,6 +1,6 @@
 package main
 
-// func main() {
+// myfunc main() {
 // 	var s = []int{1, 2, 3, 4, 5, 6, 7, 8, 9}
 // 	fmt.Println("最初的数据是:", s)
 // 	// s[0][1][2] -->[:4] 取前四个

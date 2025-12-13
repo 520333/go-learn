@@ -19,7 +19,7 @@ func returnDataToFrontend(msg string) {
 	fmt.Println("返回给前端的数据是:", msg)
 }
 
-// func main() {
+// myfunc main() {
 // 	//1.关闭连接池
 // 	//2.关闭文件句柄
 // 	//3.记录一些异常日志

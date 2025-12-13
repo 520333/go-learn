@@ -3,7 +3,7 @@ package main
 /*
 import "fmt"
 
-func main() {
+myfunc main() {
 	// var a int8     // 有符号 (1字节 8bit)  (-128 到 127) 01111111 2的7次方-1 = 127
 	// var b int16    // 有符号 (2字节 16bit) (-32768 到 32767)
 	// var c int32    // 有符号 (3字节 32bit) (-2147483648 到 2147483647)

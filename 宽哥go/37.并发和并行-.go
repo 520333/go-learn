@@ -6,7 +6,7 @@ package main
 // )
 
 // // 做包子函数
-// func makeBuns(filling string) {
+// myfunc makeBuns(filling string) {
 // 	startTime := time.Now()
 // 	fmt.Printf("%s馅,开始的时间:\n", filling, startTime)
 
@@ -23,7 +23,7 @@ package main
 
 // }
 
-// func main() {
+// myfunc main() {
 // 	/*
 // 		协程: 2KB    线程: 8MB
 // 		协程不需要关系底层逻辑，内存管理及垃圾回收

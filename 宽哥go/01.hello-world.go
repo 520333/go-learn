@@ -6,7 +6,7 @@ func a() {
 	fmt.Println("a")
 }
 
-// func main() {
+// myfunc main() {
 // 	a()
 // 	fmt.Print("中文") // 不换行
 // 	fmt.Println("Hello world! Hello Go! My Name is chuang")

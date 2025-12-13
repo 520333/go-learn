@@ -24,7 +24,7 @@ func (s *Server) SayHello(ctx context.Context, request *proto.HelloRequest) (*pr
 }
 
 // 可以定义在这里
-// func Interceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
+// myfunc Interceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
 // 	fmt.Println("接收到一个新的请求")
 // 	return handler(ctx, req)
 // }

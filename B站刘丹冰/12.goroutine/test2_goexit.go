@@ -7,10 +7,10 @@ import (
 
 func main() {
 	//用go创建一个形参返回值为空的函数
-	/*go func() {
+	/*go myfunc() {
 		defer fmt.Println("A defer")
 
-		func() {
+		myfunc() {
 			defer fmt.Println("B defer")
 			runtime.Goexit() //退出当前goroutine
 			fmt.Println("B")

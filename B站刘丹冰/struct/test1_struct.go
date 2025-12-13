@@ -13,7 +13,7 @@ type Person struct {
 	height  float64
 }
 
-func main() {
+myfunc main() {
 	// p1 := Person{ //无法省略字段
 	// 	"dawn",
 	// 	18,

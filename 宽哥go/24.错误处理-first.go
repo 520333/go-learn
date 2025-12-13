@@ -16,7 +16,7 @@ func division(i1, i2 float64) (res float64, err error) {
 	}
 }
 
-// func main() {
+// myfunc main() {
 // 	// f, err := ioutil.ReadFile("./text.txt")
 // 	// if err != nil {
 // 	// 	fmt.Println("读取文件失败:", err.Error())

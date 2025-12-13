@@ -26,16 +26,16 @@ type Dog struct {
 }
 
 //*********猫类实现animal接口*******
-func (kitty Cat) Sleep()           { fmt.Println("kitty is sleep...") }
-func (kitty Cat) GetColor() string { return kitty.Color }
-func (kitty Cat) GetType() string  { return kitty.Type }
+myfunc (kitty Cat) Sleep()           { fmt.Println("kitty is sleep...") }
+myfunc (kitty Cat) GetColor() string { return kitty.Color }
+myfunc (kitty Cat) GetType() string  { return kitty.Type }
 
 //*********狗类实现animal接口********
-func (puppy Dog) Sleep()           { fmt.Println("puppy is sleep...") }
-func (puppy Dog) GetColor() string { return puppy.Color }
-func (puppy Dog) GetType() string  { return puppy.Type }
+myfunc (puppy Dog) Sleep()           { fmt.Println("puppy is sleep...") }
+myfunc (puppy Dog) GetColor() string { return puppy.Color }
+myfunc (puppy Dog) GetType() string  { return puppy.Type }
 
-func main() {
+myfunc main() {
 	//*********猫类********
 	var animal AnimalIf
 	fmt.Println(reflect.TypeOf(animal))

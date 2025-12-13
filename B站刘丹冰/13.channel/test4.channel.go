@@ -4,7 +4,7 @@ package main
 import "fmt"
 
 // 斐波那契数列
-func fibonacii(c chan int, quit chan int) {
+myfunc fibonacii(c chan int, quit chan int) {
 	x, y := 1, 1
 	for {
 		select {
@@ -16,10 +16,10 @@ func fibonacii(c chan int, quit chan int) {
 		}
 	}
 }
-func main() {
+myfunc main() {
 	c := make(chan int)
 	quit := make(chan int)
-	go func() {
+	go myfunc() {
 		for i := 0; i < 50; i++ {
 			fmt.Println(<-c)
 		}

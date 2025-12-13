@@ -14,18 +14,18 @@ type MyReaderWriter interface {
 
 type SreaWriter struct{}
 
-func (s *SreaWriter) Write(string) {
+myfunc (s *SreaWriter) Write(string) {
 	fmt.Println("write")
 
 }
-func (s *SreaWriter) Read() string {
+myfunc (s *SreaWriter) Read() string {
 	fmt.Println("read")
 	return ""
 }
-func (s *SreaWriter) ReadWrite() {
+myfunc (s *SreaWriter) ReadWrite() {
 	fmt.Println("read and write")
 }
-func main() {
+myfunc main() {
 	var mrw MyReaderWriter = &SreaWriter{}
 	mrw.Read()
 }

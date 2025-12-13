@@ -5,9 +5,9 @@ import (
 	"fmt"
 )
 
-func main() {
+myfunc main() {
 	c := make(chan int)
-	go func() {
+	go myfunc() {
 		defer fmt.Println("goroutine结束")
 
 		fmt.Println("goroutine正在运行...")

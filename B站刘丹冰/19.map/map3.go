@@ -3,10 +3,10 @@ package main
 /*
 import "fmt"
 
-func sum(i1, i2 int) (sum int) {
+myfunc sum(i1, i2 int) (sum int) {
 	return i1 + i2
 }
-func main() {
+myfunc main() {
 	// skill := make(map[string]string)
 	skill := map[string]string{
 		"Java":       "1",

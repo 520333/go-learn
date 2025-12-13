@@ -7,7 +7,7 @@ import "fmt"
 // 	"time"
 // )
 
-// func main() {
+// myfunc main() {
 // 	fmt.Println("hello,world!")
 // 	time.Sleep(1 * time.Second)
 // }

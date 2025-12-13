@@ -3,7 +3,7 @@ package main
 /*
 import "fmt"
 
-func main() {
+myfunc main() {
 	for i := 0; i < 5; i++ {
 		for j := 0; j < 4; j++ {
 			if j == 2 {

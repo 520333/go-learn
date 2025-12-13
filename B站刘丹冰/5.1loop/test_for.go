@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-func main() {
+myfunc main() {
 	// for init; condition; post{}
 	// var i int
 	// for i < 3 {

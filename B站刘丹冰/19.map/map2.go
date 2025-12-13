@@ -3,17 +3,17 @@ package main
 /*
 import "fmt"
 
-func printMap(cityMap map[string]string) {
+myfunc printMap(cityMap map[string]string) {
 	//printMap中的cityMap是一个引用传递
 	for key, value := range cityMap {
 		fmt.Printf("key=%s value = %s\n", key, value)
 	}
 }
 
-func ChangeValue(cityMap map[string]string) {
+myfunc ChangeValue(cityMap map[string]string) {
 	cityMap["England"] = "Lodon"
 }
-func main() {
+myfunc main() {
 	cityMap := make(map[string]string)
 	cityMap["China"] = "Beijing" //添加
 	cityMap["Japan"] = "Tokyo"

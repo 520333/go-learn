@@ -8,7 +8,7 @@ package main
 // 	"os"
 // )
 
-// func generateSSHA(password string) (string, error) {
+// myfunc generateSSHA(password string) (string, error) {
 // 	// 生成 4 字节的随机盐值（slappasswd 默认使用 4 字节）
 // 	salt := make([]byte, 4)
 // 	_, err := rand.Read(salt)
@@ -34,7 +34,7 @@ package main
 // 	return "{SSHA}" + encoded, nil
 // }
 
-// func main() {
+// myfunc main() {
 // 	// 检查命令行参数
 // 	if len(os.Args) < 2 {
 // 		fmt.Println("用法: go run script.go <password>")

@@ -1,7 +1,7 @@
 package main
 
 /*
-func main() {
+myfunc main() {
 	// 条件判断
 	age := 19
 	country := "美国"

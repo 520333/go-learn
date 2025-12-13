@@ -24,7 +24,7 @@ type Info struct {
 	Phone
 }
 
-// func main() {
+// myfunc main() {
 // 	// var p Person
 // 	// p.Name = "阿宝"
 // 	// p.Age = 20

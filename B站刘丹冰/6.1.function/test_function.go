@@ -3,7 +3,7 @@ package main
 /*
 import "fmt"
 
-func floot(a string, b int) int {
+myfunc floot(a string, b int) int {
 	fmt.Println("a = ", a)
 	fmt.Println("b = ", b)
 	c := 200
@@ -11,14 +11,14 @@ func floot(a string, b int) int {
 }
 
 // 多个匿名返回值
-func floot2(a string, b int) (int, int) {
+myfunc floot2(a string, b int) (int, int) {
 	fmt.Println("a = ", a)
 	fmt.Println("b = ", b)
 	return 66, 77
 }
 
 // 有形参名返回值
-func floot3(a string, b int) (r1 int, r2 int) {
+myfunc floot3(a string, b int) (r1 int, r2 int) {
 	fmt.Println("a = ", a)
 	fmt.Println("b = ", b)
 	fmt.Println("r1 = ", r1)
@@ -28,7 +28,7 @@ func floot3(a string, b int) (r1 int, r2 int) {
 	return r1, r2
 }
 
-func floot4(a string, b int) (r1, r2 int) {
+myfunc floot4(a string, b int) (r1, r2 int) {
 	fmt.Println("======floot4======")
 	fmt.Println("a = ", a)
 	fmt.Println("b = ", b)
@@ -37,7 +37,7 @@ func floot4(a string, b int) (r1, r2 int) {
 	return
 }
 
-func main() {
+myfunc main() {
 	c := floot("ccc", 666)
 	fmt.Println("c = ", c)
 

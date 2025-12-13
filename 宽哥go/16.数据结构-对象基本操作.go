@@ -1,6 +1,6 @@
 package main
 
-// func main() {
+// myfunc main() {
 // 	teacherAge := make(map[string]int)
 // 	fmt.Println("对象的初始化值:", teacherAge) //stdout: 对象的初始化值: map[]
 

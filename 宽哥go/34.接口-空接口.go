@@ -6,7 +6,7 @@ package main
 */
 // type EmptyInterface interface{}
 
-// func main() {
+// myfunc main() {
 // 	fmt.Println("打印一条数据")
 // 	var ei EmptyInterface
 // 	s1 := "这是一串字符串"

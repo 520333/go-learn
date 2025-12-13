@@ -5,7 +5,7 @@ import "fmt"
 
 // slice是数组的弱化 实现也是基于数组
 // slice初始化3种方式: 1.从数组创建 2.使用string{} 3.使用make
-func main() {
+myfunc main() {
 	// 方法1
 	var courses []string
 	fmt.Printf("类型:%T, 长度:%v\r\n", courses, len(courses))

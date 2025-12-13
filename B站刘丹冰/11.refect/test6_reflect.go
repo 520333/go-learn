@@ -12,12 +12,12 @@ type User struct {
 	Age  int
 }
 
-func (u User) Call() {
+myfunc (u User) Call() {
 	fmt.Println("user is called...")
 	fmt.Printf("%v\n", u)
 }
 
-func DoFileAndMethod(input interface{}) {
+myfunc DoFileAndMethod(input interface{}) {
 	inputType := reflect.TypeOf(input)
 	inputValue := reflect.ValueOf(input)
 	fmt.Println("inputType = ", inputType.Name())
@@ -32,7 +32,7 @@ func DoFileAndMethod(input interface{}) {
 		fmt.Printf("方法: %s 类型: %v\n", method.Name, method.Type)
 	}
 }
-func main() {
+myfunc main() {
 	user := User{1, "dawn", 20}
 	user.Call()
 	DoFileAndMethod(user)

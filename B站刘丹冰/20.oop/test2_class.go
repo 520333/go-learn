@@ -9,21 +9,21 @@ type Hero struct {
 	Level int
 }
 
-func (h Hero) Show() {
+myfunc (h Hero) Show() {
 	fmt.Println("Name = ", h.name)
 	fmt.Println("Ad = ", h.Ad)
 	fmt.Println("Level = ", h.Level)
 }
 
-func (h Hero) GetName() string {
+myfunc (h Hero) GetName() string {
 	return h.name
 }
 
-func (h *Hero) SetName(newName string) {
+myfunc (h *Hero) SetName(newName string) {
 	h.name = newName
 }
 
-func main() {
+myfunc main() {
 	hero := Hero{name: "yoda", Ad: 100, Level: 1}
 	hero.Show()
 	hero.SetName("obiwan")

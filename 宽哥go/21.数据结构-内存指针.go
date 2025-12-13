@@ -1,13 +1,13 @@
 package main
 
-// func updateString(s string) {
+// myfunc updateString(s string) {
 // 	s = "这是一个新值"
 // }
-// func updateStringWithPointer(s *string) {
+// myfunc updateStringWithPointer(s *string) {
 // 	*s = "这是一个string类型的指针新值"
 // }
 
-// func main() {
+// myfunc main() {
 // 	var s string
 // 	s = "这是一个字符串"
 // 	fmt.Println("变量s的内存地址是:", &s) // stdout: 变量s的内存地址是: 0xc000088240

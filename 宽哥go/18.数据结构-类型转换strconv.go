@@ -1,10 +1,10 @@
 package main
 
-// func area(r float64) float64 {
+// myfunc area(r float64) float64 {
 // 	s := math.Pi * r * r
 // 	return s
 // }
-// func main() {
+// myfunc main() {
 // 	r := 2
 // 	s := area(float64(r))
 // 	fmt.Println("圆的面积是:", s) //stdout: 圆的面积是: 12.566370614359172

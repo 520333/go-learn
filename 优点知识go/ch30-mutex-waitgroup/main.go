@@ -27,7 +27,7 @@ func main() {
 	var si safeInt
 	// var a int
 	// a++
-	// go func() {
+	// go myfunc() {
 	// 	a++
 	// }()
 	// time.Sleep(time.Millisecond)

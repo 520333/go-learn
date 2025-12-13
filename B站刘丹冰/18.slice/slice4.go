@@ -3,7 +3,7 @@ package main
 /*
 import "fmt"
 
-func main() {
+myfunc main() {
 	var numbers = make([]int, 3, 5)
 	fmt.Printf("len = %d, cap = %d, %v\n", len(numbers), cap(numbers), numbers)
 	numbers = append(numbers, 1) //追加一个元素1 numbers len = 4 [0,0,0,1] cap =5

@@ -11,7 +11,7 @@ type resume struct {
 	Sex  string `info:"sex" doc:"性别"`
 }
 
-func fintTag(str interface{}) {
+myfunc fintTag(str interface{}) {
 	t := reflect.TypeOf(str).Elem()
 	for i := 0; i < t.NumField(); i++ {
 		taginfostring := t.Field(i).Tag.Get("info")
@@ -20,7 +20,7 @@ func fintTag(str interface{}) {
 		fmt.Println("doc:", tagsdoctring)
 	}
 }
-func main() {
+myfunc main() {
 	var re resume
 	fintTag(&re)
 }

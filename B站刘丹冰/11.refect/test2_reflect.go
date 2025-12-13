@@ -7,7 +7,7 @@ import (
 	"os"
 )
 
-func main() {
+myfunc main() {
 	tty, err := os.OpenFile("/dev/tty", os.O_RDWR, 0)
 	if err != nil {
 		fmt.Println("open file error", err)

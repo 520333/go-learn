@@ -15,7 +15,7 @@ func screw(c chan int) {
 	}
 }
 
-// func main() {
+// myfunc main() {
 // 	//定义拧螺丝通道
 // 	screwChan := make(chan int, 100)
 // 	defer close(screwChan)
@@ -23,7 +23,7 @@ func screw(c chan int) {
 // 	stop := make(chan bool)
 // 	defer close(stop)
 // 	go screw(screwChan)
-// 	go func() {
+// 	go myfunc() {
 // 		time.Sleep(10 * time.Second)
 // 		fmt.Println("下班了，停止拧螺丝")
 // 		stop <- true

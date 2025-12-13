@@ -243,7 +243,7 @@ func SyncOnce() {
 	config := make(map[string]string)
 	once := sync.Once{}
 	loadConfig := func() {
-		//once.Do(func() {
+		//once.Do(myfunc() {
 		config = map[string]string{
 			"varInt": fmt.Sprintf("%d", rand.Int31()),
 		}

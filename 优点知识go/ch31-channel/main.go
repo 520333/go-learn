@@ -24,7 +24,7 @@ func createChannel(i int) chan<- int {
 }
 func chanelDemo() {
 	// c := make(chan int)
-	// go func() {
+	// go myfunc() {
 	// 	for {
 	// 		n := <-c
 	// 		fmt.Println(n)

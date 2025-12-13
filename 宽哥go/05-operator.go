@@ -24,7 +24,7 @@ func stringSprintf(firstName, secondName string) {
 	fmt.Println("全名：", fullName)
 }
 
-// func main() {
+// myfunc main() {
 // 	// 数值运算
 // 	// num1 := 1
 // 	// num2 := 2

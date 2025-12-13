@@ -1,6 +1,6 @@
 package main
 
-// func dealData(data interface{}) {
+// myfunc dealData(data interface{}) {
 // 	t, ok := data.(string) //如果data是string类型的，ok=true t=data
 // 	if ok {
 // 		fmt.Println("当前类型为string,变量的值是:", t)
@@ -9,7 +9,7 @@ package main
 // 		fmt.Println("当前t的值:", t)
 // 	}
 // }
-// func getType(i interface{}) {
+// myfunc getType(i interface{}) {
 // 	switch t := i.(type) {
 // 	case int:
 // 		fmt.Println("当前值为int类型:", t)
@@ -24,7 +24,7 @@ package main
 // 	}
 
 // }
-// func main() {
+// myfunc main() {
 // 	//类型断言：大致知道了接口可能是某种类型，然后使用t,ok:=i.(string)
 // 	s := "hello"
 // 	dealData(s) //stdout: 当前类型为string,变量的值是: hello

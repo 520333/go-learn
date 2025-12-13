@@ -4,7 +4,7 @@ import "fmt"
 
 func main() {
 
-	fmt.Println("this is a func")
+	fmt.Println("this is a myfunc")
 	defer func() {
 		if r := recover(); r != nil { // recover用于捕获panic
 			fmt.Println("recover if A", r)

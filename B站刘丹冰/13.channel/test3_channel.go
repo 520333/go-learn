@@ -5,9 +5,9 @@ import (
 	"fmt"
 )
 
-func main() {
+myfunc main() {
 	c := make(chan int)
-	go func() {
+	go myfunc() {
 		for i := 0; i < 5; i++ {
 			c <- i
 		}

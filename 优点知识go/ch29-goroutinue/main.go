@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-//	func helloGoroutinue(i int) {
+//	myfunc helloGoroutinue(i int) {
 //		fmt.Printf("I am from gorouine %d", i)
 //	}
 func main() {
@@ -16,7 +16,7 @@ func main() {
 		}(i)
 	}
 	// for i := 0; i < 10; i++ {
-	// 	go func(i int) {
+	// 	go myfunc(i int) {
 	// 		for {
 	// 			a[i]++
 	// 			// fmt.Printf("I am from gorouine %d\n", i)

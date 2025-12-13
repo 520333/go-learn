@@ -1,6 +1,6 @@
 package main
 
-// func main() {
+// myfunc main() {
 // 	count := 0 //偶数个数
 // 	for num := 1; num <= 100; num++ {
 // 		if num%2 == 0 { //判断1-100有哪些偶数，有多少个偶数

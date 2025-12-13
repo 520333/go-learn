@@ -7,5 +7,5 @@ type Course struct {
 }
 
 func init() {
-	fmt.Println("this is user2 init func...")
+	fmt.Println("this is user2 init myfunc...")
 }

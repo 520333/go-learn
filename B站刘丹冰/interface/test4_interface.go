@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-func add(a, b interface{}) interface{} {
+myfunc add(a, b interface{}) interface{} {
 	switch a.(type) {
 	case int:
 		ai, _ := a.(int)
@@ -36,7 +36,7 @@ func add(a, b interface{}) interface{} {
 		panic("not superted type...")
 	}
 }
-func main() {
+myfunc main() {
 	re := add("hello", "world")
 	res, _ := re.(string)
 	fmt.Println(strings.Split(res, "  "))

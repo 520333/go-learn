@@ -13,7 +13,7 @@ func printAD() {
 
 }
 
-// func main() {
+// myfunc main() {
 // 	fmt.Println("===start===")
 // 	printAD()
 // 	fmt.Println("==end===")

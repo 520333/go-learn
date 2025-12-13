@@ -3,7 +3,7 @@ package main
 /*
 import "fmt"
 
-func main() {
+myfunc main() {
 	//slice1 := []int{1, 2, 3} //声明slice是一个切片并且初始化，默认值是1，2，3 长度len是3
 	var slice1 []int //声明slice1是一个切片，但是并没有给slice分配空间
 	//slice1 = make([]int, 3) // 开辟3个空间，默认值是0

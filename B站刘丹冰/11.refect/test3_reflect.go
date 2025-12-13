@@ -7,9 +7,9 @@ type Reader interface{ ReaderBook() }
 type Writer interface{ WriterBook() }
 type Book struct{}
 
-func (b *Book) ReaderBook() { fmt.Println("Read a Book...") }
-func (b *Book) WriterBook() { fmt.Println("write a Book...") }
-func main() {
+myfunc (b *Book) ReaderBook() { fmt.Println("Read a Book...") }
+myfunc (b *Book) WriterBook() { fmt.Println("write a Book...") }
+myfunc main() {
 	b := &Book{}
 	var r Reader = b
 	r.ReaderBook()

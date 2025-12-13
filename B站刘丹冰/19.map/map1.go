@@ -3,7 +3,7 @@ package main
 /*
 import "fmt"
 
-func main() {
+myfunc main() {
 	//===========>第一种声明方式
 	var myMap1 map[string]string
 	if myMap1 == nil {

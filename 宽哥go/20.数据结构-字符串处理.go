@@ -1,6 +1,6 @@
 package main
 
-// func main() {
+// myfunc main() {
 // 	s := "\t\txxx\n"
 // 	fmt.Println("双引号字符串:", s) //stdout: 双引号字符串:           xxx
 // 	s2 := `\t\txxx\n`

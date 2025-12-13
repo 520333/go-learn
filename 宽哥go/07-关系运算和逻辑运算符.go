@@ -1,6 +1,6 @@
 package main
 
-// func main() {
+// myfunc main() {
 // 	fmt.Println(727 > 721)    // true
 // 	fmt.Println(727 < 721)    // false
 // 	fmt.Println("a" == "b")   // false

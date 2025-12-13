@@ -1,6 +1,6 @@
 package main
 
-// func main() {
+// myfunc main() {
 // 	s1 := "dawn"
 // 	s2 := s1
 // 	fmt.Println(s1, s2) // stdout: dawn dawn

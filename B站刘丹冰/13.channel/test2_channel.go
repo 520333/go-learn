@@ -7,11 +7,11 @@ import (
 )
 
 // 有缓冲chanel
-func main() {
+myfunc main() {
 	c := make(chan int, 3) // 这是一个有缓冲通道可以容纳最多3个元素
 	fmt.Println("len(c) = ", len(c), "cap(c) = ", cap(c))
 
-	go func() {
+	go myfunc() {
 		defer fmt.Println("子go程结束...")
 		for i := 0; i < 4; i++ {
 			c <- i

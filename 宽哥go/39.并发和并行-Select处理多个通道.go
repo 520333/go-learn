@@ -1,12 +1,12 @@
 package main
 
-// func cookDish(chef, dishName string, c chan string) { //做菜函数
+// myfunc cookDish(chef, dishName string, c chan string) { //做菜函数
 // 	fmt.Printf("厨师:\033[1;32;40m%s\033[0m   正在做:\033[1;32;40m%s\033[0m\n", chef, dishName)
 // 	time.Sleep(time.Second * 5)
 // 	//做好的菜放进管道内
 // 	c <- dishName
 // }
-// func main() {
+// myfunc main() {
 // 	//定义2个channel存储不同的数据
 // 	chef1 := make(chan string)
 // 	chef2 := make(chan string)

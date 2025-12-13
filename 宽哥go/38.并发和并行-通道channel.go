@@ -1,6 +1,6 @@
 package main
 
-// func makeBuns(filling string, buns chan string) { // 做包子函数
+// myfunc makeBuns(filling string, buns chan string) { // 做包子函数
 // 	fmt.Printf("开始做%s馅的包子。\n", filling)
 // 	fmt.Printf("开始剁%s馅...\n", filling)
 // 	fmt.Println("开始擀皮...")
@@ -18,12 +18,12 @@ package main
 // 	//取数据: data1 := <- channel1
 
 // }
-// func waiter(buns chan string) { //上菜函数
+// myfunc waiter(buns chan string) { //上菜函数
 // 	bun := <-buns
 // 	fmt.Printf("上菜:%s馅包子  上菜时间:%s\n", bun, time.Now())
 // }
 
-// func main() {
+// myfunc main() {
 // 	/*
 // 		协程: 2KB    线程: 8MB
 // 		协程不需要关系底层逻辑，内存管理及垃圾回收

@@ -22,20 +22,20 @@ type databaseWriter struct {
 	db   string
 }
 
-func (fw *fileWriter) Write(string) error {
+myfunc (fw *fileWriter) Write(string) error {
 	fmt.Println("write string to file...")
 	return nil
 }
-func (dc *databaseWriter) Write(string) error {
+myfunc (dc *databaseWriter) Write(string) error {
 	fmt.Println("write string to db...")
 	return nil
 }
-func (wc *writeCloser) Close() error {
+myfunc (wc *writeCloser) Close() error {
 	fmt.Println("write string...")
 	return nil
 }
 
-func main() {
+myfunc main() {
 	var mw MyWriter = &writeCloser{
 		// &fileWriter{},
 		&databaseWriter{},

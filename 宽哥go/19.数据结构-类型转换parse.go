@@ -1,6 +1,6 @@
 package main
 
-// func main() {
+// myfunc main() {
 // 	// 0 1 t f T F false True TRUE
 // 	// 0:false 1:true
 // 	s1 := "1"

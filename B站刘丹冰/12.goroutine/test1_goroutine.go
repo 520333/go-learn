@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-func newTask() {
+myfunc newTask() {
 	i := 0
 	for {
 		i++
@@ -14,7 +14,7 @@ func newTask() {
 		time.Sleep(1 * time.Second)
 	}
 }
-func main() {
+myfunc main() {
 	// 创建一个go程 去执行newTask()流程
 	go newTask()
 	fmt.Println("main goroutine exit")

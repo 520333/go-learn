@@ -1,6 +1,6 @@
 package main
 
-// func main() {
+// myfunc main() {
 // 	defaultIntType := 1
 // 	fmt.Println("默认的数值类型是：", reflect.TypeOf(defaultIntType), "取值范围：", math.MinInt, math.MaxInt)
 // 	var int64Num int64 = 1

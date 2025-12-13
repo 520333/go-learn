@@ -11,7 +11,7 @@ func sum(a, b int) int {
 
 func funcValRef(a int) {
 	a = 1000
-	fmt.Printf("in func inner:%d\n", a)
+	fmt.Printf("in myfunc inner:%d\n", a)
 }
 
 func funcValRefPoint(a *int) {
@@ -28,9 +28,9 @@ func main() {
 
 	var p int = 100
 	funcValRef(p)
-	fmt.Printf("in func main:%d\n", p)
+	fmt.Printf("in myfunc main:%d\n", p)
 
 	funcValRefPoint(&p)
-	fmt.Printf("in func main:%d\n", p)
+	fmt.Printf("in myfunc main:%d\n", p)
 
 }

@@ -14,7 +14,7 @@ func factorial(n int) (result int) {
 
 }
 
-// func main() {
+// myfunc main() {
 // 	//递归函数:函数自己调用自己，直到达到条件后才能结束返回结果
 // 	//n!=n*(n-1)*(n-2)***1
 // 	i := 5

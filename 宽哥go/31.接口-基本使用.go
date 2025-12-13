@@ -9,7 +9,7 @@ package main
 // 	Password string
 // }
 
-// func main() {
+// myfunc main() {
 // 	//2.声明一个数据库实例
 // 	db := DBConfig{"127.0.0.1", 3306, "interface_test", "root", "123456"}
 // 	fmt.Println("数据库配置:", db)

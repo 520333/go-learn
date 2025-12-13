@@ -1,6 +1,6 @@
 package main
 
-// func main() {
+// myfunc main() {
 // 	// 切片嵌套对象
 // 	order1 := map[string]int{
 // 		"宫保鸡丁": 45,

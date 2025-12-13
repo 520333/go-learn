@@ -1,7 +1,7 @@
 package main
 
 /*
-func main() {
+myfunc main() {
 	var a string
 	//pari<statictype: string, value: "aceld">
 	a = "aceld"

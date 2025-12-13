@@ -14,7 +14,7 @@ package main
 // 	Hobby   []string
 // }
 
-// func main() {
+// myfunc main() {
 // 	var p People
 // 	p.Name = "chuang"
 // 	p.Age = 20

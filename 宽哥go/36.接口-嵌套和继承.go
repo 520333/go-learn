@@ -41,24 +41,24 @@ package main
 // 	Name string
 // }
 
-// func (u UserImpl) Login() {
+// myfunc (u UserImpl) Login() {
 // 	fmt.Println("用户登录:", u.Name)
 // }
-// func (u UserImpl) Logout() {
+// myfunc (u UserImpl) Logout() {
 // 	fmt.Println("退出登录:", u.Name)
 // }
 
-// func (u VIPUserImpl) Login() {
+// myfunc (u VIPUserImpl) Login() {
 // 	fmt.Println("VIP用户登录:", u.Name)
 // }
-// func (u VIPUserImpl) Logout() {
+// myfunc (u VIPUserImpl) Logout() {
 // 	fmt.Println("VIP退出登录:", u.Name)
 // }
 
-// func (u VIPUserImpl) ToDesk() {
+// myfunc (u VIPUserImpl) ToDesk() {
 // 	fmt.Println("VIP远程支撑服务:", u.Name)
 // }
-// func main() {
+// myfunc main() {
 // 	var userInterface User
 // 	var u UserImpl
 // 	u.Name = "chuang"

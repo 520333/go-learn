@@ -18,7 +18,7 @@ func printPriceWithSwitch(weather string) {
 	}
 }
 
-// func main() {
+// myfunc main() {
 // 	printPriceWithSwitch("lightRain")
 // 	printPriceWithSwitch("heayRain")
 // 	printPriceWithSwitch("rainStorm")

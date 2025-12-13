@@ -3,7 +3,7 @@ package main
 // import "fmt"
 
 // // 定义价格的函数
-// func printPrice(weather string) {
+// myfunc printPrice(weather string) {
 // 	defaultPrice := 10
 // 	if weather == "sunny" {
 // 		fmt.Println("今天是晴天,雨伞价格：", defaultPrice)
@@ -13,7 +13,7 @@ package main
 // 	}
 // }
 
-// func printPriceWeather(weather string) {
+// myfunc printPriceWeather(weather string) {
 // 	defaultPrice := 10
 // 	if weather == "lightRain" {
 // 		fmt.Printf("\033[1;32;40m%s%d\033[0m\n", "今天下小雨,雨伞价格：", defaultPrice+5)
@@ -26,7 +26,7 @@ package main
 // 	}
 // }
 
-// func main() {
+// myfunc main() {
 // 	weather := "lightRain" //小雨
 // 	printPriceWeather(weather)
 // 	weather = "heayRain" //大雨

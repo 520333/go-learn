@@ -1,6 +1,6 @@
 package main
 
-// func main() {
+// myfunc main() {
 // 	// 定义：var 切片名称 []切片类型
 // 	var s1 []int
 // 	fmt.Println("数据:", s1, "默认长度:", len(s1), "默认容量:", cap(s1)) //sdtout: [] 默认长度: 0 默认容量: 0

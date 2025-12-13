@@ -21,13 +21,13 @@ type Language struct {
 }
 
 // 创建之前add_time字段加上当前时间
-// func (l *Language) BeforeCreate(tx *gorm.DB) (err error) {
+// myfunc (l *Language) BeforeCreate(tx *gorm.DB) (err error) {
 // 	l.AddTime = time.Now()
 // 	return
 // }
 
 // 1.自定义表名
-// func (Language) TableName() string {
+// myfunc (Language) TableName() string {
 // 	return "my_language"
 // }
 

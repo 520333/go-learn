@@ -3,14 +3,14 @@ package main
 /*
 import "fmt"
 
-func printArray(myArray [4]int) {
+myfunc printArray(myArray [4]int) {
 	for index, value := range myArray {
 		fmt.Println("index = ", index, "value = ", value)
 	}
 	myArray[0] = 111
 
 }
-func main() {
+myfunc main() {
 	var myArray1 [10]int // 固定长度数组
 	myArray2 := [10]int{1, 2, 3, 4}
 	myArray3 := [4]int{11, 22, 33, 44}

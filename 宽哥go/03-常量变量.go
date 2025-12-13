@@ -1,6 +1,6 @@
 package main
 
-// func main() {
+// myfunc main() {
 // 	// 方法1： var关键字
 // 	var name string = "chuang"
 // 	fmt.Println("名字:", name)

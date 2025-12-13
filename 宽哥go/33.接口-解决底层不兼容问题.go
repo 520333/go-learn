@@ -33,49 +33,49 @@ type 接口名称 interface {
 // 	charset string
 // }
 
-// func (m MySQL) Select(data string) error {
+// myfunc (m MySQL) Select(data string) error {
 // 	fmt.Println("从MySQL查询数据:", data)
 // 	return nil
 // }
 
-// func (m MySQL) Insert(data string) error {
+// myfunc (m MySQL) Insert(data string) error {
 // 	fmt.Println("插入数据到MySQL:", data)
 // 	return nil
 
 // }
 
-// func (m MySQL) Update(data string) error {
+// myfunc (m MySQL) Update(data string) error {
 // 	fmt.Println("更新数据到MySQL:", data)
 // 	return nil
 // }
 
-// func (m MySQL) Delete(data string) error {
+// myfunc (m MySQL) Delete(data string) error {
 // 	fmt.Println("删除数据:", data)
 // 	return nil
 // }
 
-// func (m PostGreSQL) Select(data string) error {
+// myfunc (m PostGreSQL) Select(data string) error {
 // 	fmt.Println("从postgresql查询数据:", data)
 // 	return nil
 // }
 
-// func (m PostGreSQL) Insert(data string) error {
+// myfunc (m PostGreSQL) Insert(data string) error {
 // 	fmt.Println("插入数据到postgresql:", data)
 // 	return nil
 
 // }
 
-// func (m PostGreSQL) Update(data string) error {
+// myfunc (m PostGreSQL) Update(data string) error {
 // 	fmt.Println("更新数据到postgresql:", data)
 // 	return nil
 // }
 
-// func (m PostGreSQL) Delete(data string) error {
+// myfunc (m PostGreSQL) Delete(data string) error {
 // 	fmt.Println("postgresql删除数据:", data)
 // 	return nil
 // }
 
-// func main() {
+// myfunc main() {
 // 	dbType := "pgsql"
 // 	// db := DBConfig{"127.0.0.1", 3306, "interface_test", "root", "123456"}
 // 	var dbCommonInterface DBCommon

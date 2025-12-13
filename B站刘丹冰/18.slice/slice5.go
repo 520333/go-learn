@@ -1,7 +1,7 @@
 package main
 
 /*
-func main() {
+myfunc main() {
 	s := []int{1, 2, 3} //len=3,cap=3
 	s1 := s[0:2]        // [1,2]
 	fmt.Println(s1)

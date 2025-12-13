@@ -22,7 +22,7 @@ const (
 	i, k                      // iota = 4, i = iota * 2, k = iota * 3
 )
 
-func main() {
+myfunc main() {
 
 	fmt.Println(length)
 	// length2 = 233 // 常量不允许修改
