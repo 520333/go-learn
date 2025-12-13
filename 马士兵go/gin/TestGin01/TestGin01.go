@@ -3,13 +3,11 @@ package main
 import (
 	"log"
 	"net/http"
+	"test01/myfunc"
 
 	"github.com/gin-gonic/gin"
 )
 
-func Hello(context *gin.Context) {
-	context.HTML(http.StatusOK, "demo01/hello01.html", nil)
-}
 func main() {
 	r := gin.Default()
 
@@ -18,7 +16,7 @@ func main() {
 	//r.Static("/s", "static") // 指定静态文件：指定css文件
 	r.StaticFS("/s", http.Dir("static"))
 
-	r.GET("/hello", Hello)
+	r.GET("/hello", myfunc.Hello2)
 	err := r.Run(":9999")
 	if err != nil {
 		log.Fatalln(err)
