@@ -15,5 +15,6 @@ func main() {
 	r.GET("/userindex2", myfunc.Hello3)
 	r.GET("/userindex3", myfunc.Hello4)
 	r.POST("/toajax", myfunc.Hello5)
+	r.GET("/userindex4/:uname/:age", myfunc.Hello6)
 	r.Run(":8080")
 }

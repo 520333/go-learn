@@ -43,8 +43,8 @@ func Hello4(context *gin.Context) {
 }
 
 type User2 struct {
-	Uname string `json:"uname"`
-	Age   int    `json:"age"`
+	Uname string `json:"uname" uri:"uname"`
+	Age   int    `json:"age" uri:"age"`
 }
 
 func Hello5(context *gin.Context) {
@@ -60,5 +60,15 @@ func Hello5(context *gin.Context) {
 		})
 	}
 	fmt.Println(user)
+}
 
+func Hello6(context *gin.Context) {
+	var user User2
+	err := context.ShouldBindUri(&user)
+	fmt.Println(user)
+	if err != nil {
+		context.String(404, "绑定失败")
+	} else {
+		context.String(200, "绑定成功")
+	}
 }
