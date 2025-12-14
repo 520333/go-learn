@@ -33,3 +33,7 @@ func Hello1(context *gin.Context) {
 	}
 	context.HTML(http.StatusOK, "demo01/hello.html", mapData)
 }
+
+func Add(num1, num2 int) int {
+	return num1 + num2
+}
