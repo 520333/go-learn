@@ -25,6 +25,34 @@
     {{print nil}}
 
     变量定义：{{$name :="海绵宝宝"}} {{print $name}} {{$name}}
+    <br>
+    {{if .flag}}
+        后端传过来的是true
+    {{end}}
+
+    <br>
+    {{if .username}}
+        后端传入了数据
+    {{else}}
+        后端无数据传入
+    {{end}}
+    <br>
+
+    {{if .flag}}
+        {{if .username}}
+            哈哈
+        {{end}}
+    {{end}}<br>
+
+    with关键字:
+    {{with .stu}}
+        {{.Name}}
+        {{.Age}}
+        {{else}}
+            暂无数据
+    {{end}}
+    <br>
+
 </body>
 </html>
 {{end}}
