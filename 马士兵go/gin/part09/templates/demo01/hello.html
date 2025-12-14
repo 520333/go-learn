@@ -52,6 +52,9 @@
             暂无数据
     {{end}}
     <br>
+    {{/*通过.将数据传递给内嵌页面 实现上下文数据共享*/}}
+    {{template "template/demo01/hello2.html" .}}
+
 
 </body>
 </html>
