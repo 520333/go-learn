@@ -26,3 +26,14 @@ func Hello2(context *gin.Context) {
 		context.String(200, "绑定成功")
 	}
 }
+
+func Hello3(context *gin.Context) {
+	var user User
+	err := context.ShouldBind(&user)
+	fmt.Println(user)
+	if err != nil {
+		context.String(404, "绑定失败")
+	} else {
+		context.String(200, "绑定成功")
+	}
+}
