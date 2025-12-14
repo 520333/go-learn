@@ -12,6 +12,7 @@ func main() {
 	r.LoadHTMLGlob("part13/templates/**/*")
 	// 使用中间件
 	r.Use(middleware.MiddleWare01)
+	r.Use(middleware.MiddleWare03())
 	r.Use(middleware.MiddleWare02())
 	router.Router(r)
 
