@@ -2,6 +2,7 @@ package myfunc
 
 import (
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -21,12 +22,14 @@ func Hello1(context *gin.Context) {
 		Name: "丽丽",
 		Age:  18,
 	}
+	var nowTime = time.Now()
 	var mapData = map[string]interface{}{
 		"age":      age,
 		"arr":      arr,
 		"flag":     flag,
 		"username": username,
 		"stu":      stu,
+		"nowTime":  nowTime,
 	}
 	context.HTML(http.StatusOK, "demo01/hello.html", mapData)
 }
