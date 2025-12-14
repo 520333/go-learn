@@ -21,6 +21,10 @@ func MiddleWare02() gin.HandlerFunc {
 func MiddleWare03() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		fmt.Println("这是自定义中间件-方式3 开始")
+		if 4 > 2 {
+			//c.Abort() // 终止链条 不终止自己本身
+			return // 结束逻辑代码本身
+		}
 		c.Next()
 		fmt.Println("这是自定义中间件-方式3 结束")
 	}
