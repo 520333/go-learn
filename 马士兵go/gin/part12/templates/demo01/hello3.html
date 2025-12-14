@@ -1,0 +1,38 @@
+{{define "demo01/hello3.html"}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+</head>
+<body>
+ hello3.html
+     <form>
+         用户名字：<input type="text" name="uname" id="uname">
+         年龄：<input type="text" name="age" id="age">
+         <input type="button" value="提交" id="btn">
+     </form>
+ <script>
+     let btn =document.getElementById("btn")
+     btn.onclick=()=>{
+         let uname=document.getElementById("uname").value
+         let age=document.getElementById("age").value
+         $.ajax({
+             url: "/external/toajax",
+             type:"POST",
+             contentType:"application/json",
+             data:JSON.stringify({
+                 "uname": uname,
+                 "age":Number(age),
+             }),
+             success: (info)=>{
+                 alert(info["msg"])
+             }
+         })
+     }
+ </script>
+</body>
+</html>
+
+{{end}}
