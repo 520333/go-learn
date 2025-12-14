@@ -63,7 +63,22 @@
     {{len .arr}} <br>
     {{"yoda" |printf "%s"}}
     {{"yoda" |len}}<br>
-    {{printf "名字:%s 住址:%s" "尤达" (printf "%s-%s" "不知名星球" "未知国度")}}
+    {{printf "名字:%s 住址:%s" "尤达" (printf "%s-%s" "不知名星球" "未知国度")}}<br>
+
+
+    {{and .age .username}}
+    {{and .username .age}}
+    {{and .xxx .age}}<br>
+
+    {{or .age .username}}
+    {{or .username .age}}<br>
+
+    取反:{{not .flag}}
+    取反:{{not .aaa}}<br>
+
+    {{index .arr}}
+
+
 
 
 </body>
