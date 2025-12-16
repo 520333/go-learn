@@ -2,6 +2,7 @@ package main
 
 import (
 	"ginCms/handlers"
+	"ginCms/models"
 	"ginCms/utils"
 
 	"github.com/spf13/viper"
@@ -16,6 +17,9 @@ func main() {
 	utils.SetLogger()
 	// 初始化数据库连接
 	utils.InitDB()
+
+	// mirate
+	models.Init()
 
 	r := handlers.InitEngine()
 	utils.Logger().Info("service is listening", "addr", viper.GetString("app.addr")) //输出应用日志
