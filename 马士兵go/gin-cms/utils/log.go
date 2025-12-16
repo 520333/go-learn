@@ -19,17 +19,18 @@ func SetLogger() {
 	initLogger()
 }
 
-// 初始化日志
-func initLogger() {
-	// 使用json模式记录
-	slog.New(slog.NewJSONHandler(logWriter, &slog.HandlerOptions{}))
-}
-
 // logger
 var logger *slog.Logger
 
 func Logger() *slog.Logger {
 	return logger
+}
+
+// 公共的writer变量
+var logWriter io.Writer
+
+func LogWriter() io.Writer {
+	return logWriter
 }
 
 // 设置writer
@@ -40,7 +41,7 @@ func setLoggerWriter() {
 		// 创建文件
 		logfile := "./logs/app.log"
 		if file, err := os.OpenFile(logfile, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0666); err != nil {
-			log.Println(err)
+			log.Println("open log file failed, fallback stdout:", err)
 			return
 		} else {
 			logWriter = file
@@ -53,9 +54,8 @@ func setLoggerWriter() {
 	}
 }
 
-// 公共的writer变量
-var logWriter io.Writer
-
-func LogWriter() io.Writer {
-	return logWriter
+// 初始化日志
+func initLogger() {
+	// 使用json模式记录
+	logger = slog.New(slog.NewJSONHandler(logWriter, &slog.HandlerOptions{}))
 }
