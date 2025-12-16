@@ -1,6 +1,7 @@
 package role
 
 import (
+	"fmt"
 	"ginCms/models"
 	"ginCms/utils"
 	"net/http"
@@ -25,7 +26,7 @@ func GetRow(ctx *gin.Context) {
 		utils.Logger().Error(err.Error()) //记录日志
 		ctx.JSON(http.StatusOK, gin.H{
 			"code":    100,
-			"message": err.Error(),
+			"message": fmt.Sprintf("数据查询错误:%s", err.Error()),
 		})
 		return
 	}
