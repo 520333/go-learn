@@ -4,10 +4,24 @@ import (
 	"fmt"
 	"ginCms/models"
 	"ginCms/utils"
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
+
+func GetList(ctx *gin.Context) {
+	req := GetListReq{}
+	if err := ctx.ShouldBindQuery(&req); err != nil {
+		utils.Logger().Error(err.Error()) //记录日志
+		ctx.JSON(http.StatusOK, gin.H{
+			"code":    100,
+			"message": err.Error(),
+		})
+		return
+	}
+	log.Println(req)
+}
 
 func GetRow(ctx *gin.Context) {
 	// 1.解析请求数据（消息）
@@ -35,8 +49,4 @@ func GetRow(ctx *gin.Context) {
 		"code": 0,
 		"data": row,
 	})
-}
-
-func GetList(ctx *gin.Context) {
-
 }
