@@ -1,5 +1,51 @@
 package common
 
+const (
+	PageNumDefault  = 1
+	PageSizeDefault = 10
+	PageSizeMax     = 100
+
+	SortFieldDefault  = "id"
+	SortMethodDefault = "desc"
+)
+
+// Clean 整理Filter
+func (f *Filter) Clean() {
+	if f.Keyword == nil {
+		temp := ""
+		f.Keyword = &temp
+	}
+}
+
+// Clean 整理Sorter
+func (s *Sorter) Clean() {
+	if s.SortField == nil {
+		temp := SortFieldDefault
+		s.SortField = &temp
+
+	}
+	if s.SortMethod == nil {
+		temp := SortMethodDefault
+		s.SortMethod = &temp
+	}
+}
+
+// Clean 整理Pager
+func (p *Pager) Clean() {
+	if p.PageNum == nil {
+		temp := PageNumDefault
+		p.PageNum = &temp
+	}
+	if p.PageSize == nil {
+		temp := PageSizeDefault
+		p.PageSize = &temp
+	}
+	if *p.PageSize > PageSizeMax {
+		temp := PageSizeMax
+		p.PageSize = &temp
+	}
+}
+
 // Filter 通用的请求过滤类型
 type Filter struct {
 	// 指针类型表示该字段可以不填
@@ -17,3 +63,5 @@ type Pager struct {
 	PageNum  *int `form:"pageNum" binding:"omitempty,gt=1"`
 	PageSize *int `form:"pageSize" binding:"omitempty,gt=0"`
 }
+
+// 整体清理

@@ -13,3 +13,10 @@ type GetListReq struct {
 	common.Sorter // 排序
 	common.Pager  // 翻页
 }
+
+// Clean 查询列表参数清理
+func (req *GetListReq) Clean() {
+	req.Filter.Clean()
+	req.Sorter.Clean()
+	req.Pager.Clean()
+}

@@ -11,6 +11,7 @@ import (
 )
 
 func GetList(ctx *gin.Context) {
+	// 1.解析请求消息
 	req := GetListReq{}
 	if err := ctx.ShouldBindQuery(&req); err != nil {
 		utils.Logger().Error(err.Error()) //记录日志
@@ -20,7 +21,10 @@ func GetList(ctx *gin.Context) {
 		})
 		return
 	}
-	log.Println(req)
+	// 2.整理请求参数
+	req.Clean()
+	log.Println(req.Keyword, req.SortMethod, req.SortField, req.PageNum, req.PageSize)
+	log.Println(*req.Keyword, *req.SortMethod, *req.SortField, *req.PageNum, *req.PageSize)
 }
 
 func GetRow(ctx *gin.Context) {
