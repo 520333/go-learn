@@ -36,3 +36,7 @@ func GetRow(ctx *gin.Context) {
 		"data": row,
 	})
 }
+
+func GetList(ctx *gin.Context) {
+
+}
