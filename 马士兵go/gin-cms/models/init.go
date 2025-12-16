@@ -8,7 +8,7 @@ import (
 func Init() {
 	// migrate
 	migrate()
-
+	seed()
 }
 
 // 表结构迁移
@@ -17,5 +17,9 @@ func migrate() {
 	if err := utils.DB().AutoMigrate(&Role{}); err != nil {
 		log.Fatalln(err)
 	}
+}
 
+// 数据填充
+func seed() {
+	roleSeed()
 }
