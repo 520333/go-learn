@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"ginCms/handlers/role"
 	"ginCms/handlers/system"
 
 	"github.com/gin-gonic/gin"
@@ -13,6 +14,7 @@ func InitEngine() *gin.Engine {
 
 	// 2.注册不同模块的路由
 	system.Router(r)
+	role.Router(r)
 
 	return r
 }
