@@ -1,12 +1,15 @@
 package utils
 
 import (
+	"fmt"
 	"io"
 	"log"
 	"log/slog"
 	"os"
+	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/spf13/viper"
 )
 
 // SetLogger 设置日志
@@ -39,7 +42,9 @@ func setLoggerWriter() {
 	switch gin.Mode() {
 	case gin.ReleaseMode:
 		// 创建文件
-		logfile := "./logs/app.log"
+		month := time.Now().Format("200601")
+		logfile := viper.GetString("app.log.path")
+		logfile += fmt.Sprintf("/app-%s.log", month)
 		if file, err := os.OpenFile(logfile, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0666); err != nil {
 			log.Println("open log file failed, fallback stdout:", err)
 			return

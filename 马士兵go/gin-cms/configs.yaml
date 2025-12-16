@@ -1,3 +1,5 @@
 app:
-  mode: "debug"
+  mode: "release"
   addr: ":8084"
+  log:
+    path: "./logs"
