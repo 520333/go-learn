@@ -11,6 +11,7 @@ func defaultConfig() {
 	viper.SetDefault("app.mode", "debug")
 	viper.SetDefault("app.addr", ":8080")
 	viper.SetDefault("app.log.path", "./logs")
+	viper.SetDefault("db.dsn", "user:password@tcp(host:port)/dbname?charset=utf8mb4&parseTime=True&loc=Local")
 }
 
 // ParseConfig 解析配置

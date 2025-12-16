@@ -14,6 +14,8 @@ func main() {
 	utils.SetMode()
 	// 设置日志
 	utils.SetLogger()
+	// 初始化数据库连接
+	utils.InitDB()
 
 	r := handlers.InitEngine()
 	utils.Logger().Info("service is listening", "addr", viper.GetString("app.addr")) //输出应用日志
