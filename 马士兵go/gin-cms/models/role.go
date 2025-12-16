@@ -12,6 +12,18 @@ type Role struct {
 	Comment string `gorm:"type:text" json:"comment"`
 }
 
+// RoleFetchRow 根据条件查询单条 assoc 是否查询管理数据 where,args 查询条件
+func RoleFetchRow(assoc bool, where any, args ...any) (*Role, error) {
+	row := &Role{}
+	if err := utils.DB().Where(where, args...).First(&row).Error; err != nil {
+		return nil, err
+	}
+	// 关联查询
+	if assoc {
+	}
+	return row, nil
+}
+
 // 填充数据
 func roleSeed() {
 	// 构建数据
