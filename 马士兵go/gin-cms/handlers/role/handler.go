@@ -81,7 +81,22 @@ func Delete(ctx *gin.Context) {
 		})
 		return
 	}
-	log.Println(req)
+
+	rowNum, err := models.RoleDelete(req.IDList)
+	if err != nil {
+		utils.Logger().Error(err.Error())
+		ctx.JSON(http.StatusOK, gin.H{
+			"code":    100,
+			"message": "数据删除错误",
+		})
+		return
+	}
+
+	// 响应
+	ctx.JSON(http.StatusOK, gin.H{
+		"code": 0,
+		"data": rowNum,
+	})
 }
 
 func Add(ctx *gin.Context) {

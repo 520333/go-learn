@@ -32,6 +32,35 @@ func (f *RoleFilter) Clean() {
 	}
 }
 
+// RoleDelete 角色删除
+// @return 删除的记录数,error
+func RoleDelete(idList []uint) (int64, error) {
+	// 将delete操作在事务里完成 删除时 有时会涉及到关联数据的处理。 将数据及关联数据的删除放在一个事务中
+	rowsNum := int64(0)
+	err := utils.DB().Transaction(func(tx *gorm.DB) error {
+		result := tx.Delete(&Role{}, idList)
+		if result.Error != nil {
+			return result.Error
+		} else {
+			// 删除成功 记录删除行数
+			rowsNum = result.RowsAffected
+		}
+		return nil
+	})
+	return rowsNum, err
+}
+
+//func RoleDelete(idList []uint) error {
+//	// 将delete操作在事务里完成 删除时 有时会涉及到关联数据的处理。 将数据及关联数据的删除放在一个事务中
+//	return utils.DB().Transaction(func(tx *gorm.DB) error {
+//		if err := tx.Delete(&Role{}, idList).Error; err != nil {
+//			return err
+//		}
+//		return nil
+//	})
+//}
+
+// RoleInsert 角色增加
 func RoleInsert(row *Role) error {
 	// 将insert操作在事务里完成 插入时 有时会涉及到关联数据的处理。 将数据及关联数据的插入放在一个事务中
 	return utils.DB().Transaction(func(tx *gorm.DB) error {
