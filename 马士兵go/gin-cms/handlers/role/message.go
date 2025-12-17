@@ -17,6 +17,7 @@ type RestoreReq struct {
 // DeleteReq 删除请求消息
 type DeleteReq struct {
 	IDList []uint `form:"id" binding:"gt=0"`
+	Force  bool   `form:"force" binding:""`
 }
 
 // AddReq 添加请求消息

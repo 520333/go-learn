@@ -47,7 +47,7 @@ func Delete(ctx *gin.Context) {
 		return
 	}
 
-	rowNum, err := models.RoleDelete(req.IDList)
+	rowNum, err := models.RoleDelete(req.IDList, req.Force)
 	if err != nil {
 		utils.Logger().Error(err.Error())
 		ctx.JSON(http.StatusOK, gin.H{

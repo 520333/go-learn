@@ -49,12 +49,18 @@ func RoleRestore(idList []uint) (int64, error) {
 }
 
 // RoleDelete 角色删除
+// @param force bool 是否强制删除
 // @return 删除的记录数,error
-func RoleDelete(idList []uint) (int64, error) {
+func RoleDelete(idList []uint, force bool) (int64, error) {
 	// 将delete操作在事务里完成 删除时 有时会涉及到关联数据的处理。 将数据及关联数据的删除放在一个事务中
 	rowsNum := int64(0)
 	err := utils.DB().Transaction(func(tx *gorm.DB) error {
-		result := tx.Delete(&Role{}, idList)
+		query := tx.Model(&Role{})
+		if force {
+			// 强制删除
+			query.Unscoped()
+		}
+		result := query.Delete(&Role{}, idList)
 		if result.Error != nil {
 			return result.Error
 		} else {
