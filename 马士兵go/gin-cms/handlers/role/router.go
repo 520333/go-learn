@@ -7,4 +7,5 @@ func Router(r *gin.Engine) {
 	g.GET("", GetRow)      //GET /role?id=21
 	g.GET("list", GetList) //GET /role/list?pageSize=1&pageNum=2&sortMethod=desc
 	g.POST("", Add)        //GET /role/
+	g.DELETE("", Delete)   //DELETE /role?id=22&id=33&id=44
 }

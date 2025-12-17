@@ -71,6 +71,10 @@ func GetRow(ctx *gin.Context) {
 	})
 }
 
+func Delete(ctx *gin.Context) {
+
+}
+
 func Add(ctx *gin.Context) {
 	// 1.解析请求数据
 	req := AddReq{}
@@ -106,5 +110,4 @@ func Add(ctx *gin.Context) {
 		"code": 0,
 		"data": row,
 	})
-
 }
