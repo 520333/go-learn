@@ -72,7 +72,16 @@ func GetRow(ctx *gin.Context) {
 }
 
 func Delete(ctx *gin.Context) {
-
+	req := DeleteReq{}
+	if err := ctx.ShouldBindQuery(&req); err != nil {
+		utils.Logger().Error(err.Error()) //记录日志
+		ctx.JSON(http.StatusOK, gin.H{
+			"code":    100,
+			"message": err.Error(),
+		})
+		return
+	}
+	log.Println(req)
 }
 
 func Add(ctx *gin.Context) {
