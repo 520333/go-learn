@@ -10,6 +10,40 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+func EditEnabled(ctx *gin.Context) {
+	query := EditEnabledQueryReq{}
+	if err := ctx.ShouldBindQuery(&query); err != nil {
+		utils.Logger().Error(err.Error())
+		ctx.JSON(http.StatusOK, gin.H{
+			"code":    100,
+			"message": err.Error(),
+		})
+		return
+	}
+	body := EditEnabledBodyReq{}
+	if err := ctx.ShouldBind(&body); err != nil {
+		utils.Logger().Error(err.Error())
+		ctx.JSON(http.StatusOK, gin.H{
+			"code":    100,
+			"message": err.Error(),
+		})
+		return
+	}
+	rowsNum, err := models.RoleUpdateEnabled(query.IDList, body.Enabled)
+	if err != nil {
+		utils.Logger().Error(err.Error())
+		ctx.JSON(http.StatusOK, gin.H{
+			"code":    100,
+			"message": "数据更新错误",
+		})
+		return
+	}
+	ctx.JSON(http.StatusOK, gin.H{
+		"code": 0,
+		"data": rowsNum,
+	})
+}
+
 func Edit(ctx *gin.Context) {
 	uri := EditUriReq{}
 	if err := ctx.ShouldBindUri(&uri); err != nil {

@@ -32,6 +32,21 @@ func (f *RoleFilter) Clean() {
 	}
 }
 
+// RoleUpdateEnabled 更新多个字段的Enabled 值
+func RoleUpdateEnabled(idList []uint, enabled bool) (int64, error) {
+	rowsNum := int64(0)
+	err := utils.DB().Transaction(func(tx *gorm.DB) error {
+		result := tx.Model(&Role{}).Where("`id` IN ?", idList).Update("enabled", enabled)
+		if result.Error != nil {
+			return result.Error
+		} else {
+			rowsNum = result.RowsAffected
+		}
+		return nil
+	})
+	return rowsNum, err
+}
+
 func RoleUpdates(fieldMap FieldMap, id uint) error {
 	return utils.DB().Transaction(func(tx *gorm.DB) error {
 		if err := tx.Model(&Role{}).Where("`id` = ?", id).Updates(fieldMap).Error; err != nil {

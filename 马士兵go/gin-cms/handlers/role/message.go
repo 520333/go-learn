@@ -15,6 +15,16 @@ type EditUriReq struct {
 	ID uint `uri:"id" binding:"required,gt=0"`
 }
 
+// EditEnabledQueryReq 将全部的Enabled字段设置为相同的值
+type EditEnabledQueryReq struct {
+	IDList []uint `form:"id" binding:"gt=0"`
+}
+
+// EditEnabledBodyReq 将全部的Enabled字段设置为相同的值
+type EditEnabledBodyReq struct {
+	Enabled bool `json:"enabled"`
+}
+
 // EditBodyReq 更新主体参数
 type EditBodyReq struct {
 	Title   *string `json:"title" field:"title"`
