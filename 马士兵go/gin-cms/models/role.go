@@ -32,6 +32,22 @@ func (f *RoleFilter) Clean() {
 	}
 }
 
+// RoleRestore 还原
+func RoleRestore(idList []uint) (int64, error) {
+	rowsNum := int64(0)
+	err := utils.DB().Transaction(func(tx *gorm.DB) error {
+		result := tx.Model(&Role{}).Unscoped().Where("`id` IN ?", idList).Update("deleted_at", nil)
+		if result.Error != nil {
+			return result.Error
+		} else {
+			// 更新成功 记录更新行数
+			rowsNum = result.RowsAffected
+		}
+		return nil
+	})
+	return rowsNum, err
+}
+
 // RoleDelete 角色删除
 // @return 删除的记录数,error
 func RoleDelete(idList []uint) (int64, error) {
@@ -88,15 +104,27 @@ func RoleFetchRow(assoc bool, where any, args ...any) (*Role, error) {
 }
 
 // RoleFetchList
-// @param assoc bool 是否查询关联关系
 // @param filter RoleFilter 过滤参数
 // @param sorter Sorter 排序参数
-// @param pager Pager 翻页参数
+// @param pager 翻页参数
+// @param scope uint8 翻页参数
+// @param assoc bool 是否查询关联关系
 // @return []*Role Role列表
 // @return error
-func RoleFetchList(assoc bool, filter RoleFilter, sorter Sorter, pager Pager) ([]*Role, error) {
+func RoleFetchList(filter RoleFilter, sorter Sorter, pager Pager, scope uint8, assoc bool) ([]*Role, error) {
 	query := utils.DB().Model(&Role{})
 	// 1.过滤器
+	// 查询范围
+	switch scope {
+	case SCOPE_ALL:
+		query.Unscoped()
+	case SCOPE_DELETED:
+		query.Unscoped().Where("`deleted_at` IS NOT NULL")
+	case SCOPE_UNDELETED:
+		fallthrough
+	default:
+	}
+	// 条件过滤
 	if *filter.Keyword != "" {
 		query.Where("`title` LIKE ?", "%"+*filter.Keyword+"%")
 	}

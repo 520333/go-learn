@@ -50,6 +50,12 @@ func (p *Pager) Clean() {
 	}
 }
 
+const (
+	SCOPE_ALL = iota
+	SCOPE_UNDELETED
+	SCOPE_DELETED
+)
+
 // Sorter 通用的查询列表排序类型
 type Sorter struct {
 	SortField  *string `form:"sortField" binding:"omitempty,gt=0"`            // 排序字段

@@ -9,6 +9,11 @@ type GetRowReq struct {
 	ID uint `form:"id" binding:"required,gt=0"`
 }
 
+// RestoreReq 还原请求消息
+type RestoreReq struct {
+	IDList []uint `form:"id" binding:"gt=0"`
+}
+
 // DeleteReq 删除请求消息
 type DeleteReq struct {
 	IDList []uint `form:"id" binding:"gt=0"`
