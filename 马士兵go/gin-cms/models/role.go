@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"ginCms/utils"
 	"strings"
+
+	"gorm.io/gorm"
 )
 
 // Role 定义角色模型
@@ -28,6 +30,20 @@ func (f *RoleFilter) Clean() {
 		temp := ""
 		f.Keyword = &temp
 	}
+}
+
+func RoleInsert(row *Role) error {
+	// 将insert操作在事务里完成 插入时 有时会涉及到关联数据的处理。 将数据及关联数据的插入放在一个事务中
+	return utils.DB().Transaction(func(tx *gorm.DB) error {
+		if err := tx.Create(row).Error; err != nil {
+			return err
+		}
+		return nil
+	})
+}
+
+func RoleFetch(id uint, assoc bool) (*Role, error) {
+	return RoleFetchRow(assoc, "`id` = ?", id)
 }
 
 // RoleFetchRow 根据条件查询单条 assoc 是否查询管理数据 where,args 查询条件

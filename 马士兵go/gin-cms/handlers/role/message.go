@@ -17,6 +17,14 @@ type AddReq struct {
 	Key   string `json:"key" binding:"required"`
 }
 
+// ToRole AddReq to Role
+func (req AddReq) ToRole() *models.Role {
+	row := req.Role
+	row.Title = req.Title
+	row.Key = req.Key
+	return &row
+}
+
 // GetListReq role列表请求参数类型
 type GetListReq struct {
 	models.RoleFilter // 过滤
