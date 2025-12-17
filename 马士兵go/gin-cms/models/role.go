@@ -1,6 +1,8 @@
 package models
 
-import "ginCms/utils"
+import (
+	"ginCms/utils"
+)
 
 // Role 定义角色模型
 type Role struct {
@@ -10,6 +12,20 @@ type Role struct {
 	Enabled bool   `gorm:"" json:"enabled"`
 	Weight  int    `gorm:"index;" json:"weight"`
 	Comment string `gorm:"type:text" json:"comment"`
+}
+
+// RoleFilter 通用的请求过滤类型
+type RoleFilter struct {
+	// 指针类型表示该字段可以不填
+	Keyword *string `form:"keyword" binding:"omitempty,gt=0"` //omitempty 非零值才校验
+}
+
+// Clean 整理Filter
+func (f *RoleFilter) Clean() {
+	if f.Keyword == nil {
+		temp := ""
+		f.Keyword = &temp
+	}
 }
 
 // RoleFetchRow 根据条件查询单条 assoc 是否查询管理数据 where,args 查询条件
@@ -22,6 +38,10 @@ func RoleFetchRow(assoc bool, where any, args ...any) (*Role, error) {
 	if assoc {
 	}
 	return row, nil
+}
+
+func RoleFetchList(assoc bool, filter RoleFilter, sorter Sorter, pager Pager) ([]*Role, error) {
+	return nil, nil
 }
 
 // 填充数据
