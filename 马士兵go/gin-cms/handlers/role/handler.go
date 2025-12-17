@@ -70,3 +70,7 @@ func GetRow(ctx *gin.Context) {
 		"data": row,
 	})
 }
+
+func Add(ctx *gin.Context) {
+
+}
