@@ -9,6 +9,14 @@ type GetRowReq struct {
 	ID uint `form:"id" binding:"required,gt=0"`
 }
 
+// AddReq 添加请求消息
+type AddReq struct {
+	models.Role
+	// 需要额外校验的字段
+	Title string `json:"title" binding:"required"`
+	Key   string `json:"key" binding:"required"`
+}
+
 // GetListReq role列表请求参数类型
 type GetListReq struct {
 	models.RoleFilter // 过滤

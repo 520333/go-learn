@@ -72,5 +72,14 @@ func GetRow(ctx *gin.Context) {
 }
 
 func Add(ctx *gin.Context) {
-
+	req := AddReq{}
+	if err := ctx.ShouldBind(&req); err != nil {
+		utils.Logger().Error(err.Error()) //记录日志
+		ctx.JSON(http.StatusOK, gin.H{
+			"code":    100,
+			"message": err.Error(),
+		})
+		return
+	}
+	log.Println(req)
 }
