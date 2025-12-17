@@ -13,6 +13,9 @@ type Model struct {
 	DeletedAt gorm.DeletedAt `gorm:"index" json:"-"`
 }
 
+// FieldMap Key:字段名 value: 字段值
+type FieldMap map[string]any
+
 const (
 	PageNumDefault  = 1
 	PageSizeDefault = 10

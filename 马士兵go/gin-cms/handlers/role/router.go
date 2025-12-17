@@ -10,4 +10,5 @@ func Router(r *gin.Engine) {
 	g.DELETE("", Delete)      //删除 DELETE /role?id=22&id=33&id=44
 	g.GET("recycle", Recycle) //查询回收站 GET /role/recycle?keyword=超人
 	g.PUT("restore", Restore) //还原 PUT /role?id=1&id=2
+	g.PUT(":id", Edit)        //更新单条 PUT /role/33
 }

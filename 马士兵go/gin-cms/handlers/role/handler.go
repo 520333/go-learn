@@ -10,6 +10,34 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+func Edit(ctx *gin.Context) {
+	uri := EditUriReq{}
+	if err := ctx.ShouldBindUri(&uri); err != nil {
+		utils.Logger().Error(err.Error()) //记录日志
+		ctx.JSON(http.StatusOK, gin.H{
+			"code":    100,
+			"message": err.Error(),
+		})
+		return
+	}
+	log.Println(uri)
+	// 2.解析Body请求数据
+	body := EditBodyReq{}
+	if err := ctx.ShouldBind(&body); err != nil {
+		utils.Logger().Error(err.Error()) //记录日志
+		ctx.JSON(http.StatusOK, gin.H{
+			"code":    100,
+			"message": err.Error(),
+		})
+		return
+	}
+	log.Println(body)
+
+	// 3.req to map
+	fieldMap := body.ToFieldMap()
+	log.Println(fieldMap)
+}
+
 func Restore(ctx *gin.Context) {
 	req := RestoreReq{}
 	if err := ctx.ShouldBindQuery(&req); err != nil {
