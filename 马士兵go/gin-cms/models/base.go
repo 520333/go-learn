@@ -14,7 +14,7 @@ type Model struct {
 }
 
 // FieldMap Key:字段名 value: 字段值
-type FieldMap map[string]any
+type FieldMap = map[string]any
 
 const (
 	PageNumDefault  = 1

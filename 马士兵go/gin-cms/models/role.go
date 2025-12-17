@@ -32,6 +32,15 @@ func (f *RoleFilter) Clean() {
 	}
 }
 
+func RoleUpdates(fieldMap FieldMap, id uint) error {
+	return utils.DB().Transaction(func(tx *gorm.DB) error {
+		if err := tx.Model(&Role{}).Where("`id` = ?", id).Updates(fieldMap).Error; err != nil {
+			return err
+		}
+		return nil
+	})
+}
+
 // RoleRestore 还原
 func RoleRestore(idList []uint) (int64, error) {
 	rowsNum := int64(0)

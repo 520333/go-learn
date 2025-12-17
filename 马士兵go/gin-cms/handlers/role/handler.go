@@ -35,7 +35,29 @@ func Edit(ctx *gin.Context) {
 
 	// 3.req to map
 	fieldMap := body.ToFieldMap()
-	log.Println(fieldMap)
+	// 2.利用模型完成插入
+	if err := models.RoleUpdates(fieldMap, uri.ID); err != nil {
+		utils.Logger().Error(err.Error())
+		ctx.JSON(http.StatusOK, gin.H{
+			"code":    100,
+			"message": "数据更新错误",
+		})
+		return
+	}
+	// 响应
+	row, err := models.RoleFetch(uri.ID, false)
+	if err != nil {
+		utils.Logger().Error(err.Error()) //记录日志
+		ctx.JSON(http.StatusOK, gin.H{
+			"code":    100,
+			"message": "数据查询错误",
+		})
+		return
+	}
+	ctx.JSON(http.StatusOK, gin.H{
+		"code": 0,
+		"data": row,
+	})
 }
 
 func Restore(ctx *gin.Context) {
