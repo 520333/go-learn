@@ -27,7 +27,6 @@ func (s *Sorter) Clean() {
 	if s.SortField == nil {
 		temp := SortFieldDefault
 		s.SortField = &temp
-
 	}
 	if s.SortMethod == nil {
 		temp := SortMethodDefault
@@ -37,7 +36,7 @@ func (s *Sorter) Clean() {
 
 // Clean 整理Pager
 func (p *Pager) Clean() {
-	if p.PageNum == nil {
+	if p.PageNum == nil || *p.PageNum == 0 {
 		temp := PageNumDefault
 		p.PageNum = &temp
 	}
@@ -59,6 +58,6 @@ type Sorter struct {
 
 // Pager 通用的查询列表翻页类型
 type Pager struct {
-	PageNum  *int `form:"pageNum" binding:"omitempty,gt=1"`
+	PageNum  *int `form:"pageNum" binding:"omitempty,gt=0"`
 	PageSize *int `form:"pageSize" binding:"omitempty,gt=0"`
 }

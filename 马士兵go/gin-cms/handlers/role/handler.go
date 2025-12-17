@@ -25,6 +25,22 @@ func GetList(ctx *gin.Context) {
 	req.Clean()
 	log.Println(req.Keyword, req.SortMethod, req.SortField, req.PageNum, req.PageSize)
 	log.Println(*req.Keyword, *req.SortMethod, *req.SortField, *req.PageNum, *req.PageSize)
+
+	// 3.基于model查询
+	rows, err := models.RoleFetchList(false, req.RoleFilter, req.Sorter, req.Pager)
+	if err != nil {
+		utils.Logger().Error(err.Error()) //记录日志
+		ctx.JSON(http.StatusOK, gin.H{
+			"code":    100,
+			"message": fmt.Sprintf("数据查询错误"),
+		})
+		return
+	}
+	// 4.响应
+	ctx.JSON(http.StatusOK, gin.H{
+		"code": 0,
+		"data": rows,
+	})
 }
 
 func GetRow(ctx *gin.Context) {

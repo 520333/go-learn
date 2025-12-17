@@ -1,7 +1,9 @@
 package models
 
 import (
+	"fmt"
 	"ginCms/utils"
+	"strings"
 )
 
 // Role 定义角色模型
@@ -40,8 +42,37 @@ func RoleFetchRow(assoc bool, where any, args ...any) (*Role, error) {
 	return row, nil
 }
 
+// RoleFetchList
+// @param assoc bool 是否查询关联关系
+// @param filter RoleFilter 过滤参数
+// @param sorter Sorter 排序参数
+// @param pager Pager 翻页参数
+// @return []*Role Role列表
+// @return error
 func RoleFetchList(assoc bool, filter RoleFilter, sorter Sorter, pager Pager) ([]*Role, error) {
-	return nil, nil
+	query := utils.DB().Model(&Role{})
+	// 1.过滤器
+	if *filter.Keyword != "" {
+		query.Where("`title` LIKE ?", "%"+*filter.Keyword+"%")
+	}
+	// 2.排序
+	query.Order(fmt.Sprintf("`%s` %s", *sorter.SortField, strings.ToUpper(*sorter.SortMethod)))
+
+	// 3.翻页 offset limit pageSize大于0时才进行翻页
+	if *pager.PageSize > 0 {
+		var offset = (*pager.PageNum - 1) * *pager.PageSize
+		query.Offset(offset).Limit(*pager.PageSize)
+	}
+
+	// 4.查询
+	var rows []*Role
+	if err := query.Find(&rows).Error; err != nil {
+		return nil, err
+	}
+	// 5.关联查询
+	if assoc {
+	}
+	return rows, nil
 }
 
 // 填充数据
