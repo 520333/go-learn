@@ -2,6 +2,7 @@ package role
 
 import (
 	"fmt"
+	"ginCms/handlers/common"
 	"ginCms/models"
 	"ginCms/utils"
 	"log"
@@ -197,8 +198,9 @@ func Add(ctx *gin.Context) {
 	if err := ctx.ShouldBind(&req); err != nil {
 		utils.Logger().Error(err.Error()) //记录日志
 		ctx.JSON(http.StatusOK, gin.H{
-			"code":    100,
-			"message": err.Error(),
+			"code":         100,
+			"message":      err.Error(),
+			"transMessage": common.Translate(err),
 		})
 		return
 	}
