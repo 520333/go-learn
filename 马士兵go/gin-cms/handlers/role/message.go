@@ -31,8 +31,9 @@ type EditEnabledBodyReq struct {
 
 // EditBodyReq 更新主体参数
 type EditBodyReq struct {
-	Title   *string `json:"title" field:"title"`
-	Key     *string `json:"key" field:"key"`
+	ID      uint
+	Title   *string `json:"title" field:"title" binding:"omitempty,roleTitleUnique"`
+	Key     *string `json:"key" field:"key" binding:"omitempty,roleKeyUnique"`
 	Enabled *bool   `json:"enabled" field:"enabled"`
 	Weight  *int    `json:"weight" field:"weight"`
 	Comment *string `json:"comment" field:"comment"`
@@ -110,17 +111,23 @@ func (req *GetListReq) Clean() {
 func roleTitleUnique(fieldLevel validator.FieldLevel) bool {
 	// title的值
 	value := fieldLevel.Field().Interface().(string)
+	// id的值
+	id := fieldLevel.Parent().FieldByName("ID").Interface().(uint)
+
 	// 校验是否重复
 	row := models.Role{}
-	utils.DB().Where("`title` = ?", value).Unscoped().First(&row)
+	utils.DB().Where("`title` = ? && `id` != ?", value, id).Unscoped().First(&row)
 	return row.ID == 0 // 判断是否查询到了
 }
+
 func roleKeyUnique(fieldLevel validator.FieldLevel) bool {
 	// title的值
 	value := fieldLevel.Field().Interface().(string)
+	id := fieldLevel.Parent().FieldByName("ID").Interface().(uint)
+
 	// 校验是否重复
 	row := models.Role{}
-	utils.DB().Where("`key` = ?", value).Unscoped().First(&row)
+	utils.DB().Where("`key` = ? && `id` != ?", value, id).Unscoped().First(&row)
 	return row.ID == 0 // 判断是否查询到了
 }
 func init() {

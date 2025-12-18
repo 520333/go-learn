@@ -56,7 +56,9 @@ func Edit(ctx *gin.Context) {
 	}
 	log.Println(uri)
 	// 2.解析Body请求数据
-	body := EditBodyReq{}
+	body := EditBodyReq{
+		ID: uri.ID,
+	}
 	if err := ctx.ShouldBind(&body); err != nil {
 		utils.Logger().Error(err.Error()) //记录日志
 		ctx.JSON(http.StatusOK, gin.H{
