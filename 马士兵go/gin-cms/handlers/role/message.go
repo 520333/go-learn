@@ -2,7 +2,11 @@ package role
 
 import (
 	"ginCms/models"
+	"ginCms/utils"
 	"reflect"
+
+	"github.com/gin-gonic/gin/binding"
+	"github.com/go-playground/validator/v10"
 )
 
 // GetRowReq 接口的请求消息类型
@@ -76,8 +80,8 @@ type DeleteReq struct {
 type AddReq struct {
 	models.Role
 	// 需要额外校验的字段
-	Title string `json:"title" binding:"required"`
-	Key   string `json:"key" binding:"required"`
+	Title string `json:"title" binding:"required,roleTitleUnique"`
+	Key   string `json:"key" binding:"required,roleKeyUnique"`
 }
 
 // ToRole AddReq to Role
@@ -100,4 +104,34 @@ func (req *GetListReq) Clean() {
 	req.RoleFilter.Clean()
 	req.Sorter.Clean()
 	req.Pager.Clean()
+}
+
+// 自定义验证器函数签名
+func roleTitleUnique(fieldLevel validator.FieldLevel) bool {
+	// title的值
+	value := fieldLevel.Field().Interface().(string)
+	// 校验是否重复
+	row := models.Role{}
+	utils.DB().Where("`title` = ?", value).Unscoped().First(&row)
+	return row.ID == 0 // 判断是否查询到了
+}
+func roleKeyUnique(fieldLevel validator.FieldLevel) bool {
+	// title的值
+	value := fieldLevel.Field().Interface().(string)
+	// 校验是否重复
+	row := models.Role{}
+	utils.DB().Where("`key` = ?", value).Unscoped().First(&row)
+	return row.ID == 0 // 判断是否查询到了
+}
+func init() {
+	// 注册本包逻辑的验证器
+	registerValidator()
+}
+
+func registerValidator() {
+	if validate, ok := binding.Validator.Engine().(*validator.Validate); ok {
+		// 注册
+		_ = validate.RegisterValidation("roleTitleUnique", roleTitleUnique)
+		_ = validate.RegisterValidation("roleKeyUnique", roleKeyUnique)
+	}
 }
