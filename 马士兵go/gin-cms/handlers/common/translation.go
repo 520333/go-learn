@@ -22,7 +22,7 @@ func Translate(err error) gin.H {
 	//仅翻译验证消息
 	errs, ok := err.(validator.ValidationErrors)
 	if !ok {
-		return nil
+		return gin.H{}
 	}
 	// 翻译
 	msg := gin.H{}
