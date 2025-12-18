@@ -12,7 +12,11 @@ import (
 	zhTranslations "github.com/go-playground/validator/v10/translations/zh"
 )
 
-var translator ut.Translator
+// 自定义错误消息
+var customMsg = map[string]string{
+	"roleTitleUnique": "{0}对应的角色名称已经存在",
+	"roleKeyUnique":   "{0}对应的角色键已经存在",
+}
 
 func Translate(err error) gin.H {
 	//仅翻译验证消息
@@ -27,6 +31,8 @@ func Translate(err error) gin.H {
 	}
 	return msg
 }
+
+var translator ut.Translator
 
 func translateMessage() {
 	universalTranslator := ut.New(zh.New()) //通用翻译器
@@ -46,6 +52,26 @@ func translateMessage() {
 	validate.RegisterTagNameFunc(func(field reflect.StructField) string {
 		return field.Tag.Get("json")
 	})
+
+	// 注册自定义消息
+	translateFn := func(ut ut.Translator, fe validator.FieldError) string {
+		msg, err := ut.T(fe.Tag(), fe.Field())
+		if err != nil {
+			utils.Logger().Warn(err.Error())
+			return ""
+		}
+		return msg
+	}
+	for tag, text := range customMsg {
+		if err := validate.RegisterTranslation(tag, translator, func(ut ut.Translator) error {
+			if err := ut.Add(tag, text, false); err != nil {
+				return err
+			}
+			return nil
+		}, translateFn); err != nil {
+			utils.Logger().Warn(err.Error())
+		}
+	}
 }
 
 func init() {
