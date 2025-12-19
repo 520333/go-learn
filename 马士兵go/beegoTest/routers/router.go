@@ -2,6 +2,7 @@ package routers
 
 import (
 	"beegoTest/controllers"
+	"strings"
 
 	"github.com/beego/beego/v2/server/web"
 	"github.com/beego/beego/v2/server/web/context"
@@ -37,12 +38,70 @@ func init() {
 		//ctx.Output.Body([]byte("Router Param! *:" + ctx.Input.Param(":splat")))
 		ctx.Output.Body([]byte("Router Param! id:" + ctx.Input.Param(":id")))
 	})
+
+	// namespace
+	// 创建
+	v1 := web.NewNamespace("/v1",
+		// 条件限定 返回true 执行路由转发否则不执行
+		web.NSCond(func(ctx *context.Context) bool {
+			agent := ctx.Request.Header.Get("User-Agent")
+			if strings.Contains(agent, "GO") {
+				return true
+			}
+			return false
+		}),
+
+		// 前置过滤器
+		web.NSBefore(func(ctx *context.Context) {
+			// TODO 身份认证、鉴权、追踪、请求日志
+		}, func(ctx *context.Context) {
+
+		}),
+		// 后置过滤器
+		web.NSAfter(func(ctx *context.Context) {
+			// TODO 资源回收、统计
+		}, func(ctx *context.Context) {
+
+		}),
+		web.NSRouter("/content", &ContentController{}),
+		web.NSNamespace("/tag",
+			web.NSRouter("group", &TagGroupController{}),
+		),
+	)
+	// 注册
+	web.AddNamespace(v1)
+
+	// 另一种路由命名空间的使用
+	v2 := web.NewNamespace("/v2")
+	v2.Cond(func(ctx *context.Context) bool {
+		return true
+	})
+	v2.Filter("before", func(ctx *context.Context) {})
+	v2.Filter("after", func(ctx *context.Context) {})
+	v2.Router("/article", &ContentController{})
+	v2Tag := web.NewNamespace("tag")
+	v2.Namespace(v2Tag)
+	web.AddNamespace(v2)
+}
+
+type TagGroupController struct {
+	web.Controller
+}
+
+func (this *TagGroupController) Get() {
+	_ = this.Ctx.Output.Body([]byte("\"GO 海绵宝宝! TagGroupController Get()"))
 }
 
 type ContentController struct {
 	web.Controller
 }
 
+func (this *ContentController) Get() {
+	_ = this.Ctx.Output.Body([]byte("\"GO 海绵宝宝! Content Get()"))
+}
+func (this *ContentController) Post() {
+	_ = this.Ctx.Output.Body([]byte("\"GO 海绵宝宝! Content Post()"))
+}
 func (this *ContentController) Select() {
 	_ = this.Ctx.Output.Body([]byte("\"GO 海绵宝宝! Content Select()"))
 }
