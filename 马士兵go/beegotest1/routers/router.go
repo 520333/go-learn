@@ -1,0 +1,167 @@
+// @APIVersion 1.0.0
+// @Title beego Test API
+// @Description beego has a very cool tools to autogenerate documents for your API
+// @Contact astaxie@gmail.com
+// @TermsOfServiceUrl http://beego.me/
+// @License Apache 2.0
+// @LicenseUrl http://www.apache.org/licenses/LICENSE-2.0.html
+package routers
+
+import (
+	"beegotest1/controllers"
+	"encoding/json"
+	"log"
+	"net/http"
+
+	beego "github.com/beego/beego/v2/server/web"
+)
+
+func init() {
+	ns := beego.NewNamespace("/v1",
+		beego.NSNamespace("/object",
+			beego.NSInclude(
+				&controllers.ObjectController{},
+			),
+		),
+		beego.NSNamespace("/user",
+			beego.NSInclude(
+				&controllers.UserController{},
+			),
+		),
+	)
+	beego.AddNamespace(ns)
+
+	test := beego.NewNamespace("/test")
+	test.Router("request-data/:id", &TestRequestController{})
+	test.Router("request-data/other/?:key", &TestRequestController{}, "post:Other")
+	test.Router("request-data/upload", &TestRequestController{}, "post:Upload")
+	beego.AddNamespace(test)
+	//beego.Post("/test/post", func(ctx *context.Context) {
+	//	ctx.Input.Query("name")
+	//})
+}
+
+type TestRequestController struct {
+	beego.Controller
+}
+
+func (c *TestRequestController) Post() {
+	startAt, _ := c.GetInt("startAt")
+	type Article struct {
+		Subject string `json:"subject,omitempty"`
+		Content string `json:"content,omitempty"`
+	}
+	article := &Article{}
+	_ = json.Unmarshal(c.Ctx.Input.RequestBody, article)
+	requestData := map[string]interface{}{
+		"ID":   c.Ctx.Input.Param(":id"),
+		"name": c.GetString("name"),
+		//"courses": c.GetString("courses"),
+		"courses": c.GetStrings("courses"),
+		"startAt": startAt,
+		// body
+		"keyword":       c.GetString("keyword"), // urlencoded get
+		"content":       c.GetString("content"), // form-data
+		"body":          &article,               // raw,json
+		"Authorization": c.Ctx.Input.Header("Authorization"),
+	}
+	c.Data["json"] = requestData
+	_ = c.ServeJSON()
+}
+
+func (c *TestRequestController) Other() {
+	requestData := map[string]interface{}{}
+	requestData[":key"] = c.GetString(":key")
+	requestData["name"] = c.GetString("name")
+	ids := []uint{}
+	if err := c.Ctx.Input.Bind(&ids, "ids"); err != nil {
+		log.Println(err)
+	}
+	requestData["ids"] = ids
+	type User struct {
+		Name   string
+		Status bool
+	}
+	user := &User{}
+	if err := c.Ctx.Input.Bind(user, "user"); err != nil {
+		log.Println(err)
+	}
+	requestData["user"] = user
+	type Article struct {
+		Subject   string `form:"subject" json:"subject"`
+		Content   string `form:"content" json:"content"`
+		Published bool   `form:"published" json:"published"`
+		Views     int    `form:"views" json:"views"`
+	}
+	article := &Article{}
+	_ = c.ParseForm(article)
+	requestData["article"] = article
+
+	c.Data["json"] = requestData
+	_ = c.ServeJSON()
+}
+func (c *TestRequestController) Upload() {
+	// 1.获取文件信息
+	f, h, err := c.GetFile("logo")
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	// 2.校验文件信息是否满足
+	// 2.1
+	var maxSize int64 = 100 * 1024 // 100k
+	if h.Size > maxSize {
+		//log.Fatalln("file size too large")
+		c.Data["json"] = map[string]any{
+			"message":  "file size too large",
+			"size":     h.Size,
+			"Type":     h.Header.Get("Content-Type"),
+			"filename": h.Filename,
+		}
+		_ = c.ServeJSON()
+	}
+	// 2.1.2 类型校验
+	allowTypes := []string{"image/jpeg", "image/png", "image/gif", "image/webp"}
+	allow := false
+	for _, t := range allowTypes {
+		if h.Header.Get("Content-Type") == t {
+			allow = true
+			break
+		}
+	}
+	buffer := make([]byte, 512)
+	f.Read(buffer)
+	contentType := http.DetectContentType(buffer)
+	// 以文件到N个字节为判断依据
+	allowServer := false // server自己判定类型结果
+	for _, t := range allowTypes {
+		if contentType == t {
+			allowServer = true
+			break
+		}
+	}
+	if !(allow && allowServer) {
+		c.Data["json"] = map[string]any{
+			"message":     "file type not allowed",
+			"size":        h.Size,
+			"Type":        h.Header.Get("Content-Type"),
+			"Server Type": contentType,
+			"filename":    h.Filename,
+		}
+		_ = c.ServeJSON()
+	}
+	// 2.2 规范存储 hash文件名防止文件名中出现乱码 保证相同文件存储一次
+
+	// 3.存储到合理位置
+	uploadPath := "./volume/upload/"
+	if err := c.SaveToFile("logo", uploadPath+h.Filename); err != nil {
+		log.Fatalln(err)
+	}
+	c.Data["json"] = map[string]any{
+		"Size":     h.Size,
+		"Type":     h.Header.Get("Content-Type"),
+		"filename": h.Filename,
+	}
+	_ = c.ServeJSON()
+
+}

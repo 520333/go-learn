@@ -2,6 +2,7 @@ package routers
 
 import (
 	"beegoTest/controllers"
+	"encoding/json"
 	"strings"
 
 	"github.com/beego/beego/v2/server/web"
@@ -82,6 +83,47 @@ func init() {
 	v2Tag := web.NewNamespace("tag")
 	v2.Namespace(v2Tag)
 	web.AddNamespace(v2)
+
+	test := web.NewNamespace("/test")
+	test.Router("request-data/:id", &TestRequestController{})
+	test.Router("request-data/other/?:key", &TestRequestController{}, "post:Other")
+	web.AddNamespace(test)
+}
+
+type TestRequestController struct {
+	web.Controller
+}
+
+func (c *TestRequestController) Post() {
+	startAt, _ := c.GetInt("startAt")
+	type Article struct {
+		Subject string `json:"subject,omitempty"`
+		Content string `json:"content,omitempty"`
+	}
+	article := &Article{}
+	_ = json.Unmarshal(c.Ctx.Input.RequestBody, article)
+	requestData := map[string]interface{}{
+		"ID":   c.Ctx.Input.Param(":id"),
+		"name": c.GetString("name"),
+		//"courses": c.GetString("courses"),
+		"courses": c.GetStrings("courses"),
+		"startAt": startAt,
+		// body
+		"keyword":       c.GetString("keyword"), // urlencoded get
+		"content":       c.GetString("content"), // form-data
+		"body":          &article,               // raw,json
+		"Authorization": c.Ctx.Input.Header("Authorization"),
+	}
+	c.Data["json"] = requestData
+	_ = c.ServeJSON()
+}
+
+func (c *TestRequestController) Other() {
+	requestData := map[string]interface{}{}
+	requestData["name"] = c.Ctx.Input.Param("name")
+
+	c.Data["json"] = requestData
+	c.ServeJSON()
 }
 
 type TagGroupController struct {
