@@ -18,12 +18,37 @@ func init() {
 	// post方法映射到OtherFunc
 	ourController := &OurController{}
 	web.Router("/our/other", ourController, "get,post:OtherFunc;*:Register")
-	web.Include(&CPController{})
+	//web.Include(&CPController{})
 
+	// 路由自动匹配
+	web.AutoRouter(&ContentController{}) //GET  /content/select
 }
 
-func NameHandler(ctx *context.Context) {
-	_ = ctx.Output.Body([]byte("Go 海绵宝宝! Name Handler!"))
+type ContentController struct {
+	web.Controller
+}
+
+func (this *ContentController) Select() {
+	_ = this.Ctx.Output.Body([]byte("\"GO 海绵宝宝! Content Select()"))
+}
+
+type CPController struct {
+	web.Controller
+}
+
+func (this *CPController) URLMapping() {
+	this.Mapping("Create", this.Create)
+	this.Mapping("Retrieve", this.Retrieve)
+}
+
+// @router /content [post,put]
+func (this *CPController) Create() {
+	this.Ctx.Output.Body([]byte("Go Create!"))
+}
+
+// @router /content/:id [get]
+func (this *CPController) Retrieve() {
+	this.Ctx.Output.Body([]byte("Go Retrieve!"))
 }
 
 type OurController struct {
@@ -33,6 +58,7 @@ type OurController struct {
 func (this *OurController) Get() {
 	_ = this.Ctx.Output.Body([]byte("Go 海绵宝宝! Controller Method GET!"))
 }
+
 func (this *OurController) Post() {
 	_ = this.Ctx.Output.Body([]byte("Go 海绵宝宝! Controller Method POST!"))
 }
@@ -58,21 +84,6 @@ func (this *OurController) Register() {
 	_ = this.Ctx.Output.Body([]byte("Go 海绵宝宝! Controller Method Register!"))
 }
 
-type CPController struct {
-	web.Controller
-}
-
-func (this *CPController) URLMapping() {
-	this.Mapping("Create", this.Create)
-	this.Mapping("Retrieve", this.Retrieve)
-}
-
-// @router /content [post,put]
-func (this *CPController) Create() {
-	this.Ctx.Output.Body([]byte("Go Create!"))
-}
-
-// @router /content/:id [get]
-func (this *CPController) Retrieve() {
-	this.Ctx.Output.Body([]byte("Go Retrieve!"))
+func NameHandler(ctx *context.Context) {
+	_ = ctx.Output.Body([]byte("Go 海绵宝宝! Name Handler!"))
 }
