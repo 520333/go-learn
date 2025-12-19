@@ -22,6 +22,21 @@ func init() {
 
 	// 路由自动匹配
 	web.AutoRouter(&ContentController{}) //GET  /content/select
+
+	// 路由参数 正则匹配
+	web.Get("/article/:id", func(ctx *context.Context) {
+		//web.Get("/article/?:id", func(ctx *context.Context) {
+		//web.Get("/article/*:id", func(ctx *context.Context) {
+		//web.Get("/article/*.*", func(ctx *context.Context) {
+		//web.Get("/article/:id:int", func(ctx *context.Context) {
+		//web.Get("/article/:id(\\d{4})", func(ctx *context.Context) {
+		//web.Get("/article_:id(\\d{4})", func(ctx *context.Context) {
+		//ctx.Output.Body([]byte("Router Param! id:" + ctx.Input.Param(":id")))
+		//body := fmt.Sprintf("Router Param! *.:%s,.*:%s", ctx.Input.Param(":path"), ctx.Input.Param(":ext"))
+		//ctx.Output.Body([]byte(body))
+		//ctx.Output.Body([]byte("Router Param! *:" + ctx.Input.Param(":splat")))
+		ctx.Output.Body([]byte("Router Param! id:" + ctx.Input.Param(":id")))
+	})
 }
 
 type ContentController struct {
