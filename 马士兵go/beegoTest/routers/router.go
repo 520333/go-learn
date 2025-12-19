@@ -1,7 +1,6 @@
 package routers
 
 import (
-	"beegoTest/api/content"
 	"beegoTest/controllers"
 
 	"github.com/beego/beego/v2/server/web"
@@ -14,11 +13,13 @@ func init() {
 		_ = ctx.Output.Body([]byte("Go 海绵宝宝!"))
 	})
 	web.Get("/named-handler", NameHandler)
-	web.Get("/content/", content.Retrieve)
+	//web.Get("/content/", content.Retrieve)
 	web.Router("/our", &OurController{})
 	// post方法映射到OtherFunc
 	ourController := &OurController{}
 	web.Router("/our/other", ourController, "get,post:OtherFunc;*:Register")
+	web.Include(&CPController{})
+
 }
 
 func NameHandler(ctx *context.Context) {
@@ -55,4 +56,23 @@ func (this *OurController) OtherFunc() {
 }
 func (this *OurController) Register() {
 	_ = this.Ctx.Output.Body([]byte("Go 海绵宝宝! Controller Method Register!"))
+}
+
+type CPController struct {
+	web.Controller
+}
+
+func (this *CPController) URLMapping() {
+	this.Mapping("Create", this.Create)
+	this.Mapping("Retrieve", this.Retrieve)
+}
+
+// @router /content [post,put]
+func (this *CPController) Create() {
+	this.Ctx.Output.Body([]byte("Go Create!"))
+}
+
+// @router /content/:id [get]
+func (this *CPController) Retrieve() {
+	this.Ctx.Output.Body([]byte("Go Retrieve!"))
 }
