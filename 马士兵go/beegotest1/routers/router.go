@@ -69,6 +69,22 @@ type User struct {
 	Intro      string   `valid:"Match(/^Hello/)" label:"介绍" json:"intro"`
 }
 
+func (u *User) Valid(v *validation.Validation) {
+	// 1.实现自己的验证
+	has := false // flag
+	for _, t := range u.Topic {
+		if t == "beego" {
+			has = true
+			break
+		}
+	}
+
+	// 2.给予验证结果，选择是否设置错误消息
+	if !has {
+		_ = v.SetError("Topic", "主题必须要包含 beego")
+	}
+}
+
 var MessageTmpls = map[string]string{
 	"Required":     "不能为空",
 	"Min":          "最小为 %d",
@@ -94,7 +110,14 @@ var MessageTmpls = map[string]string{
 
 func (c *TestRequestController) Valid() {
 	// 1.获取User类型数据 来自请求端
-	user := &User{}
+	user := &User{
+		Name:       "GOLANG-",
+		Topic:      []string{"beego", "gin"},
+		Email:      "hai@qq.com",
+		LoginIP:    "127.0.0.1",
+		ContactNum: "18000000000",
+		Intro:      "Hello world",
+	}
 	// 2.执行验证
 	// 设置全局错误消息
 	validation.SetDefaultMessage(MessageTmpls)
