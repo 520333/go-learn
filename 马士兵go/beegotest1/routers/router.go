@@ -46,6 +46,7 @@ func init() {
 	//})
 	// 设置全局错误消息
 	validation.SetDefaultMessage(MessageTmpls)
+
 }
 
 type TestRequestController struct {
