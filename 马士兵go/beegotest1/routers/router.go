@@ -49,6 +49,8 @@ func init() {
 
 	// 测试 CRUD， restful
 	test.Router("/model/curd", &controllers.ArticleController{})
+	test.Router("/model/create", &controllers.ArticleController{}, "post:Create")
+	test.Router("/model/read", &controllers.ArticleController{}, "get:Read")
 }
 
 type TestRequestController struct {
