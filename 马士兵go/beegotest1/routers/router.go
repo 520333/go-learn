@@ -39,7 +39,7 @@ func init() {
 	test.Router("request-data/cookie", &TestRequestController{}, "post:Cookie")
 	test.Router("request-data/header", &TestRequestController{}, "get:Header")
 	test.Router("response-data", &TestRequestController{}, "get:Resp")
-	test.Router("valid-data", &TestRequestController{}, "get:Valid")
+	test.Router("valid-data", &TestRequestController{}, "post:Valid")
 	beego.AddNamespace(test)
 	//beego.Post("/test/post", func(ctx *context.Context) {
 	//	ctx.Input.Query("name")
@@ -110,13 +110,22 @@ var MessageTmpls = map[string]string{
 
 func (c *TestRequestController) Valid() {
 	// 1.获取User类型数据 来自请求端
-	user := &User{
-		Name:       "GOLANG-",
-		Topic:      []string{"beego", "gin"},
-		Email:      "hai@qq.com",
-		LoginIP:    "127.0.0.1",
-		ContactNum: "18000000000",
-		Intro:      "Hello world",
+	//user := &User{
+	//	Name:       "GOLANG-",
+	//	Topic:      []string{"beego", "gin"},
+	//	Email:      "hai@qq.com",
+	//	LoginIP:    "127.0.0.1",
+	//	ContactNum: "18000000000",
+	//	Intro:      "Hello world",
+	//}
+	user := &User{}
+	if err := json.Unmarshal(c.Ctx.Input.RequestBody, user); err != nil {
+		c.Data["json"] = map[string]any{
+			"code":    1,
+			"message": "请求数据解析错误",
+		}
+		_ = c.ServeJSON()
+		return
 	}
 	// 2.执行验证
 	// 设置全局错误消息
