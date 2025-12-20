@@ -47,6 +47,8 @@ func init() {
 	// 设置全局错误消息
 	validation.SetDefaultMessage(MessageTmpls)
 
+	// 测试 CRUD， restful
+	test.Router("/model/curd", &controllers.ArticleController{})
 }
 
 type TestRequestController struct {

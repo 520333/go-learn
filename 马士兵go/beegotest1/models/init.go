@@ -36,9 +36,15 @@ func init() {
 
 	// 3.自动同步表结构
 	if beego.BConfig.RunMode == "dev" {
-		dbName, force, verbose := "default", false, true
+		dbName, force, verbose := "default", true, false
 		if err := orm.RunSyncdb(dbName, force, verbose); err != nil {
 			log.Println(err)
 		}
 	}
+
+	// 4.初始化Ormer
+	OrmDft = orm.NewOrm()
+	//OrmDft = orm.NewOrmWithDB("default")
 }
+
+var OrmDft orm.Ormer
