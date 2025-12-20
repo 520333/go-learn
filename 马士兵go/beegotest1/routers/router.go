@@ -37,6 +37,7 @@ func init() {
 	test.Router("request-data/upload", &TestRequestController{}, "post:Upload")
 	test.Router("request-data/cookie", &TestRequestController{}, "post:Cookie")
 	test.Router("request-data/header", &TestRequestController{}, "get:Header")
+	test.Router("response-data", &TestRequestController{}, "get:Resp")
 	beego.AddNamespace(test)
 	//beego.Post("/test/post", func(ctx *context.Context) {
 	//	ctx.Input.Query("name")
@@ -46,7 +47,52 @@ func init() {
 type TestRequestController struct {
 	beego.Controller
 }
+type Resp struct {
+	Code    int    `json:"code" xml:"code"`
+	Message string `json:"message" xml:"message"`
+	Data    any    `json:"data" xml:"data"`
+}
+type Article struct {
+	ID        uint   `json:"id,omitempty"`
+	Subject   string `json:"subject,omitempty"`
+	Views     int    `json:"views,omitempty"`
+	Published bool   `json:"published,omitempty"`
+}
 
+func (c *TestRequestController) Resp() {
+	// 响应数据
+	data := Resp{
+		Code:    0,
+		Message: "success",
+		Data: Article{
+			ID:      1,
+			Subject: "Beego 一个功能齐全的web框架",
+			Views:   1024,
+			//Published: false,
+		},
+	}
+	//data1 := map[string]any{
+	//	"message": "success",
+	//}
+	// 设置不同的响应格式
+	//c.Data["json"] = data // json
+	//_ = c.ServeJSON()
+	//c.Data["xml"] = data  // xml
+	//c.Data["xml"] = data1 // xml
+	//_ = c.ServeXML()
+	//c.Data["yaml"] = data // yaml
+	//_ = c.ServeYAML()
+
+	// 基于请求头Accept 完成响应格式的转换
+	_ = c.Ctx.Output.ServeFormatted(data, false, false)
+
+	//c.Data["jsonp"] = data
+	//_ = c.ServeJSONP() //get /response-data?callback=func
+
+	c.Ctx.WriteString("go")
+	c.Ctx.WriteString("lang")
+	c.Ctx.WriteString("海绵宝宝")
+}
 func (c *TestRequestController) Header() {
 	// 获取header
 	value1 := c.Ctx.Input.Header("Content-Type")
