@@ -61,16 +61,16 @@ type Article struct {
 
 func (c *TestRequestController) Resp() {
 	// 响应数据
-	data := Resp{
-		Code:    0,
-		Message: "success",
-		Data: Article{
-			ID:      1,
-			Subject: "Beego 一个功能齐全的web框架",
-			Views:   1024,
-			//Published: false,
-		},
-	}
+	//data := Resp{
+	//	Code:    0,
+	//	Message: "success",
+	//	Data: Article{
+	//		ID:      1,
+	//		Subject: "Beego 一个功能齐全的web框架",
+	//		Views:   1024,
+	//		//Published: false,
+	//	},
+	//}
 	//data1 := map[string]any{
 	//	"message": "success",
 	//}
@@ -84,14 +84,17 @@ func (c *TestRequestController) Resp() {
 	//_ = c.ServeYAML()
 
 	// 基于请求头Accept 完成响应格式的转换
-	_ = c.Ctx.Output.ServeFormatted(data, false, false)
+	//_ = c.Ctx.Output.ServeFormatted(data, false, false)
 
 	//c.Data["jsonp"] = data
 	//_ = c.ServeJSONP() //get /response-data?callback=func
 
-	c.Ctx.WriteString("go")
-	c.Ctx.WriteString("lang")
-	c.Ctx.WriteString("海绵宝宝")
+	//c.Ctx.WriteString("go")
+	//c.Ctx.WriteString("lang")
+	//c.Ctx.WriteString("海绵宝宝")
+
+	// 文件下载
+	c.Ctx.Output.Download("./beegotest1.exe", "test.exe")
 }
 func (c *TestRequestController) Header() {
 	// 获取header
