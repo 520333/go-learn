@@ -44,6 +44,8 @@ func init() {
 	//beego.Post("/test/post", func(ctx *context.Context) {
 	//	ctx.Input.Query("name")
 	//})
+	// 设置全局错误消息
+	validation.SetDefaultMessage(MessageTmpls)
 }
 
 type TestRequestController struct {
@@ -129,7 +131,7 @@ func (c *TestRequestController) Valid() {
 	}
 	// 2.执行验证
 	// 设置全局错误消息
-	validation.SetDefaultMessage(MessageTmpls)
+	//validation.SetDefaultMessage(MessageTmpls)
 
 	validator := validation.Validation{}
 	validResult, err := validator.Valid(user)
