@@ -35,6 +35,7 @@ func init() {
 	test.Router("request-data/:id", &TestRequestController{})
 	test.Router("request-data/other/?:key", &TestRequestController{}, "post:Other")
 	test.Router("request-data/upload", &TestRequestController{}, "post:Upload")
+	test.Router("request-data/cookie", &TestRequestController{}, "post:Cookie")
 	beego.AddNamespace(test)
 	//beego.Post("/test/post", func(ctx *context.Context) {
 	//	ctx.Input.Query("name")
@@ -43,6 +44,31 @@ func init() {
 
 type TestRequestController struct {
 	beego.Controller
+}
+
+func (c *TestRequestController) Cookie() {
+	// 设置cookie
+	c.Ctx.Output.Cookie("token", "some token value")
+	// 获取cookie
+	token := c.Ctx.Input.Cookie("token")
+	// 安全cookie
+	secret := "your secret key"
+	// 设置安全cookie
+	//c.Ctx.SetSecureCookie(secret,"a","a")
+	c.Ctx.SetSecureCookie(secret, "user", "12")
+	// 获取安全cookie
+	value, ok := c.GetSecureCookie(secret, "user")
+	if !ok {
+		log.Println("cookie not found")
+	}
+
+	c.Data["json"] = map[string]interface{}{
+		"code":        200,
+		"msg":         "success",
+		"data":        token,
+		"cookie:user": value,
+	}
+	_ = c.ServeJSON()
 }
 
 func (c *TestRequestController) Post() {
