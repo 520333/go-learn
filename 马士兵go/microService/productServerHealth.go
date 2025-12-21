@@ -51,6 +51,7 @@ func main() {
 		Notes:                          "Product Server Health",
 		SuccessBeforePassing:           0,
 		FailuresBeforeCritical:         0,
+		FailuresBeforeWarning:          0,
 		DeregisterCriticalServiceAfter: "",
 	}
 	// 注册服务 作为客户端连接consul
