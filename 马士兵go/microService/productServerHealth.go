@@ -20,7 +20,7 @@ func main() {
 	// 定义业务逻辑服务，假设为产品服务
 	server := http.NewServeMux()
 	server.HandleFunc("/info", func(writer http.ResponseWriter, request *http.Request) {
-		_, err := fmt.Fprintf(writer, "Product Service.")
+		_, err := fmt.Fprintf(writer, "Product Service. %s", address)
 		if err != nil {
 			log.Fatalln(err)
 		}
