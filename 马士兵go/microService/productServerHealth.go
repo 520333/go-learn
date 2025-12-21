@@ -52,7 +52,7 @@ func main() {
 		SuccessBeforePassing:           0,
 		FailuresBeforeCritical:         0,
 		FailuresBeforeWarning:          0,
-		DeregisterCriticalServiceAfter: "",
+		DeregisterCriticalServiceAfter: "10s", // 10秒不健康会被取消注册
 	}
 	// 注册服务 作为客户端连接consul
 	consulConfig := api.DefaultConfig()
