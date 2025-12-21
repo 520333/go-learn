@@ -33,7 +33,7 @@ func main() {
 	// rest api 定义
 	router.HandleFunc("/articles", articleList).Methods("GET")
 	router.HandleFunc("/articles/{id}", articleRetrieve).Methods("GET")
-	router.HandleFunc("/articles/", articleCreate).Methods("POST")
+	router.HandleFunc("/articles", articleCreate).Methods("POST")
 	router.HandleFunc("/articles/{id}", articleDelete).Methods("DELETE")
 	router.HandleFunc("/articles/{id}", articleUpdate).Methods("PUT")
 	router.HandleFunc("/articles/{id}", articleUpdatePartial).Methods("PATCH")
