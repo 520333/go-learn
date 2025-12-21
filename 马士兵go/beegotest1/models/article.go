@@ -29,6 +29,7 @@ func (*Article) TableIndex() [][]string {
 		[]string{"Subject", "Summary"},
 	}
 }
+
 func (*Article) TableUnique() [][]string {
 	return [][]string{}
 }

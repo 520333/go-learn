@@ -214,6 +214,7 @@ func (c *TestRequestController) Resp() {
 	// 文件下载
 	c.Ctx.Output.Download("./beegotest1.exe", "test.exe")
 }
+
 func (c *TestRequestController) Header() {
 	// 获取header
 	value1 := c.Ctx.Input.Header("Content-Type")
@@ -227,6 +228,7 @@ func (c *TestRequestController) Header() {
 	c.Ctx.Output.Header("X-Powered-By", "golang")
 	_ = c.ServeJSON()
 }
+
 func (c *TestRequestController) Cookie() {
 	// 设置cookie
 	c.Ctx.Output.Cookie("token", "some token value")
@@ -307,6 +309,7 @@ func (c *TestRequestController) Other() {
 	c.Data["json"] = requestData
 	_ = c.ServeJSON()
 }
+
 func (c *TestRequestController) Upload() {
 	// 1.获取文件信息
 	f, h, err := c.GetFile("logo")
