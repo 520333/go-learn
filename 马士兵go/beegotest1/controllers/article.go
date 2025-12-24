@@ -32,6 +32,7 @@ func (c *ArticleController) Read() {
 	}
 	_ = c.ServeJSON()
 }
+
 func (c *ArticleController) Create() {
 
 	// 1.做测试数据切片
