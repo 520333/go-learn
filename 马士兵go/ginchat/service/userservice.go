@@ -7,8 +7,10 @@ import (
 )
 
 // GetUserList
+// @Summary 获取用户列表
 // @Tags 用户列表
-// @Success 200 {string} json{"code","message"}
+// @Produce json
+// @Success 200 {string} json {"code","message"}
 // @Router /user/getUserList [get]
 func GetUserList(c *gin.Context) {
 	data := make([]*models.UserBasic, 10)
