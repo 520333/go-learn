@@ -35,6 +35,16 @@ func CreateUser(c *gin.Context) {
 	user.Name = c.Query("name")
 	passWord := c.Query("password")
 	rePassWord := c.Query("repassword")
+
+	username := models.FindUserByName(user.Name)
+	if username.Name != "" {
+		c.JSON(-1, gin.H{
+			"code":    -1,
+			"message": "用户名已注册！",
+		})
+		return
+	}
+
 	if passWord != rePassWord {
 		c.JSON(-1, gin.H{
 			"code":    -1,
