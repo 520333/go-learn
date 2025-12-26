@@ -19,6 +19,7 @@ func main() {
 	if err := db.AutoMigrate(&models.UserBasic{}); err != nil {
 		log.Println(err)
 	}
+	db.AutoMigrate(&models.Message{}, &models.Contact{}, &models.GroupBasic{})
 
 	user := &models.UserBasic{}
 	user.Name = "海绵宝宝"
