@@ -10,6 +10,7 @@ go get github.com/redis/go-redis/v9
 # websocket
 go get -u github.com/gorilla/websocke
 
+go get -u gopkg.in/fatih/set.v
 # swagger
 go install github.com/swaggo/swag/cmd/swag@latest
 go get -u github.com/swaggo/swag/cmd/swag

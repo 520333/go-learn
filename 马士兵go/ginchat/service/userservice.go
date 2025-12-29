@@ -38,16 +38,24 @@ func GetUserList(c *gin.Context) {
 // @Param repassword query string true "确认密码"
 // @Produce json
 // @Success 200 {string} json {"code","message"}
-// @Router /user/createUser [get]
+// @Router /user/createUser [post]
 func CreateUser(c *gin.Context) {
 	user := models.UserBasic{}
-	user.Name = c.Query("name")
-	passWord := c.Query("password")
-	rePassWord := c.Query("repassword")
+	user.Name = c.Request.FormValue("name")
+	passWord := c.Request.FormValue("password")
+	rePassWord := c.Request.FormValue("repassword")
 	salt := fmt.Sprintf("%06d", rand.Int31())
-
-	username := models.FindUserByName(user.Name)
-	if username.Name != "" {
+	fmt.Println(user.Name, ">>>>>>>>>>>>>>>>", passWord, rePassWord)
+	data := models.FindUserByName(user.Name)
+	if user.Name == "" || passWord == "" || rePassWord == "" {
+		c.JSON(-1, gin.H{
+			"code":    -1,
+			"message": "用户名密码不能为空！",
+			"data":    user,
+		})
+		return
+	}
+	if data.Name != "" {
 		c.JSON(-1, gin.H{
 			"code":    -1,
 			"message": "用户名已注册！",
@@ -55,7 +63,6 @@ func CreateUser(c *gin.Context) {
 		})
 		return
 	}
-
 	if passWord != rePassWord {
 		c.JSON(-1, gin.H{
 			"code":    -1,
@@ -86,8 +93,8 @@ func CreateUser(c *gin.Context) {
 // @Router /user/findUserByNameAndPwd [post]
 func FindUserByNameAndPwd(c *gin.Context) {
 	data := models.UserBasic{}
-	name := c.Query("name")
-	password := c.Query("password")
+	name := c.Request.FormValue("name")
+	password := c.Request.FormValue("password")
 	user := models.FindUserByName(name)
 	if user.Name == "" {
 		c.JSON(200, gin.H{
@@ -199,4 +206,8 @@ func MsgHandler(ws *websocket.Conn, c *gin.Context) {
 			fmt.Println(err)
 		}
 	}
+}
+
+func SendUserMsg(c *gin.Context) {
+	models.Chat(c.Writer, c.Request)
 }
