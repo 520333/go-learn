@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
     <link rel="stylesheet" href="/asset/css/mui.min.css">
     <link rel="stylesheet" href="/asset/css/login.css">
     <script src="/asset/js/mui.min.js"></script>
@@ -59,8 +61,10 @@
                     if(res.code!=0){
                         mui.toast(res.message)
                     }else{
-                        location.replace("/toChat")
                         mui.toast("登录成功，即将跳转")
+                        setTimeout(() => {
+                            location.replace(`/toChat?userId=${res.data.ID}&token=${res.data.Identity}`)
+                        }, 1000)
                     }
                 })
             },
