@@ -217,7 +217,7 @@
                         }
                     },
                     showweixin:function(){
-                        mui.alert("请加微信号jiepool-winlion索取")
+                        mui.alert("宝哥专精")
                     } ,
                     showmsg:function(user,msg){
                         var data={
@@ -299,7 +299,7 @@
 
                     },
                     initwebsocket:function(){
-                        var url="ws://"+location.host+"/chat?id="+userId()+"&token=" +util.parseQuery("token");
+                        var url="ws://"+location.host+"/user/SendUserMsg?id="+userId()+"&token=" +util.parseQuery("token");
                         this.webSocket=new WebSocket(url);
                         //消息处理
                         this.webSocket.onmessage = function(evt){

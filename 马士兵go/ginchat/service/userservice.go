@@ -211,3 +211,22 @@ func MsgHandler(ws *websocket.Conn, c *gin.Context) {
 func SendUserMsg(c *gin.Context) {
 	models.Chat(c.Writer, c.Request)
 }
+
+// SearchFriends
+// @Summary 查询好友
+// @Tags 用户模块
+// @Param userId formData string true "userId"
+// @Produce json
+// @Success 200 {string} string "{ \"code\": 0, \"message\": \"success\" }"
+// @Router /searchFriend [post]
+func SearchFriends(c *gin.Context) {
+	id, _ := strconv.Atoi(c.PostForm("userId"))
+	users := models.SearchFriend(uint(id))
+
+	models.SearchFriend(uint(id))
+	c.JSON(200, gin.H{
+		"code":    0,
+		"message": "查询好友列表成功",
+		"data":    users,
+	})
+}
