@@ -19,6 +19,7 @@ func Resp(w http.ResponseWriter, code int, data interface{}, msg string) {
 	w.WriteHeader(http.StatusOK)
 	h := H{
 		Code: code,
+		Data: data,
 		Rows: data,
 		Msg:  msg,
 	}

@@ -17,6 +17,7 @@ func Router() *gin.Engine {
 
 	// 静态资源
 	r.Static("/asset", "asset/")
+
 	r.LoadHTMLGlob("view/**/*")
 
 	// 首页
@@ -35,6 +36,7 @@ func Router() *gin.Engine {
 	// 发送消息
 	r.POST("/user/updateUser", service.UpdateUser)
 	r.POST("/user/findUserByNameAndPwd", service.FindUserByNameAndPwd)
+	r.POST("/attach/upload", service.Upload) //发送图片
 
 	// 发送消息
 	r.GET("/user/SendMsg", service.SendMsg)
