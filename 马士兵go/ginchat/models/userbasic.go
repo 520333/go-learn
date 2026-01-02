@@ -54,6 +54,11 @@ func FindUserByName(name string) UserBasic {
 	return user
 }
 
+func FindById(id uint) UserBasic {
+	user := UserBasic{}
+	utils.DB.Where("id = ?", id).First(&user)
+	return user
+}
 func FindUserByPhone(phone string) *gorm.DB {
 	user := UserBasic{}
 	return utils.DB.Where("phone = ?", phone).First(&user)

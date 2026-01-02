@@ -36,3 +36,20 @@ func SearchFriend(userId uint) []UserBasic {
 	//}
 	return users
 }
+
+func AddFriend(userId uint, targetId uint) int {
+	user := UserBasic{}
+	if targetId != 0 {
+		user = FindById(targetId)
+		if user.Identity != "" {
+			var contact = Contact{}
+			contact.OwnerId = userId
+			contact.TargetId = targetId
+			contact.Type = 1
+			utils.DB.Create(&contact)
+			return 0
+		}
+		return -1
+	}
+	return -1
+}

@@ -151,7 +151,7 @@
                                         console.log("ondataavailable");
                                         uploadblob("attach/upload",event.data,".mp3",res=>{
                                             var duration = Math.ceil((new Date().getTime()-this.duration)/1000);
-                                            this.sendaudiomsg(res.data,duration);
+                                            this.sendaudiomsg(res.Data,duration);
                                         })
                                         stream.getTracks().forEach(function (track) {
                                             track.stop();
@@ -365,8 +365,8 @@
                     },
                     _addfriend:function(dstobj){
                         var that = this
-                        post("contact/addfriend",{dstid:dstobj,userid: userId()},function(res){
-                            if(res.code==0){
+                        post("contact/addfriend",{targetId:dstobj,userId: userId()},function(res){
+                            if(res.Code==0){
                                 mui.toast("添加成功");
                                 that.loadfriends();
                             }else{
@@ -405,7 +405,7 @@
                     quit:function () {
                         sessionStorage.removeItem("userid")
                         sessionStorage.removeItem("userinfo")
-                        location.href="login.shtml"
+                        location.href="login.html"
                     }
 
 
