@@ -224,9 +224,10 @@ func SearchFriends(c *gin.Context) {
 	users := models.SearchFriend(uint(id))
 
 	models.SearchFriend(uint(id))
-	c.JSON(200, gin.H{
-		"code":    0,
-		"message": "查询好友列表成功",
-		"data":    users,
-	})
+	//c.JSON(200, gin.H{
+	//	"code":    0,
+	//	"message": "查询好友列表成功",
+	//	"data":    users,
+	//})
+	utils.RespOKList(c.Writer, users, len(users))
 }

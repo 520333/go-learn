@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
-    <link rel="stylesheet" href="/asset/css/mui.min.css">
+<!--    <meta charset="utf-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">-->
+<!--    <link rel="stylesheet" href="/asset/css/mui.min.css">-->
     <link rel="stylesheet" href="/asset/css/login.css">
-    <script src="/asset/js/mui.min.js"></script>
-    <script src="/asset/js/vue.min.js"></script>
-    <script src="/asset/js/util.js"></script>
+<!--    <script src="/asset/js/mui.min.js"></script>-->
+<!--    <script src="/asset/js/vue.min.js"></script>-->
+<!--    <script src="/asset/js/util.js"></script>-->
+    {{template "chat/head.html"}}
 </head>
 <body>
 
@@ -62,6 +63,9 @@
                         mui.toast(res.message)
                     }else{
                         mui.toast("登录成功，即将跳转")
+                        userInfo(res.data)
+                        userId(res.data.ID)
+
                         setTimeout(() => {
                             location.replace(`/toChat?userId=${res.data.ID}&token=${res.data.Identity}`)
                         }, 1000)

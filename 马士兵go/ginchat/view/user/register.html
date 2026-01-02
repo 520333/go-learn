@@ -64,8 +64,10 @@
                     if(res.code!=0){
                         mui.toast(res.message)
                     }else{
-                        location.replace("/user/index.html")
-                        mui.toast("注册成功,即将跳转")
+                        mui.toast("注册成功")
+                        setTimeout(() => {
+                            location.replace("/")
+                        }, 500)
                     }
                 })
             },
