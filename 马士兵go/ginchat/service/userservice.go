@@ -243,6 +243,7 @@ func AddFriends(c *gin.Context) {
 	}
 }
 
+// CreateCommunity 新建群
 func CreateCommunity(c *gin.Context) {
 	ownerId, _ := strconv.Atoi(c.PostForm("ownerId"))
 	name := c.PostForm("name")
@@ -253,6 +254,17 @@ func CreateCommunity(c *gin.Context) {
 	code, msg := models.CreateCommunity(community)
 	if code == 0 {
 		utils.RespOK(c.Writer, code, msg)
+	} else {
+		utils.RespFail(c.Writer, msg)
+	}
+}
+
+// LoadCommunity 加载群列表
+func LoadCommunity(c *gin.Context) {
+	ownerId, _ := strconv.Atoi(c.PostForm("ownerId"))
+	data, msg := models.LoadCommunity(uint(ownerId))
+	if len(data) != 0 {
+		utils.RespOKList(c.Writer, data, msg)
 	} else {
 		utils.RespFail(c.Writer, msg)
 	}

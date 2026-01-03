@@ -32,3 +32,13 @@ func CreateCommunity(c Community) (int, string) {
 	}
 	return 0, "建群成功"
 }
+
+func LoadCommunity(ownerId uint) ([]*Community, string) {
+	data := make([]*Community, 0)
+	utils.DB.Where("owner_id = ?", ownerId).Find(&data)
+	for _, v := range data {
+		fmt.Println(v)
+	}
+
+	return data, "查询成功"
+}
