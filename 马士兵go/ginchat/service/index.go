@@ -41,6 +41,7 @@ func ToChat(c *gin.Context) {
 		"view/chat/concat.html",
 		"view/chat/group.html",
 		"view/chat/profile.html",
+		"view/chat/createcom.html",
 		"view/chat/main.html",
 	)
 	if err != nil {

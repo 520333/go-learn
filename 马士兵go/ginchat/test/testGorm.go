@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"ginchat/models"
 	"log"
 
@@ -19,14 +18,14 @@ func main() {
 	if err := db.AutoMigrate(&models.UserBasic{}); err != nil {
 		log.Println(err)
 	}
-	db.AutoMigrate(&models.Message{}, &models.Contact{}, &models.GroupBasic{})
+	db.AutoMigrate(&models.Message{}, &models.Contact{}, &models.GroupBasic{}, &models.Community{})
 
-	user := &models.UserBasic{}
-	user.Name = "海绵宝宝"
-	//user.PassWord = "123456"
-	db.Create(user)
-
-	// Read
-	fmt.Println(db.First(user, 1))
-	db.Model(user).Update("PassWord", "123456")
+	//user := &models.UserBasic{}
+	//user.Name = "海绵宝宝"
+	////user.PassWord = "123456"
+	//db.Create(user)
+	//
+	//// Read
+	//fmt.Println(db.First(user, 1))
+	//db.Model(user).Update("PassWord", "123456")
 }

@@ -26,6 +26,13 @@
                     },
                     webSocket:{},
                     win:"main",
+                    com:{
+                        "icon":"",
+                        "cate":"",
+                        "name":"",
+                        "memo":"",
+
+                    },
                     txtmsg:"",
                     panelstat:"kbord",
                     txtstat:"kbord",
@@ -373,6 +380,19 @@
                                 mui.toast(res.Msg);
                             }
                         })
+                    },
+                    // 新建群
+                    createCom:function (){
+                        this.win = "community"
+                        console.log("createCom")
+                    },
+                    // 提交新建群
+                    createcommunity: function (){
+                        console.log("createcommunity")
+                    },
+                    // 回到首页
+                    goBack: function() {
+                        this.win="main"
                     },
                     _joincomunity:function(dstobj){
                         var that = this;
