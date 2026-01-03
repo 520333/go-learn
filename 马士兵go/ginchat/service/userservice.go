@@ -235,10 +235,10 @@ func SearchFriends(c *gin.Context) {
 func AddFriends(c *gin.Context) {
 	userId, _ := strconv.Atoi(c.PostForm("userId"))
 	targetId, _ := strconv.Atoi(c.PostForm("targetId"))
-	code := models.AddFriend(uint(userId), uint(targetId))
+	code, msg := models.AddFriend(uint(userId), uint(targetId))
 	if code == 0 {
-		utils.RespOK(c.Writer, code, "添加成功")
+		utils.RespOK(c.Writer, code, msg)
 	} else {
-		utils.RespFail(c.Writer, "添加失败")
+		utils.RespFail(c.Writer, msg)
 	}
 }
