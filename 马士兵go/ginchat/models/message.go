@@ -3,6 +3,7 @@ package models
 import (
 	"encoding/json"
 	"fmt"
+	"ginchat/utils"
 	"net"
 	"net/http"
 	"strconv"
@@ -191,13 +192,38 @@ func dispatch(data []byte) {
 		fmt.Println("dispatch: data", string(data))
 		sendMsg(msg.TargetId, data)
 		//case 2: // 群发
-		//	sendGroupMsg()
+		sendGroupMsg(msg.TargetId, data) // 发送的群ID，消息内容
 		//case 3: // 广播
 		//	sentAllMsg()
 		//case 4:
 		//	fallthrough
 		//default:
 	}
+}
+func sendGroupMsg(targetId int64, msg []byte) {
+	fmt.Println("开始群发消息:")
+	userIds := SearchUserByGroupId(uint(targetId))
+	for i := 0; i < len(userIds); i++ {
+		sendMsg(int64(userIds[i]), msg)
+	}
+}
+
+func JoinGroup(userId uint, comId uint) (int, string) {
+	contact := Contact{}
+	contact.OwnerId = userId
+	contact.TargetId = comId
+	contact.Type = 2
+	community := Community{}
+	utils.DB.Where("id = ?", comId).Find(&community)
+	if community.Name == "" {
+		return -1, "该群没有找到"
+	}
+	utils.DB.Where("owner_id = ? and target_id = ? and type = 2", userId, comId).Find(&contact)
+	if !contact.CreatedAt.IsZero() {
+		return -1, "已添加过该群"
+	}
+	utils.DB.Create(&contact)
+	return 0, "加群成功"
 }
 
 func sendMsg(userId int64, msg []byte) {

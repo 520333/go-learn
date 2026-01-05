@@ -269,3 +269,15 @@ func LoadCommunity(c *gin.Context) {
 		utils.RespFail(c.Writer, msg)
 	}
 }
+
+// JoinGroups 加载群列表
+func JoinGroups(c *gin.Context) {
+	ownerId, _ := strconv.Atoi(c.PostForm("ownerId"))
+	comId, _ := strconv.Atoi(c.PostForm("comId"))
+	data, msg := models.JoinGroup(uint(ownerId), uint(comId))
+	if data == 0 {
+		utils.RespOK(c.Writer, data, msg)
+	} else {
+		utils.RespFail(c.Writer, msg)
+	}
+}

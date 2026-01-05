@@ -282,9 +282,9 @@
                     groupmsg:function(group){
 
                         this.win = "group";
-                        this.title=group.name;
-                        this.msgcontext.TargetId = parseInt(group.id);
-                        this.msgcontext.Type = 11;
+                        this.title=group.Name;
+                        this.msgcontext.TargetId = parseInt(group.ID);
+                        this.msgcontext.Type = 2;
                     },
                     loaduserinfo:function(userid,cb){
                         userid = ""+userid;
@@ -396,6 +396,7 @@
                                 mui.toast(res.Msg)
                             }else{
                                 mui.toast("建群成功，即将跳转")
+                                this.loadcommunitys();
                                 this.goBack()
                             }
                         })
@@ -406,13 +407,12 @@
                     },
                     _joincomunity:function(dstobj){
                         var that = this;
-                        post("contact/joincommunity",{dstid:dstobj,"userid":userId()},function(res){
-                            if(res.code==0){
+                        post("contact/joincommunity",{comId:dstobj,"ownerId":userId()},function(res){
+                            if(res.Code==0){
                                 mui.toast("添加成功");
-
                                 that.loadcommunitys();
                             }else{
-                                mui.toast(res.msg);
+                                mui.toast(res.Msg);
                             }
                         })
                     },
