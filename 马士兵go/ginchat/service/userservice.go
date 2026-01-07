@@ -281,3 +281,9 @@ func JoinGroups(c *gin.Context) {
 		utils.RespFail(c.Writer, msg)
 	}
 }
+
+func FindById(c *gin.Context) {
+	userId, _ := strconv.Atoi(c.PostForm("ownerId"))
+	data := models.FindById(uint(userId))
+	utils.RespOK(c.Writer, data, "ok")
+}

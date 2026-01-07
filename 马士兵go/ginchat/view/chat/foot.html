@@ -291,16 +291,15 @@
                         console.log(userid)
                         var userinfo = this.usermap[userid];
                         if(!userinfo){
-                            post("user/find",{id:parseInt(userid)},function(res){
-                                cb(res.data);
-                                this.usermap[userid] = res.data;
+                            post("user/find",{userId:parseInt(userid)},function(res){
+                                cb(res.Data);
+                                this.usermap[userid] = res.Data;
                             }.bind(this))
                         }else{
                             cb(userinfo)
                         }
                     },
                     onmessage:function(data){
-
                         this.loaduserinfo(data.userId,function(user){
                             this.showmsg(user,data)
                         }.bind(this))
