@@ -1,10 +1,14 @@
 package main
 
 import (
+	"bytes"
+	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"net/http/httputil"
 	"net/url"
+	"strconv"
 	"strings"
 )
 
@@ -37,8 +41,25 @@ func NewSingleHostReverseProxy(target *url.URL) *httputil.ReverseProxy {
 			req.Header.Set("User-Agent", "")
 		}
 	}
-	return &httputil.ReverseProxy{Director: director}
+	// 修改返回内容
+	modifyResponse := func(res *http.Response) error {
+		fmt.Println("here is modifyResponse Function")
+		if res.StatusCode == 200 {
+			srcBody, err := ioutil.ReadAll(res.Body)
+			if err != nil {
+				panic(err)
+			}
+			newBody := []byte(string(srcBody) + " 海绵宝宝")
+			res.Body = ioutil.NopCloser(bytes.NewBuffer(newBody))
+			length := int64(len(newBody))
+			res.ContentLength = length
+			res.Header.Set("Content-Length", strconv.FormatInt(length, 10))
+		}
+		return nil
+	}
+	return &httputil.ReverseProxy{Director: director, ModifyResponse: modifyResponse}
 }
+
 func JoinPath(a, b string) string {
 	aslash := strings.HasSuffix(a, "/")
 	bslash := strings.HasPrefix(b, "/")
