@@ -16,7 +16,7 @@ import (
 
 func main() {
 	// 上游真实服务器
-	realServer := "http://127.0.0.1:8001?a=1&b=2#container"
+	realServer := "http://127.0.0.1:8002?a=1&b=2#container"
 	serverURL, err := url.Parse(realServer)
 	if err != nil {
 		log.Println(err)
@@ -58,6 +58,13 @@ func NewSingleHostReverseProxy(target *url.URL) *httputil.ReverseProxy {
 	// 修改返回内容
 	modifyResponse := func(res *http.Response) error {
 		fmt.Println("here is modifyResponse Function")
+		// 升级协议 不需要进行修改
+		if res.StatusCode == 101 { // 101 switching Protocols
+			if strings.Contains(res.Header.Get("Connection"), "Upgrade") {
+				return nil
+			}
+			fmt.Println("response status code is 101")
+		}
 		if res.StatusCode == 200 {
 			srcBody, err := ioutil.ReadAll(res.Body)
 			if err != nil {
