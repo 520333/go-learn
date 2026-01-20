@@ -13,26 +13,29 @@ import (
 
 func main() {
 	// 启动TCP服务器
+	// 后端 TCP Server
 	go func() {
-		var addr = ":8003"
-		// 1.创建tcpServer实例
+		addr := "192.168.1.240:8003"
 		tcpServer := &server.TCPServer{
 			Addr:    addr,
 			Handler: &handler{},
 		}
-		// 2.启动监听提供服务
-		log.Println("Starting TCP Server at " + addr)
-		_ = tcpServer.ListenAndServe()
+		log.Println("Starting TCP Server at", addr)
+		if err := tcpServer.ListenAndServe(); err != nil {
+			log.Fatal(err)
+		}
 	}()
 	// 启动TCP代理
 	go func() {
-		var tcpServerAddr = ":8003"
-		// 1.创建tcpProxy实例
-		tcpProxy := proxy.NewSingleHostReverseProxy(tcpServerAddr)
-		// 2.启动监听提供服务
-		var addr = ":8083"
-		log.Println("Starting TCP Server at " + addr)
-		server.ListenAndServe(tcpServerAddr, tcpProxy)
+		backendAddr := "192.168.1.240:8003"
+		proxyHandler := proxy.NewSingleHostReverseProxy(backendAddr)
+
+		listenAddr := "192.168.1.240:8083"
+		log.Println("Starting TCP Proxy at", listenAddr)
+
+		if err := server.ListenAndServe(listenAddr, proxyHandler); err != nil {
+			log.Fatal(err)
+		}
 	}()
 	quit := make(chan os.Signal)
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
@@ -43,4 +46,5 @@ type handler struct{}
 
 func (h *handler) ServeTCP(ctx context.Context, conn net.Conn) {
 	conn.Write([]byte("hahaha\n"))
+	conn.Close()
 }
