@@ -27,3 +27,6 @@ message Student {
     string teacher = 5;
   }
 }
+
+// 进入到该文件当前目录执行
+// protoc --go_out=paths=source_relative:. --go-grpc_out=paths=source_relative:. *.proto
