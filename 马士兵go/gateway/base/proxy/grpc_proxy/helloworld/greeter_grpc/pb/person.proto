@@ -1,0 +1,29 @@
+syntax = "proto3";
+option go_package = ".;pb";
+
+message Person {
+  string name = 1;
+  int32 age = 2;
+}
+
+service HelloService {
+  rpc Hello (Person) returns (Person);
+}
+
+// 枚举
+enum Week {
+  Monday = 0;
+  Tuesday = 1;
+}
+
+message Student {
+  string className = 1;
+  Person p = 2; // 嵌套
+  Week w = 3;
+  repeated int32 score = 4; // 数组
+
+  // 联合体
+  oneof data {
+    string teacher = 5;
+  }
+}
