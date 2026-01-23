@@ -9,6 +9,7 @@ import (
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/grpc/metadata"
 )
 
 var msg = "this is client"
@@ -23,13 +24,23 @@ func main() {
 	}
 	defer conn.Close()
 	c := proto.NewEchoClient(conn)
+
+	// 调用一元RPC方法
+	UnaryEchoWithMedata(c, msg)
+
+}
+
+func UnaryEchoWithMedata(c proto.EchoClient, msg string) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 	fmt.Println("------------ UnaryEcho Client ------------")
+	md := metadata.Pairs("timestamp", time.Now().Format(time.StampNano))
+	//md.Append("authorization", "token....")
+	ctx = metadata.NewOutgoingContext(ctx, md)
 	reply, err := c.UnaryEcho(ctx, &proto.EchoRequest{Message: msg})
 	if err != nil {
 		log.Fatalf("client.UnaryEcho err: %v", err)
 	} else {
-		fmt.Println(reply)
+		fmt.Println(reply.Message)
 	}
 }
