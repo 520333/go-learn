@@ -60,7 +60,7 @@ func (s *server) ClientStreamingEcho(stream proto.Echo_ClientStreamingEchoServer
 	for {
 		req, err := stream.Recv()
 		if err == io.EOF {
-			fmt.Println("echo last received message")
+			fmt.Println("echo lasted received message")
 			return stream.SendAndClose(&proto.EchoResponse{Message: message})
 		}
 		if err != nil {
@@ -68,10 +68,24 @@ func (s *server) ClientStreamingEcho(stream proto.Echo_ClientStreamingEchoServer
 		}
 		fmt.Printf("request received: %s\n", req.Message)
 	}
-	return nil
 }
 
-func (s *server) BidirectionalStreamingEcho(req grpc.ClientStreamingServer[proto.EchoRequest, proto.EchoResponse]) error {
-	//TODO implement me
-	panic("implement me")
+// BidirectionalStreamingEcho 双向流处理RPC方法实现
+func (s *server) BidirectionalStreamingEcho(stream proto.Echo_BidirectionalStreamingEchoServer) error {
+	fmt.Println("------------ BidirectionalStreamingEcho Server------------")
+	var message = "received over!"
+	for {
+		req, err := stream.Recv()
+		if err == io.EOF {
+			fmt.Println("echo lasted received message")
+			return stream.SendMsg(&proto.EchoResponse{Message: message})
+		}
+		if err != nil {
+			return err
+		}
+		fmt.Printf("request received: %s\n", req.Message)
+		if err = stream.SendMsg(&proto.EchoResponse{Message: "request received: " + req.Message}); err != nil {
+			return err
+		}
+	}
 }

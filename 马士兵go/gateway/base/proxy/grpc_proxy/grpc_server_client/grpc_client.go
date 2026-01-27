@@ -39,6 +39,10 @@ func main() {
 	ClientStreamingEchoWithMedata(c, msg)
 	time.Sleep(time.Second)
 
+	// 调用双向流式RPC方法
+	bidirectionalStreamingEchoWithMedata(c, msg)
+	time.Sleep(time.Second)
+
 }
 
 func UnaryEchoWithMedata(c proto.EchoClient, msg string) {
@@ -61,7 +65,6 @@ func ServerStreamingEchoWithMedata(c proto.EchoClient, msg string) {
 	defer cancel()
 	fmt.Println("------------ ServerStreaming Client ------------")
 	md := metadata.Pairs("timestamp", time.Now().Format(time.StampNano))
-	//md.Append("authorization", "token....")
 	ctx = metadata.NewOutgoingContext(ctx, md)
 	stream, err := c.ServerStreamingEcho(ctx, &proto.EchoRequest{Message: msg})
 	if err != nil {
@@ -86,7 +89,6 @@ func ClientStreamingEchoWithMedata(c proto.EchoClient, msg string) {
 	defer cancel()
 	fmt.Println("------------ ClientStreaming Client ------------")
 	md := metadata.Pairs("timestamp", time.Now().Format(time.StampNano))
-	//md.Append("authorization", "token....")
 	ctx = metadata.NewOutgoingContext(ctx, md)
 	stream, err := c.ClientStreamingEcho(ctx)
 	if err != nil {
@@ -103,4 +105,39 @@ func ClientStreamingEchoWithMedata(c proto.EchoClient, msg string) {
 		log.Fatalf("failed to finish clientStreaming: %v", err)
 	}
 	fmt.Printf("response :%s\n", resp.Message)
+}
+
+func bidirectionalStreamingEchoWithMedata(c proto.EchoClient, msg string) {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+	fmt.Println("------------ BidirectionalStreaming Client ------------")
+	md := metadata.Pairs("timestamp", time.Now().Format(time.StampNano))
+	ctx = metadata.NewOutgoingContext(ctx, md)
+	stream, err := c.BidirectionalStreamingEcho(ctx)
+	if err != nil {
+		log.Fatalf("failed to call BidirectionalStreaming method error: %v", err)
+	}
+
+	// 协程-发送消息
+	go func() {
+		for i := 0; i < 5; i++ {
+			if err = stream.Send(&proto.EchoRequest{Message: msg + " " + strconv.Itoa(i+1)}); err != nil {
+				log.Fatalf("Failed to send error: %v", err)
+			}
+		}
+		_ = stream.CloseSend()
+	}()
+
+	// 协程-接收消息
+	for {
+		resp, err := stream.Recv()
+		if err == io.EOF {
+			fmt.Printf("Failed to Finished BidirectionalStreaming %v", err.Error())
+			break
+		}
+		if err != nil {
+			log.Fatalf("failed to receive: %v", err)
+		}
+		fmt.Printf("response: %s\n", resp.Message)
+	}
 }
