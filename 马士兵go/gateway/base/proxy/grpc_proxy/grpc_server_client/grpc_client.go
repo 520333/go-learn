@@ -6,6 +6,7 @@ import (
 	"gateway/base/proxy/grpc_proxy/proto"
 	"io"
 	"log"
+	"strconv"
 	"time"
 
 	"google.golang.org/grpc"
@@ -32,6 +33,10 @@ func main() {
 
 	// 调用服务端流式处理RPC方法
 	ServerStreamingEchoWithMedata(c, msg)
+	time.Sleep(time.Second)
+
+	// 调用客户端流式处理RPC方法
+	ClientStreamingEchoWithMedata(c, msg)
 	time.Sleep(time.Second)
 
 }
@@ -74,4 +79,28 @@ func ServerStreamingEchoWithMedata(c proto.EchoClient, msg string) {
 	if rpcError != io.EOF {
 		log.Fatalf("failed to finish streaming: %v", rpcError)
 	}
+}
+
+func ClientStreamingEchoWithMedata(c proto.EchoClient, msg string) {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+	fmt.Println("------------ ClientStreaming Client ------------")
+	md := metadata.Pairs("timestamp", time.Now().Format(time.StampNano))
+	//md.Append("authorization", "token....")
+	ctx = metadata.NewOutgoingContext(ctx, md)
+	stream, err := c.ClientStreamingEcho(ctx)
+	if err != nil {
+		log.Fatalf("failed to call ClientStreaming method error: %v", err)
+	}
+
+	for i := 0; i < 5; i++ {
+		if err = stream.Send(&proto.EchoRequest{Message: msg + " " + strconv.Itoa(i+1)}); err != nil {
+			log.Fatalf("failed to send error: %v", err)
+		}
+	}
+	resp, err := stream.CloseAndRecv()
+	if err != nil {
+		log.Fatalf("failed to finish clientStreaming: %v", err)
+	}
+	fmt.Printf("response :%s\n", resp.Message)
 }

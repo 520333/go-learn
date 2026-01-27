@@ -5,8 +5,10 @@ import (
 	"flag"
 	"fmt"
 	"gateway/base/proxy/grpc_proxy/proto"
+	"io"
 	"log"
 	"net"
+	"strconv"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/metadata"
@@ -42,9 +44,8 @@ func (s *server) UnaryEcho(ctx context.Context, req *proto.EchoRequest) (*proto.
 // ServerStreamingEcho 服务端流式处理RPC方式实现
 func (s *server) ServerStreamingEcho(req *proto.EchoRequest, stream proto.Echo_ServerStreamingEchoServer) error {
 	fmt.Println("------------ StreamingEcho Server ------------")
-
 	for i := 0; i < 5; i++ {
-		err := stream.Send(&proto.EchoResponse{Message: req.Message})
+		err := stream.Send(&proto.EchoResponse{Message: req.Message + " " + strconv.Itoa(i+1)})
 		if err != nil {
 			return err
 		}
@@ -52,9 +53,22 @@ func (s *server) ServerStreamingEcho(req *proto.EchoRequest, stream proto.Echo_S
 	return nil
 }
 
-func (s *server) ClientStreamingEcho(req grpc.ClientStreamingServer[proto.EchoRequest, proto.EchoResponse]) error {
-	//TODO implement me
-	panic("implement me")
+// ClientStreamingEcho 客户端流式处理RPC方法实现
+func (s *server) ClientStreamingEcho(stream proto.Echo_ClientStreamingEchoServer) error {
+	fmt.Println("------------ ClientStreamingEcho Client ------------")
+	var message = "received over!"
+	for {
+		req, err := stream.Recv()
+		if err == io.EOF {
+			fmt.Println("echo last received message")
+			return stream.SendAndClose(&proto.EchoResponse{Message: message})
+		}
+		if err != nil {
+			return err
+		}
+		fmt.Printf("request received: %s\n", req.Message)
+	}
+	return nil
 }
 
 func (s *server) BidirectionalStreamingEcho(req grpc.ClientStreamingServer[proto.EchoRequest, proto.EchoResponse]) error {
