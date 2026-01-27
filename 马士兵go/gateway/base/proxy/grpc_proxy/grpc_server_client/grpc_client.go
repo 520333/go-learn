@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"gateway/base/proxy/grpc_proxy/proto"
+	"io"
 	"log"
 	"time"
 
@@ -27,6 +28,11 @@ func main() {
 
 	// 调用一元RPC方法
 	UnaryEchoWithMedata(c, msg)
+	time.Sleep(time.Second)
+
+	// 调用服务端流式处理RPC方法
+	ServerStreamingEchoWithMedata(c, msg)
+	time.Sleep(time.Second)
 
 }
 
@@ -39,8 +45,33 @@ func UnaryEchoWithMedata(c proto.EchoClient, msg string) {
 	ctx = metadata.NewOutgoingContext(ctx, md)
 	reply, err := c.UnaryEcho(ctx, &proto.EchoRequest{Message: msg})
 	if err != nil {
-		log.Fatalf("client.UnaryEcho err: %v", err)
+		log.Fatalf("failed to call UnaryEcho method error: %v", err)
 	} else {
 		fmt.Println(reply.Message)
+	}
+}
+
+func ServerStreamingEchoWithMedata(c proto.EchoClient, msg string) {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+	fmt.Println("------------ ServerStreaming Client ------------")
+	md := metadata.Pairs("timestamp", time.Now().Format(time.StampNano))
+	//md.Append("authorization", "token....")
+	ctx = metadata.NewOutgoingContext(ctx, md)
+	stream, err := c.ServerStreamingEcho(ctx, &proto.EchoRequest{Message: msg})
+	if err != nil {
+		log.Fatalf("failed to call ServerStreaming method error: %v", err)
+	}
+	var rpcError error
+	for {
+		resp, err := stream.Recv()
+		if err != nil {
+			rpcError = err
+			break
+		}
+		fmt.Printf("response is :%s\n", resp.Message)
+	}
+	if rpcError != io.EOF {
+		log.Fatalf("failed to finish streaming: %v", rpcError)
 	}
 }

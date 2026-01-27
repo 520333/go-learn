@@ -39,17 +39,25 @@ func (s *server) UnaryEcho(ctx context.Context, req *proto.EchoRequest) (*proto.
 	return &proto.EchoResponse{Message: req.Message}, nil
 }
 
-func (s *server) ServerStreamingEcho(request *proto.EchoRequest, g grpc.ServerStreamingServer[proto.EchoResponse]) error {
+// ServerStreamingEcho 服务端流式处理RPC方式实现
+func (s *server) ServerStreamingEcho(req *proto.EchoRequest, stream proto.Echo_ServerStreamingEchoServer) error {
+	fmt.Println("------------ StreamingEcho Server ------------")
+
+	for i := 0; i < 5; i++ {
+		err := stream.Send(&proto.EchoResponse{Message: req.Message})
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func (s *server) ClientStreamingEcho(req grpc.ClientStreamingServer[proto.EchoRequest, proto.EchoResponse]) error {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (s *server) ClientStreamingEcho(g grpc.ClientStreamingServer[proto.EchoRequest, proto.EchoResponse]) error {
-	//TODO implement me
-	panic("implement me")
-}
-
-func (s *server) BidirectionalStreamingEcho(g grpc.ClientStreamingServer[proto.EchoRequest, proto.EchoResponse]) error {
+func (s *server) BidirectionalStreamingEcho(req grpc.ClientStreamingServer[proto.EchoRequest, proto.EchoResponse]) error {
 	//TODO implement me
 	panic("implement me")
 }
