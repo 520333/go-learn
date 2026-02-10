@@ -2,6 +2,7 @@ package loadbalance
 
 import "errors"
 
+// RoundRobinBalance 轮询算法
 type RoundRobinBalance struct {
 	servAddr []string // 服务器主机地址 IP:host
 	curIndex int      // 当前轮询的节点索引

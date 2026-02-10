@@ -2,7 +2,10 @@ package loadbalance
 
 import (
 	"fmt"
+	"strconv"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestRoundRobin(t *testing.T) {
@@ -16,4 +19,38 @@ func TestRoundRobin(t *testing.T) {
 	for i := 0; i < 10; i++ {
 		fmt.Println(rb.Next())
 	}
+}
+
+func TestWeightRoundRobinBalance(t *testing.T) {
+	rb := &WeightRoundRobinBalance{}
+	rb.Add("127.0.0.1:8003", "6")
+	rb.Add("127.0.0.1:8004", "3")
+	rb.Add("127.0.0.1:8005", "1")
+	print(rb, "")
+	fmt.Println("---------- init over ----------")
+	for i := 0; i < 15; i++ {
+		addr, err := rb.Next()
+		assert.Nil(t, err)
+		print(rb, addr)
+	}
+}
+
+func print(rb *WeightRoundRobinBalance, addr string) {
+	fmt.Println("================================")
+	fmt.Println("主机地址\t\t\t当前权重\t有效权重")
+	total := 0
+	for j := 0; j < len(rb.servAddr); j++ {
+		w := rb.servAddr[j]
+		total += w.effectiveWeight
+		cw := strconv.Itoa(w.currentWeight)
+		ew := strconv.Itoa(w.effectiveWeight)
+		if w.addr == addr {
+			fmt.Printf("%c[1;0;31m%s%c[0m", 0x1B, addr, 0x1B)
+		} else {
+			fmt.Print(w.addr)
+		}
+		var str = "\t\t" + cw + "\t\t" + ew + "\t\t"
+		fmt.Println(str)
+	}
+	fmt.Println("有效权重之和: \t\t\t\t" + strconv.Itoa(total))
 }
