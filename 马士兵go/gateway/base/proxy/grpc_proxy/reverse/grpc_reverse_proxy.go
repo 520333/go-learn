@@ -3,11 +3,11 @@ package main
 import (
 	"context"
 	"flag"
+	"fmt"
 	"gateway/base/proxy/grpc_proxy/proto"
 	"io"
 	"log"
 	"net"
-	"strconv"
 	"strings"
 
 	"google.golang.org/grpc"
@@ -21,7 +21,7 @@ func main() {
 	var port = flag.Int("port", 8085, "the port to server on")
 	flag.Parse()
 
-	listener, err := net.Listen("tcp", ":"+strconv.Itoa(*port))
+	listener, err := net.Listen("tcp", fmt.Sprintf(":%d", *port))
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
@@ -105,32 +105,28 @@ func handler(srv interface{}, pxyServerStream grpc.ServerStream) error {
 func clientToServer(dst grpc.ServerStream, src grpc.ClientStream) chan error {
 	res := make(chan error, 1)
 	go func() {
-		msg := &proto.EchoResponse{}
-		//for i := 0; ; i++ {
-		//	if i == 0 {
+		md, err := src.Header()
+		if err != nil {
+			res <- err
+			return
+		}
+
+		if err := dst.SendHeader(md); err != nil {
+			res <- err
+			return
+		}
+
 		for {
-			// response header 进行处理
-			// 客户端读取响应时，会先读取响应头，然后在作出相应的处理
-			// 所以有必要设置响应头
-			md, err := src.Header()
-			if err != nil {
+			msg := new(proto.EchoResponse)
+			if err := src.RecvMsg(msg); err != nil {
 				res <- err
-				break
-			}
-			if err = dst.SendHeader(md); err != nil {
-				res <- err
-				break
+				return
 			}
 
-			if err = src.RecvMsg(msg); err != nil {
+			if err := dst.SendMsg(msg); err != nil {
 				res <- err
-				break
+				return
 			}
-			if err = dst.SendMsg(msg); err != nil {
-				res <- err
-				break
-			}
-			//	}
 		}
 	}()
 	return res
