@@ -77,3 +77,10 @@ func TestRandomBalance(t *testing.T) {
 		fmt.Println(rb.Next())
 	}
 }
+
+func TestConsistentHashBalance(t *testing.T) {
+	rb := NewConsistentHashBalance(2, nil)
+	rb.Add("127.0.0.1:8001", "127.0.0.1:8002", "127.0.0.1:8003", "127.0.0.1:8004", "127.0.0.1:8005")
+	fmt.Println(rb.hasKeys)
+	fmt.Println(rb.hashMap)
+}
