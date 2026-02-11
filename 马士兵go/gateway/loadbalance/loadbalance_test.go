@@ -64,3 +64,16 @@ func print(rb *WeightRoundRobinBalance, addr string) {
 	}
 	fmt.Println("有效权重之和: \t\t\t\t" + strconv.Itoa(total))
 }
+
+func TestRandomBalance(t *testing.T) {
+	rb := &RandomBalance{}
+	rb.Add("127.0.0.1:8001")
+	rb.Add("127.0.0.1:8002")
+	rb.Add("127.0.0.1:8003")
+	rb.Add("127.0.0.1:8004")
+	rb.Add("127.0.0.1:8005")
+
+	for i := 0; i < 10; i++ {
+		fmt.Println(rb.Next())
+	}
+}
