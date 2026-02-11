@@ -33,11 +33,12 @@ func TestWeightRoundRobinBalance(t *testing.T) {
 		addr, err := rb.Next()
 		assert.Nil(t, err)
 
-		var r = rand.Intn(3)
+		var r = rand.Intn(2)
 		if r == 1 { // 故障的概率
-			fmt.Println("server" + addr + "has failed.")
+			fmt.Println("server" + addr + " has failed.")
 			rb.callback(addr, false)
 		} else {
+			fmt.Println("正常访问：" + addr)
 			rb.callback(addr, true)
 		}
 		print(rb, addr)
