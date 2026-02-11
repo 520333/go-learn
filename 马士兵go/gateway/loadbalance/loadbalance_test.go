@@ -2,6 +2,7 @@ package loadbalance
 
 import (
 	"fmt"
+	"math/rand"
 	"strconv"
 	"testing"
 
@@ -23,14 +24,22 @@ func TestRoundRobin(t *testing.T) {
 
 func TestWeightRoundRobinBalance(t *testing.T) {
 	rb := &WeightRoundRobinBalance{}
-	rb.Add("127.0.0.1:8003", "6")
-	rb.Add("127.0.0.1:8004", "3")
-	rb.Add("127.0.0.1:8005", "1")
+	rb.Add("127.0.0.1:8001", "6")
+	rb.Add("127.0.0.1:8002", "3")
+	rb.Add("127.0.0.1:8003", "1")
 	print(rb, "")
 	fmt.Println("---------- init over ----------")
 	for i := 0; i < 15; i++ {
 		addr, err := rb.Next()
 		assert.Nil(t, err)
+
+		var r = rand.Intn(3)
+		if r == 1 { // 故障的概率
+			fmt.Println("server" + addr + "has failed.")
+			rb.callback(addr, false)
+		} else {
+			rb.callback(addr, true)
+		}
 		print(rb, addr)
 	}
 }

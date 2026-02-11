@@ -66,3 +66,21 @@ func (r *WeightRoundRobinBalance) Next() (string, error) {
 	r.curIndex = index
 	return maxNode.addr, nil
 }
+
+func (r *WeightRoundRobinBalance) callback(addr string, flag bool) {
+	for i := 0; i < len(r.servAddr); i++ {
+		w := r.servAddr[i]
+		if w.addr == addr {
+			// 访问服务器成功
+			if flag {
+				if w.effectiveWeight < w.weight {
+					w.effectiveWeight++
+				}
+			}
+		} else {
+			// 访问服务器失败
+			w.effectiveWeight--
+		}
+		break
+	}
+}
