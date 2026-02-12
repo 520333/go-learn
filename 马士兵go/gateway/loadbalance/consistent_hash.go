@@ -2,6 +2,7 @@ package loadbalance
 
 import (
 	"errors"
+	"fmt"
 	"hash/crc32"
 	"sort"
 	"strconv"
@@ -63,5 +64,19 @@ func (c *ConsistentHashBalance) Add(servers ...string) error {
 }
 
 func (c *ConsistentHashBalance) Get(key string) (string, error) {
-	return "", nil
+	l := len(c.hasKeys)
+	if l == 0 {
+		return "", errors.New("node list is empty")
+	}
+	hash := c.hash([]byte(key))
+	fmt.Println(strconv.FormatInt(int64(hash), 10) + ":")
+	index := sort.Search(l, func(i int) bool {
+		return c.hasKeys[i] >= hash
+	})
+	if index == l {
+		index = 0
+	}
+	c.mux.RLock()
+	defer c.mux.RUnlock()
+	return c.hashMap[c.hasKeys[index]], nil
 }

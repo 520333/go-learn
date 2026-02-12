@@ -81,6 +81,25 @@ func TestRandomBalance(t *testing.T) {
 func TestConsistentHashBalance(t *testing.T) {
 	rb := NewConsistentHashBalance(2, nil)
 	rb.Add("127.0.0.1:8001", "127.0.0.1:8002", "127.0.0.1:8003", "127.0.0.1:8004", "127.0.0.1:8005")
-	fmt.Println(rb.hasKeys)
+	//fmt.Println(rb.hasKeys)
 	fmt.Println(rb.hashMap)
+	funcName(rb)
+	key := rb.hasKeys[2]
+	rb.hasKeys = append(rb.hasKeys[:1], rb.hasKeys[2:]...)
+	delete(rb.hashMap, key)
+	funcName(rb)
+
+}
+
+func funcName(rb *ConsistentHashBalance) {
+	fmt.Println("=============")
+	fmt.Println(rb.Get("http://127.0.0.1:8002/demo/get"))
+	fmt.Println(rb.Get("http://127.0.0.1:8003/demo/getDemo"))
+	fmt.Println(rb.Get("http://127.0.0.1:8002/demo/get"))
+	fmt.Println(rb.Get("http://127.0.0.1:8004/demo/getBalance"))
+	fmt.Println("--------------")
+	fmt.Println(rb.Get("127.0.0.1:8002"))
+	fmt.Println(rb.Get("127.0.0.1:8003"))
+	fmt.Println(rb.Get("127.0.0.1:8002"))
+	fmt.Println(rb.Get("192.168.1.254:8004"))
 }
