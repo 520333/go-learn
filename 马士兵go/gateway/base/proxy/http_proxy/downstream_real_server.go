@@ -12,6 +12,8 @@ import (
 func main() {
 	server1 := &RealServer{Addr: ":8001"}
 	server1.Run()
+	server2 := &RealServer{Addr: ":8002"}
+	server2.Run()
 	quit := make(chan os.Signal)
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 	<-quit
