@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package api.verityCode;
+
+option go_package = "verifyCode/api/verityCode;verityCode";
+option java_multiple_files = true;
+option java_package = "api.verityCode";
+
+service VerityCode {
+	rpc GetVerityCode (GetVerityCodeRequest) returns (GetVerityCodeReply);
+}
+enum TYPE {
+  DEFAULT = 0;
+  DIGIT = 1;
+  LETTER = 2;
+  MIXED = 3;
+}
+// 请求数据参数结构
+message GetVerityCodeRequest {
+  uint32 length = 1;
+  TYPE type = 2;
+}
+// 接口返回值结构
+message GetVerityCodeReply {
+  string code = 1;
+}
+
