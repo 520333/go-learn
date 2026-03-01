@@ -3,7 +3,9 @@ package service
 import (
 	"context"
 	"customer/api/verityCode"
+	"customer/internal/biz"
 	"customer/internal/data"
+	"fmt"
 	"regexp"
 	"time"
 
@@ -67,4 +69,47 @@ func (s *CustomerService) GetVerifyCode(ctx context.Context, req *pb.GetVerifyCo
 		VerifyCodeTime: time.Now().Unix(),
 		VerifyCodeLife: life,
 	}, nil
+}
+
+func (s *CustomerService) Login(ctx context.Context, req *pb.LoginReq) (*pb.LoginResp, error) {
+	// 一 校验电话和验证码
+	// redis
+	code := s.cd.GetVerifyCode(req.Telephone)
+	if code == "" || code != req.VerifyCode {
+		fmt.Println(req.VerifyCode, code)
+		return &pb.LoginResp{
+			Code:    1,
+			Message: "验证码不匹配",
+		}, nil
+	}
+	// 二 判断电话号码是否注册 来获取顾客信息
+	customer, err := s.cd.GetCustomerByTelephone(req.Telephone)
+	if err != nil {
+		return &pb.LoginResp{
+			Code:    1,
+			Message: "顾客信息获取错误",
+		}, nil
+	}
+
+	// 三 设置token jwt-token
+	token, err := s.cd.GenerateTokenAndSave(customer, biz.CustomerDuration*time.Second, biz.CustomerSecret)
+	if err != nil {
+		return &pb.LoginResp{
+			Code:    1,
+			Message: "Token生成失败",
+		}, nil
+	}
+
+	// 四 响应token
+	return &pb.LoginResp{
+		Code:           0,
+		Message:        "login success",
+		Token:          token,
+		TokenCreatedAt: time.Now().Unix(),
+		TokenLife:      int32(biz.CustomerDuration),
+	}, nil
+}
+
+func (s *CustomerService) Logout(ctx context.Context, req *pb.LogoutReq) (*pb.LogoutResp, error) {
+	return &pb.LogoutResp{}, nil
 }

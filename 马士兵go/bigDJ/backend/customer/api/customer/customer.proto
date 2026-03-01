@@ -10,7 +10,36 @@ service Customer {
       get: "/customer/get-verify-code/{telephone}"
     };
   }
+  rpc Login (LoginReq) returns(LoginResp){
+    option (google.api.http) = {
+      post: "/customer/login",
+      body: "*",
+    };
+  }
+  rpc Logout (LogoutReq) returns(LogoutResp){
+    option (google.api.http) = {
+      get: "/customer/logout"
+    };
+  }
 }
+
+message LoginReq {
+  string telephone = 1;
+  string verify_code = 2;
+}
+
+message LoginResp {
+  int64 code = 1;
+  string message = 2;
+  string token = 3;
+  int64 token_created_at = 4;
+  int32 token_life = 5;
+}
+
+message LogoutReq {}
+
+message LogoutResp {}
+
 message GetVerifyCodeReq {
   string telephone = 1;
 }

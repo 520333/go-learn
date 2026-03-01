@@ -30,6 +30,48 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/Status'
+    /customer/login:
+        post:
+            tags:
+                - Customer
+            operationId: Customer_Login
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/LoginReq'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/LoginResp'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /customer/logout:
+        get:
+            tags:
+                - Customer
+            operationId: Customer_Logout
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/LogoutResp'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
 components:
     schemas:
         GetVerifyCodeResp:
@@ -54,6 +96,30 @@ components:
                     description: The type of the serialized message.
             additionalProperties: true
             description: Contains an arbitrary serialized message along with a @type that describes the type of the serialized message.
+        LoginReq:
+            type: object
+            properties:
+                telephone:
+                    type: string
+                verifyCode:
+                    type: string
+        LoginResp:
+            type: object
+            properties:
+                code:
+                    type: string
+                message:
+                    type: string
+                token:
+                    type: string
+                tokenCreatedAt:
+                    type: string
+                tokenLife:
+                    type: integer
+                    format: int32
+        LogoutResp:
+            type: object
+            properties: {}
         Status:
             type: object
             properties:

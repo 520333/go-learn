@@ -10,6 +10,6 @@
 
 (function (window, undefined) {
 
-	if (window.KindEditor) {
-		return;
-	}
+    if (window.KindEditor) {
+        return;
+    }
