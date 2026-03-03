@@ -103,3 +103,16 @@ func (cd CustomerData) GetToken(id interface{}) (string, error) {
 	}
 	return c.Token, nil
 }
+
+func (cd CustomerData) DelToken(id interface{}) error {
+	c := &biz.Customer{}
+	// 找到customer
+	if result := cd.data.Mdb.First(c, id); result.Error != nil {
+		return result.Error
+	}
+	// 删除customer的token
+	c.Token = ""
+	c.TokenCreatedAt = sql.NullTime{Valid: false}
+	cd.data.Mdb.Save(c)
+	return nil
+}

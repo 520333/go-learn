@@ -38,7 +38,10 @@ message LoginResp {
 
 message LogoutReq {}
 
-message LogoutResp {}
+message LogoutResp {
+  int64 code = 1;
+  string message = 2;
+}
 
 message GetVerifyCodeReq {
   string telephone = 1;

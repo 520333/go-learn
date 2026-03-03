@@ -119,7 +119,11 @@ components:
                     format: int32
         LogoutResp:
             type: object
-            properties: {}
+            properties:
+                code:
+                    type: string
+                message:
+                    type: string
         Status:
             type: object
             properties:

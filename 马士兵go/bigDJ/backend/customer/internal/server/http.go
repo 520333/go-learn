@@ -22,6 +22,11 @@ func NewHTTPServer(c *conf.Server, customerService *service.CustomerService, gre
 		http.Middleware(
 			recovery.Recovery(),
 			// 自己设置的中间件
+			// CORS
+			selector.Server(NWCors()).Match(func(ctx context.Context, operation string) bool {
+				return true
+			}).Build(),
+			// JWT 除了特定的几个其他请求相应都使用该中间件
 			selector.Server(jwt.Server(func(token *jwt2.Token) (interface{}, error) {
 				return []byte(biz.CustomerSecret), nil
 			}),

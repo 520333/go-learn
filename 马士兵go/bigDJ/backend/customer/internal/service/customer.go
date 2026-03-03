@@ -11,7 +11,9 @@ import (
 
 	pb "customer/api/customer"
 
+	"github.com/go-kratos/kratos/v2/middleware/auth/jwt"
 	"github.com/go-kratos/kratos/v2/transport/grpc"
+	jwt2 "github.com/golang-jwt/jwt/v5"
 )
 
 type CustomerService struct {
@@ -111,5 +113,17 @@ func (s *CustomerService) Login(ctx context.Context, req *pb.LoginReq) (*pb.Logi
 }
 
 func (s *CustomerService) Logout(ctx context.Context, req *pb.LogoutReq) (*pb.LogoutResp, error) {
-	return &pb.LogoutResp{}, nil
+	// 一 获取用户id
+	claims, _ := jwt.FromContext(ctx)
+	claimsMap := claims.(jwt2.MapClaims)
+	if err := s.CD.DelToken(claimsMap["jti"]); err != nil {
+		return &pb.LogoutResp{
+			Code:    1,
+			Message: "Token删除失败",
+		}, nil
+	}
+	return &pb.LogoutResp{
+		Code:    0,
+		Message: "logout success",
+	}, nil
 }
