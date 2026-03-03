@@ -16,11 +16,11 @@ import (
 
 type CustomerService struct {
 	pb.UnimplementedCustomerServer
-	cd *data.CustomerData
+	CD *data.CustomerData
 }
 
 func NewCustomerService(cd *data.CustomerData) *CustomerService {
-	return &CustomerService{cd: cd}
+	return &CustomerService{CD: cd}
 }
 
 func (s *CustomerService) GetVerifyCode(ctx context.Context, req *pb.GetVerifyCodeReq) (*pb.GetVerifyCodeResp, error) {
@@ -49,7 +49,7 @@ func (s *CustomerService) GetVerifyCode(ctx context.Context, req *pb.GetVerifyCo
 	// 三 redis的临时存储
 	// 3.1 连接redis
 	const life = 60
-	if err = s.cd.SetVerifyCode(req.Telephone, reply.Code, life); err != nil {
+	if err = s.CD.SetVerifyCode(req.Telephone, reply.Code, life); err != nil {
 		return &pb.GetVerifyCodeResp{Code: 1, Message: "验证码存储错误(redis配置解析错误)"}, nil
 	}
 
@@ -74,7 +74,7 @@ func (s *CustomerService) GetVerifyCode(ctx context.Context, req *pb.GetVerifyCo
 func (s *CustomerService) Login(ctx context.Context, req *pb.LoginReq) (*pb.LoginResp, error) {
 	// 一 校验电话和验证码
 	// redis
-	code := s.cd.GetVerifyCode(req.Telephone)
+	code := s.CD.GetVerifyCode(req.Telephone)
 	if code == "" || code != req.VerifyCode {
 		fmt.Println(req.VerifyCode, code)
 		return &pb.LoginResp{
@@ -83,7 +83,7 @@ func (s *CustomerService) Login(ctx context.Context, req *pb.LoginReq) (*pb.Logi
 		}, nil
 	}
 	// 二 判断电话号码是否注册 来获取顾客信息
-	customer, err := s.cd.GetCustomerByTelephone(req.Telephone)
+	customer, err := s.CD.GetCustomerByTelephone(req.Telephone)
 	if err != nil {
 		return &pb.LoginResp{
 			Code:    1,
@@ -92,7 +92,7 @@ func (s *CustomerService) Login(ctx context.Context, req *pb.LoginReq) (*pb.Logi
 	}
 
 	// 三 设置token jwt-token
-	token, err := s.cd.GenerateTokenAndSave(customer, biz.CustomerDuration*time.Second, biz.CustomerSecret)
+	token, err := s.CD.GenerateTokenAndSave(customer, biz.CustomerDuration*time.Second, biz.CustomerSecret)
 	if err != nil {
 		return &pb.LoginResp{
 			Code:    1,

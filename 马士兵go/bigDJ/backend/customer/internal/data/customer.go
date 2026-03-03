@@ -94,3 +94,12 @@ func (cd CustomerData) GenerateTokenAndSave(c *biz.Customer, duration time.Durat
 	// 操作成功
 	return signedToken, nil
 }
+
+// GetToken 利用用户顾客id
+func (cd CustomerData) GetToken(id interface{}) (string, error) {
+	c := &biz.Customer{}
+	if result := cd.data.Mdb.First(c, id); result.Error != nil {
+		return "", result.Error
+	}
+	return c.Token, nil
+}
