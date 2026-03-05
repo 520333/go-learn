@@ -6,14 +6,17 @@ import (
 	"customer/internal/biz"
 	"customer/internal/data"
 	"fmt"
+	"log"
 	"regexp"
 	"time"
 
 	pb "customer/api/customer"
 
+	"github.com/go-kratos/kratos/contrib/registry/consul/v2"
 	"github.com/go-kratos/kratos/v2/middleware/auth/jwt"
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	jwt2 "github.com/golang-jwt/jwt/v5"
+	"github.com/hashicorp/consul/api"
 )
 
 type CustomerService struct {
@@ -32,8 +35,26 @@ func (s *CustomerService) GetVerifyCode(ctx context.Context, req *pb.GetVerifyCo
 	if !regexpPattern.MatchString(req.Telephone) {
 		return &pb.GetVerifyCodeResp{Code: 1, Message: "电话号码格式错误"}, nil
 	}
+
 	// 二 通过验证码服务生成验证码(服务间通讯 grpc)
-	conn, err := grpc.DialInsecure(context.Background(), grpc.WithEndpoint("localhost:9000"))
+	// 使用服务发现
+	// 1.获取consul客户端
+	consulConfig := api.DefaultConfig()
+	consulConfig.Address = "192.168.1.178:8500"
+	consulClient, err := api.NewClient(consulConfig)
+	// 2.服务发现管理器
+	dis := consul.New(consulClient)
+	if err != nil {
+		log.Fatal(err)
+	}
+	// 2.1连接目标grpc服务器
+	endpoint := "discovery:///verifyCode"
+	conn, err := grpc.DialInsecure(context.Background(),
+		//grpc.WithEndpoint("localhost:9000"),
+		grpc.WithEndpoint(endpoint), // 目标服务的名字
+		grpc.WithDiscovery(dis),     // 使用服务发现
+	)
+
 	if err != nil {
 		return &pb.GetVerifyCodeResp{Code: 1, Message: "验证码服务不可用"}, nil
 	}

@@ -19,3 +19,13 @@ services:
       - "3306:3306"
     volumes:
       - ./data/mysql:/var/lib/mysql
+
+  consul:
+    image: consul:1.14.8
+    container_name: consul
+    command: agent -dev -client=0.0.0.0
+    ports:
+      - "8500:8500"
+#    volumes:
+#      - ./consul-data:/consul/data
+    restart: unless-stopped
