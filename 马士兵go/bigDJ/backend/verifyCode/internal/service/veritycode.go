@@ -2,7 +2,9 @@ package service
 
 import (
 	"context"
+	"fmt"
 	"math/rand"
+	"os"
 	pb "verifyCode/api/verityCode"
 )
 
@@ -15,6 +17,7 @@ func NewVerityCodeService() *VerityCodeService {
 }
 
 func (s *VerityCodeService) GetVerityCode(ctx context.Context, req *pb.GetVerityCodeRequest) (*pb.GetVerityCodeReply, error) {
+	fmt.Println("当前实例:", os.Getenv("HOSTNAME"))
 	return &pb.GetVerityCodeReply{
 		Code: RandCode(int(req.Length), req.Type),
 	}, nil

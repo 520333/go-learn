@@ -14,6 +14,8 @@ import (
 
 	"github.com/go-kratos/kratos/contrib/registry/consul/v2"
 	"github.com/go-kratos/kratos/v2/middleware/auth/jwt"
+	"github.com/go-kratos/kratos/v2/selector"
+	"github.com/go-kratos/kratos/v2/selector/wrr"
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	jwt2 "github.com/golang-jwt/jwt/v5"
 	"github.com/hashicorp/consul/api"
@@ -47,8 +49,11 @@ func (s *CustomerService) GetVerifyCode(ctx context.Context, req *pb.GetVerifyCo
 	if err != nil {
 		log.Fatal(err)
 	}
+	//selector.SetGlobalSelector(random.NewBuilder())
+	selector.SetGlobalSelector(wrr.NewBuilder())
+	//selector.SetGlobalSelector(p2c.NewBuilder())
 	// 2.1连接目标grpc服务器
-	endpoint := "discovery:///verifyCode"
+	endpoint := "discovery:///VerifyCode"
 	conn, err := grpc.DialInsecure(context.Background(),
 		//grpc.WithEndpoint("localhost:9000"),
 		grpc.WithEndpoint(endpoint), // 目标服务的名字

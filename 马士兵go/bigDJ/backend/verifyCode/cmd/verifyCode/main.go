@@ -49,12 +49,16 @@ func newApp(logger log.Logger, gs *grpc.Server, hs *http.Server) *kratos.App {
 	}
 	// 二 获取consul注册管理器
 	reg := consul.New(consulClient)
+	// 设置meta属性 设置weight
+	meta := map[string]string{
+		"weight": "999",
+	}
 
 	return kratos.New(
 		kratos.ID(id),
 		kratos.Name(Name),
 		kratos.Version(Version),
-		kratos.Metadata(map[string]string{}),
+		kratos.Metadata(meta),
 		kratos.Logger(logger),
 		kratos.Server(
 			gs,
