@@ -6,6 +6,7 @@ import (
 	"valuation/api/mapService"
 
 	"github.com/go-kratos/kratos/contrib/registry/consul/v2"
+	"github.com/go-kratos/kratos/v2/middleware/tracing"
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	"github.com/hashicorp/consul/api"
 	"gorm.io/gorm"
@@ -88,10 +89,11 @@ func (*ValuationBiz) GetDrivingInfo(ctx context.Context, origin, destination str
 	dis := consul.New(consulClient)
 
 	// 2.1连接目标grpc服务器
-	endpoint := "discovery:///map"
+	endpoint := "discovery:///Map"
 	conn, err := grpc.DialInsecure(context.Background(),
-		grpc.WithEndpoint(endpoint), // 目标服务的名字
-		grpc.WithDiscovery(dis),     // 使用服务发现
+		grpc.WithEndpoint(endpoint),           // 目标服务的名字
+		grpc.WithDiscovery(dis),               // 使用服务发现
+		grpc.WithMiddleware(tracing.Client()), // 客户端tracing
 	)
 
 	if err != nil {
