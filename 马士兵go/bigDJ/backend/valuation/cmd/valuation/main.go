@@ -4,7 +4,7 @@ import (
 	"flag"
 	"os"
 
-	"map/internal/conf"
+	"valuation/internal/conf"
 
 	"github.com/go-kratos/kratos/contrib/registry/consul/v2"
 	"github.com/go-kratos/kratos/v2"
@@ -23,7 +23,7 @@ import (
 // go build -ldflags "-X main.Version=x.y.z"
 var (
 	// Name is the name of the compiled software.
-	Name string = "map"
+	Name string = "Valuation"
 	// Version is the version of the compiled software.
 	Version string = "1.0.0"
 	// flagconf is the config flag.
