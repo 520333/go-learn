@@ -2,7 +2,6 @@ package service
 
 import (
 	"context"
-	"fmt"
 	"valuation/internal/biz"
 
 	pb "valuation/api/valuation"
@@ -24,6 +23,15 @@ func (s *ValuationService) GetEstimatePrice(ctx context.Context, req *pb.GetEsti
 	if err != nil {
 		return nil, errors.New(200, "Map ERROR", "get driving info")
 	}
-	fmt.Println(distance, duration)
-	return &pb.GetEstimatePriceReply{}, nil
+	//fmt.Println(distance, duration)
+	// 费用
+	price, err := s.vb.GetPrice(ctx, distance, duration, 1, 23)
+	if err != nil {
+		return nil, errors.New(200, "PRICE ERROR", "call price error")
+	}
+	return &pb.GetEstimatePriceReply{
+		Origin:      req.Origin,
+		Destination: req.Destination,
+		Price:       price,
+	}, nil
 }

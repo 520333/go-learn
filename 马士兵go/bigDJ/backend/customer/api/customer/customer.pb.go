@@ -22,6 +22,134 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+type EstimatePriceReq struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Origin        string                 `protobuf:"bytes,1,opt,name=origin,proto3" json:"origin,omitempty"`
+	Destination   string                 `protobuf:"bytes,2,opt,name=destination,proto3" json:"destination,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *EstimatePriceReq) Reset() {
+	*x = EstimatePriceReq{}
+	mi := &file_api_customer_customer_proto_msgTypes[0]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *EstimatePriceReq) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*EstimatePriceReq) ProtoMessage() {}
+
+func (x *EstimatePriceReq) ProtoReflect() protoreflect.Message {
+	mi := &file_api_customer_customer_proto_msgTypes[0]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use EstimatePriceReq.ProtoReflect.Descriptor instead.
+func (*EstimatePriceReq) Descriptor() ([]byte, []int) {
+	return file_api_customer_customer_proto_rawDescGZIP(), []int{0}
+}
+
+func (x *EstimatePriceReq) GetOrigin() string {
+	if x != nil {
+		return x.Origin
+	}
+	return ""
+}
+
+func (x *EstimatePriceReq) GetDestination() string {
+	if x != nil {
+		return x.Destination
+	}
+	return ""
+}
+
+type EstimatePriceResp struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Code          int64                  `protobuf:"varint,1,opt,name=code,proto3" json:"code,omitempty"`
+	Message       string                 `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
+	Origin        string                 `protobuf:"bytes,3,opt,name=origin,proto3" json:"origin,omitempty"`
+	Destination   string                 `protobuf:"bytes,4,opt,name=destination,proto3" json:"destination,omitempty"`
+	Price         int64                  `protobuf:"varint,5,opt,name=price,proto3" json:"price,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *EstimatePriceResp) Reset() {
+	*x = EstimatePriceResp{}
+	mi := &file_api_customer_customer_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *EstimatePriceResp) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*EstimatePriceResp) ProtoMessage() {}
+
+func (x *EstimatePriceResp) ProtoReflect() protoreflect.Message {
+	mi := &file_api_customer_customer_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use EstimatePriceResp.ProtoReflect.Descriptor instead.
+func (*EstimatePriceResp) Descriptor() ([]byte, []int) {
+	return file_api_customer_customer_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *EstimatePriceResp) GetCode() int64 {
+	if x != nil {
+		return x.Code
+	}
+	return 0
+}
+
+func (x *EstimatePriceResp) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
+func (x *EstimatePriceResp) GetOrigin() string {
+	if x != nil {
+		return x.Origin
+	}
+	return ""
+}
+
+func (x *EstimatePriceResp) GetDestination() string {
+	if x != nil {
+		return x.Destination
+	}
+	return ""
+}
+
+func (x *EstimatePriceResp) GetPrice() int64 {
+	if x != nil {
+		return x.Price
+	}
+	return 0
+}
+
 type LoginReq struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Telephone     string                 `protobuf:"bytes,1,opt,name=telephone,proto3" json:"telephone,omitempty"`
@@ -32,7 +160,7 @@ type LoginReq struct {
 
 func (x *LoginReq) Reset() {
 	*x = LoginReq{}
-	mi := &file_api_customer_customer_proto_msgTypes[0]
+	mi := &file_api_customer_customer_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -44,7 +172,7 @@ func (x *LoginReq) String() string {
 func (*LoginReq) ProtoMessage() {}
 
 func (x *LoginReq) ProtoReflect() protoreflect.Message {
-	mi := &file_api_customer_customer_proto_msgTypes[0]
+	mi := &file_api_customer_customer_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -57,7 +185,7 @@ func (x *LoginReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LoginReq.ProtoReflect.Descriptor instead.
 func (*LoginReq) Descriptor() ([]byte, []int) {
-	return file_api_customer_customer_proto_rawDescGZIP(), []int{0}
+	return file_api_customer_customer_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *LoginReq) GetTelephone() string {
@@ -87,7 +215,7 @@ type LoginResp struct {
 
 func (x *LoginResp) Reset() {
 	*x = LoginResp{}
-	mi := &file_api_customer_customer_proto_msgTypes[1]
+	mi := &file_api_customer_customer_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -99,7 +227,7 @@ func (x *LoginResp) String() string {
 func (*LoginResp) ProtoMessage() {}
 
 func (x *LoginResp) ProtoReflect() protoreflect.Message {
-	mi := &file_api_customer_customer_proto_msgTypes[1]
+	mi := &file_api_customer_customer_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -112,7 +240,7 @@ func (x *LoginResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LoginResp.ProtoReflect.Descriptor instead.
 func (*LoginResp) Descriptor() ([]byte, []int) {
-	return file_api_customer_customer_proto_rawDescGZIP(), []int{1}
+	return file_api_customer_customer_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *LoginResp) GetCode() int64 {
@@ -158,7 +286,7 @@ type LogoutReq struct {
 
 func (x *LogoutReq) Reset() {
 	*x = LogoutReq{}
-	mi := &file_api_customer_customer_proto_msgTypes[2]
+	mi := &file_api_customer_customer_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -170,7 +298,7 @@ func (x *LogoutReq) String() string {
 func (*LogoutReq) ProtoMessage() {}
 
 func (x *LogoutReq) ProtoReflect() protoreflect.Message {
-	mi := &file_api_customer_customer_proto_msgTypes[2]
+	mi := &file_api_customer_customer_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -183,7 +311,7 @@ func (x *LogoutReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LogoutReq.ProtoReflect.Descriptor instead.
 func (*LogoutReq) Descriptor() ([]byte, []int) {
-	return file_api_customer_customer_proto_rawDescGZIP(), []int{2}
+	return file_api_customer_customer_proto_rawDescGZIP(), []int{4}
 }
 
 type LogoutResp struct {
@@ -196,7 +324,7 @@ type LogoutResp struct {
 
 func (x *LogoutResp) Reset() {
 	*x = LogoutResp{}
-	mi := &file_api_customer_customer_proto_msgTypes[3]
+	mi := &file_api_customer_customer_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -208,7 +336,7 @@ func (x *LogoutResp) String() string {
 func (*LogoutResp) ProtoMessage() {}
 
 func (x *LogoutResp) ProtoReflect() protoreflect.Message {
-	mi := &file_api_customer_customer_proto_msgTypes[3]
+	mi := &file_api_customer_customer_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -221,7 +349,7 @@ func (x *LogoutResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LogoutResp.ProtoReflect.Descriptor instead.
 func (*LogoutResp) Descriptor() ([]byte, []int) {
-	return file_api_customer_customer_proto_rawDescGZIP(), []int{3}
+	return file_api_customer_customer_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *LogoutResp) GetCode() int64 {
@@ -247,7 +375,7 @@ type GetVerifyCodeReq struct {
 
 func (x *GetVerifyCodeReq) Reset() {
 	*x = GetVerifyCodeReq{}
-	mi := &file_api_customer_customer_proto_msgTypes[4]
+	mi := &file_api_customer_customer_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -259,7 +387,7 @@ func (x *GetVerifyCodeReq) String() string {
 func (*GetVerifyCodeReq) ProtoMessage() {}
 
 func (x *GetVerifyCodeReq) ProtoReflect() protoreflect.Message {
-	mi := &file_api_customer_customer_proto_msgTypes[4]
+	mi := &file_api_customer_customer_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -272,7 +400,7 @@ func (x *GetVerifyCodeReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetVerifyCodeReq.ProtoReflect.Descriptor instead.
 func (*GetVerifyCodeReq) Descriptor() ([]byte, []int) {
-	return file_api_customer_customer_proto_rawDescGZIP(), []int{4}
+	return file_api_customer_customer_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *GetVerifyCodeReq) GetTelephone() string {
@@ -295,7 +423,7 @@ type GetVerifyCodeResp struct {
 
 func (x *GetVerifyCodeResp) Reset() {
 	*x = GetVerifyCodeResp{}
-	mi := &file_api_customer_customer_proto_msgTypes[5]
+	mi := &file_api_customer_customer_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -307,7 +435,7 @@ func (x *GetVerifyCodeResp) String() string {
 func (*GetVerifyCodeResp) ProtoMessage() {}
 
 func (x *GetVerifyCodeResp) ProtoReflect() protoreflect.Message {
-	mi := &file_api_customer_customer_proto_msgTypes[5]
+	mi := &file_api_customer_customer_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -320,7 +448,7 @@ func (x *GetVerifyCodeResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetVerifyCodeResp.ProtoReflect.Descriptor instead.
 func (*GetVerifyCodeResp) Descriptor() ([]byte, []int) {
-	return file_api_customer_customer_proto_rawDescGZIP(), []int{5}
+	return file_api_customer_customer_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *GetVerifyCodeResp) GetCode() int64 {
@@ -362,7 +490,16 @@ var File_api_customer_customer_proto protoreflect.FileDescriptor
 
 const file_api_customer_customer_proto_rawDesc = "" +
 	"\n" +
-	"\x1bapi/customer/customer.proto\x12\fapi.customer\x1a\x1cgoogle/api/annotations.proto\"I\n" +
+	"\x1bapi/customer/customer.proto\x12\fapi.customer\x1a\x1cgoogle/api/annotations.proto\"L\n" +
+	"\x10EstimatePriceReq\x12\x16\n" +
+	"\x06origin\x18\x01 \x01(\tR\x06origin\x12 \n" +
+	"\vdestination\x18\x02 \x01(\tR\vdestination\"\x91\x01\n" +
+	"\x11EstimatePriceResp\x12\x12\n" +
+	"\x04code\x18\x01 \x01(\x03R\x04code\x12\x18\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage\x12\x16\n" +
+	"\x06origin\x18\x03 \x01(\tR\x06origin\x12 \n" +
+	"\vdestination\x18\x04 \x01(\tR\vdestination\x12\x14\n" +
+	"\x05price\x18\x05 \x01(\x03R\x05price\"I\n" +
 	"\bLoginReq\x12\x1c\n" +
 	"\ttelephone\x18\x01 \x01(\tR\ttelephone\x12\x1f\n" +
 	"\vverify_code\x18\x02 \x01(\tR\n" +
@@ -387,11 +524,12 @@ const file_api_customer_customer_proto_rawDesc = "" +
 	"\vverify_code\x18\x03 \x01(\tR\n" +
 	"verifyCode\x12(\n" +
 	"\x10verify_code_time\x18\x04 \x01(\x03R\x0everifyCodeTime\x12(\n" +
-	"\x10verify_code_life\x18\x05 \x01(\x05R\x0everifyCodeLife2\xb8\x02\n" +
+	"\x10verify_code_life\x18\x05 \x01(\x05R\x0everifyCodeLife2\xac\x03\n" +
 	"\bCustomer\x12\x7f\n" +
 	"\rGetVerifyCode\x12\x1e.api.customer.GetVerifyCodeReq\x1a\x1f.api.customer.GetVerifyCodeResp\"-\x82\xd3\xe4\x93\x02'\x12%/customer/get-verify-code/{telephone}\x12T\n" +
 	"\x05Login\x12\x16.api.customer.LoginReq\x1a\x17.api.customer.LoginResp\"\x1a\x82\xd3\xe4\x93\x02\x14:\x01*\"\x0f/customer/login\x12U\n" +
-	"\x06Logout\x12\x17.api.customer.LogoutReq\x1a\x18.api.customer.LogoutResp\"\x18\x82\xd3\xe4\x93\x02\x12\x12\x10/customer/logoutB Z\x1ecustomer/api/customer;customerb\x06proto3"
+	"\x06Logout\x12\x17.api.customer.LogoutReq\x1a\x18.api.customer.LogoutResp\"\x18\x82\xd3\xe4\x93\x02\x12\x12\x10/customer/logout\x12r\n" +
+	"\rEstimatePrice\x12\x1e.api.customer.EstimatePriceReq\x1a\x1f.api.customer.EstimatePriceResp\" \x82\xd3\xe4\x93\x02\x1a\x12\x18/customer/estimate-priceB Z\x1ecustomer/api/customer;customerb\x06proto3"
 
 var (
 	file_api_customer_customer_proto_rawDescOnce sync.Once
@@ -405,24 +543,28 @@ func file_api_customer_customer_proto_rawDescGZIP() []byte {
 	return file_api_customer_customer_proto_rawDescData
 }
 
-var file_api_customer_customer_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
+var file_api_customer_customer_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
 var file_api_customer_customer_proto_goTypes = []any{
-	(*LoginReq)(nil),          // 0: api.customer.LoginReq
-	(*LoginResp)(nil),         // 1: api.customer.LoginResp
-	(*LogoutReq)(nil),         // 2: api.customer.LogoutReq
-	(*LogoutResp)(nil),        // 3: api.customer.LogoutResp
-	(*GetVerifyCodeReq)(nil),  // 4: api.customer.GetVerifyCodeReq
-	(*GetVerifyCodeResp)(nil), // 5: api.customer.GetVerifyCodeResp
+	(*EstimatePriceReq)(nil),  // 0: api.customer.EstimatePriceReq
+	(*EstimatePriceResp)(nil), // 1: api.customer.EstimatePriceResp
+	(*LoginReq)(nil),          // 2: api.customer.LoginReq
+	(*LoginResp)(nil),         // 3: api.customer.LoginResp
+	(*LogoutReq)(nil),         // 4: api.customer.LogoutReq
+	(*LogoutResp)(nil),        // 5: api.customer.LogoutResp
+	(*GetVerifyCodeReq)(nil),  // 6: api.customer.GetVerifyCodeReq
+	(*GetVerifyCodeResp)(nil), // 7: api.customer.GetVerifyCodeResp
 }
 var file_api_customer_customer_proto_depIdxs = []int32{
-	4, // 0: api.customer.Customer.GetVerifyCode:input_type -> api.customer.GetVerifyCodeReq
-	0, // 1: api.customer.Customer.Login:input_type -> api.customer.LoginReq
-	2, // 2: api.customer.Customer.Logout:input_type -> api.customer.LogoutReq
-	5, // 3: api.customer.Customer.GetVerifyCode:output_type -> api.customer.GetVerifyCodeResp
-	1, // 4: api.customer.Customer.Login:output_type -> api.customer.LoginResp
-	3, // 5: api.customer.Customer.Logout:output_type -> api.customer.LogoutResp
-	3, // [3:6] is the sub-list for method output_type
-	0, // [0:3] is the sub-list for method input_type
+	6, // 0: api.customer.Customer.GetVerifyCode:input_type -> api.customer.GetVerifyCodeReq
+	2, // 1: api.customer.Customer.Login:input_type -> api.customer.LoginReq
+	4, // 2: api.customer.Customer.Logout:input_type -> api.customer.LogoutReq
+	0, // 3: api.customer.Customer.EstimatePrice:input_type -> api.customer.EstimatePriceReq
+	7, // 4: api.customer.Customer.GetVerifyCode:output_type -> api.customer.GetVerifyCodeResp
+	3, // 5: api.customer.Customer.Login:output_type -> api.customer.LoginResp
+	5, // 6: api.customer.Customer.Logout:output_type -> api.customer.LogoutResp
+	1, // 7: api.customer.Customer.EstimatePrice:output_type -> api.customer.EstimatePriceResp
+	4, // [4:8] is the sub-list for method output_type
+	0, // [0:4] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
 	0, // [0:0] is the sub-list for extension extendee
 	0, // [0:0] is the sub-list for field type_name
@@ -439,7 +581,7 @@ func file_api_customer_customer_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_api_customer_customer_proto_rawDesc), len(file_api_customer_customer_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   6,
+			NumMessages:   8,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

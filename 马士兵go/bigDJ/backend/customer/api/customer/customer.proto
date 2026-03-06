@@ -21,6 +21,24 @@ service Customer {
       get: "/customer/logout"
     };
   }
+
+  rpc EstimatePrice (EstimatePriceReq) returns(EstimatePriceResp){
+    option (google.api.http) = {
+      get: "/customer/estimate-price"
+    };
+  }
+}
+message EstimatePriceReq {
+  string origin = 1;
+  string destination = 2;
+}
+
+message EstimatePriceResp {
+  int64 code = 1;
+  string message = 2;
+  string origin = 3;
+  string destination = 4;
+  int64 price = 5;
 }
 
 message LoginReq {
@@ -54,6 +72,7 @@ message GetVerifyCodeResp {
   int64 verify_code_time = 4;
   int32 verify_code_life = 5;
 }
+
 
 
 
