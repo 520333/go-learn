@@ -189,7 +189,7 @@ const file_api_verityCode_verityCode_proto_rawDesc = "" +
 	"\x05MIXED\x10\x032g\n" +
 	"\n" +
 	"VerityCode\x12Y\n" +
-	"\rGetVerityCode\x12$.api.verityCode.GetVerityCodeRequest\x1a\".api.verityCode.GetVerityCodeReplyB$Z\"customer/api/verityCode;verityCodeb\x06proto3"
+	"\rGetVerityCode\x12$.api.verityCode.GetVerityCodeRequest\x1a\".api.verityCode.GetVerityCodeReplyB\"Z driver/api/verityCode;verityCodeb\x06proto3"
 
 var (
 	file_api_verityCode_verityCode_proto_rawDescOnce sync.Once
