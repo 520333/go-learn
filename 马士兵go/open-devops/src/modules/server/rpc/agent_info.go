@@ -57,7 +57,6 @@ func (*Server) HostInfoReport(input models.AgentCollectInfo, output *string) err
 	// uid存在需要判断hash
 	if rhUidDb.Hash != hash {
 		rh.Hash = hash
-		rh.Id = rhUidDb.Id
 		updated, err := rh.Update()
 		if err != nil {
 			*output = "update_error"

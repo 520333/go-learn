@@ -39,13 +39,19 @@ type ResourceHost struct {
 	PublicIps        json.RawMessage `json:"public_ips"`
 	AvailabilityZone string          `json:"availability_zone"`
 
+	// 服务树字段 (对应刚刚新增的数据库列)
+	StreeGroup   string `json:"stree_group" xorm:"stree_group"`
+	StreeProduct string `json:"stree_product" xorm:"stree_product"`
+	StreeApp     string `json:"stree_app" xorm:"stree_app"`
+
 	// 机器采集到的字段
-	SN         string    `json:"sn" xorm:"-"`       // sn号
-	CPU        string    `json:"cpu" xorm:"cpu"`    // cpu核数
-	Mem        string    `json:"mem"`               // 内存g数
-	Disk       string    `json:"disk"`              // 磁盘g数
-	IpAddr     string    `json:"ip_addr" xorm:"-"`  // ip
-	HostName   string    `json:"hostname" xorm:"-"` // hostname
+	SN       string `json:"sn" xorm:"-"`       // sn号
+	CPU      string `json:"cpu" xorm:"cpu"`    // cpu核数
+	Mem      string `json:"mem"`               // 内存g数
+	Disk     string `json:"disk"`              // 磁盘g数
+	IpAddr   string `json:"ip_addr" xorm:"-"`  // ip
+	HostName string `json:"hostname" xorm:"-"` // hostname
+
 	CreateTime time.Time `json:"create_time" xorm:"create_time created"`
 	UpdateTime time.Time `json:"update_time" xorm:"update_time updated"`
 }
@@ -81,8 +87,7 @@ func (rh *ResourceHost) AddOne() error {
 }
 
 func (rh *ResourceHost) Update() (bool, error) {
-	rowAffected, err := DB["stree"].ID(rh.Id).Update(rh)
-	//rowAffected, err := DB["stree"].Update(rh)
+	rowAffected, err := DB["stree"].Update(rh)
 	if err != nil {
 		return false, err
 	}

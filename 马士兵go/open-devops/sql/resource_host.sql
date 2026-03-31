@@ -22,6 +22,10 @@ CREATE TABLE `resource_host` (
     `cpu` varchar(20) NOT NULL COMMENT 'cpu核数',
     `mem` varchar(20) NOT NULL COMMENT '内存g数',
     `disk` varchar(20) NOT NULL COMMENT '磁盘g数',
+    -- 服务树字段
+    `stree_group` varchar(100) NOT NULL COMMENT '服务树g字段',
+    `stree_product` varchar(100) NOT NULL COMMENT '服务树p字段',
+    `stree_app` varchar(100) NOT NULL COMMENT '服务树a字段',
     `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`),

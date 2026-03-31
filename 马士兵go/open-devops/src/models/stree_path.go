@@ -352,6 +352,57 @@ func StreePathQuery(req *common.NodeCommonReq, logger log.Logger) (res []string)
 		}
 		sort.Strings(res)
 		return
+	case 4:
+		// 直接查询g.p.a是否存在
+		gpas := strings.Split(req.Node, ".")
+		g, p, a := gpas[0], gpas[1], gpas[2]
+		nodeG := &StreePath{
+			Level:    1,
+			Path:     "0",
+			NodeName: g,
+		}
+		dbG, err := nodeG.GetOne()
+		if err != nil {
+			level.Error(logger).Log("msg", "query_g_failed", "path", req.Node, "err", err)
+			return
+		}
+		if dbG == nil {
+			// 说明要查询的g不存在
+			return
+		}
+		pathP := fmt.Sprintf("/%d", dbG.Id)
+		nodeP := &StreePath{
+			Level:    2,
+			Path:     pathP,
+			NodeName: p,
+		}
+		dbP, err := nodeP.GetOne()
+		if err != nil {
+			level.Error(logger).Log("msg", "query_g_failed", "path", req.Node, "err", err)
+			return
+		}
+		if dbP == nil {
+			// 说明要查询的p不存在
+			return
+		}
+		pathA := fmt.Sprintf("%s/%d", dbP.Path, dbP.Id)
+
+		nodeA := &StreePath{
+			Level:    3,
+			Path:     pathA,
+			NodeName: a,
+		}
+		dbA, err := nodeA.GetOne()
+		if err != nil {
+			level.Error(logger).Log("msg", "query_a_failed", "path", req.Node, "err", err)
+			return
+		}
+		if dbA == nil {
+			// 说明要查询的p不存在
+			return
+		}
+		res = append(res, req.Node)
+		return
 	}
 	return
 
