@@ -3,22 +3,19 @@ package main
 import (
 	"context"
 	"fmt"
-	"open-devops/src/models"
-	"open-devops/src/modules/server/config"
-	"open-devops/src/modules/server/rpc"
-	"open-devops/src/modules/server/web"
+	"open-devops/src/modules/agent/config"
+	"open-devops/src/modules/agent/info"
+	"open-devops/src/modules/agent/rpc"
 	"os"
 	"os/signal"
 	"path/filepath"
 	"syscall"
 	"time"
 
-	"github.com/oklog/run"
-
 	"github.com/alecthomas/kingpin/v2"
 	"github.com/go-kit/log"
 	"github.com/go-kit/log/level"
-	_ "github.com/go-sql-driver/mysql"
+	"github.com/oklog/run"
 	"github.com/prometheus/common/promslog"
 	promlogflag "github.com/prometheus/common/promslog/flag"
 	"github.com/prometheus/common/version"
@@ -26,14 +23,14 @@ import (
 
 var (
 	// 命令行解析
-	app = kingpin.New(filepath.Base(os.Args[0]), "The open-devops-server")
+	app = kingpin.New(filepath.Base(os.Args[0]), "The open-devops-agent")
 	// 指定配置文件
-	configFile = app.Flag("config.file", "open-devops-server configuration file path").Short('c').Default("open-devops-server.yml").String()
+	configFile = app.Flag("config.file", "open-devops-agent configuration file path").Short('c').Default("open-devops-agent.yml").String()
 )
 
 func main() {
 	// 版本信息
-	app.Version(version.Print("open-devops-server"))
+	app.Version(version.Print("open-devops-agent"))
 	// 帮助信息
 	app.HelpFlag.Short('h')
 
@@ -42,7 +39,6 @@ func main() {
 	promlogflag.AddFlags(app, &promlogConfig)
 	// 强制解析
 	kingpin.MustParse(app.Parse(os.Args[1:]))
-	//fmt.Println(*configFile)
 	// 设置logger
 	var logger log.Logger
 	logger = func(config *promslog.Config) log.Logger {
@@ -69,34 +65,29 @@ func main() {
 		l = level.NewFilter(l, le)
 		l = log.With(l, "ts", log.TimestampFormat(
 			func() time.Time { return time.Now().Local() },
-			"2006-01-02T15:04:05.000Z07:00",
+			"2006-01-02 15:04:05.000 ",
 		), "caller", log.DefaultCaller)
 		return l
 	}(&promlogConfig)
-	level.Info(logger).Log("msg", "using config.file", "file.path", *configFile)
+
+	level.Debug(logger).Log("debug.msg", "using config.file", "file.path", *configFile)
 
 	sConfig, err := config.LoadFile(*configFile)
 	if err != nil {
 		level.Error(logger).Log("msg", "config.LoadFile Error,Exiting ...", "error", err)
 		return
 	}
-	level.Info(logger).Log("msg", "load.config.success", "file.path", *configFile, "content.mysql.num", len(sConfig.MysqlS))
-	// 初始化mysql
-	models.InitMySQL(sConfig.MysqlS)
-	level.Info(logger).Log("msg", "load.mysql.success", "db.num", len(models.DB))
-	// TODO 本地测试node的添加，后续需要删掉
-	//models.StreePathAddTest(logger)
-	//models.StreePathQueryTest1(logger)
-	//models.StreePathQueryTest2(logger)
-	//models.StreePathQueryTest3(logger)
-	//models.StreePathDelTest(logger)
-	//models.AddResourceHostTest()
+	level.Info(logger).Log("msg", "load.config.success", "file.path", *configFile, "rpc_server_addr", sConfig.RpcServerAddr)
 
+	// 初始化rpc client
+	rpcCli := rpc.InitRpcCli(sConfig.RpcServerAddr, logger)
+	rpcCli.Ping()
 	// 编排开始
 	var g run.Group
 	ctxAll, cancelAll := context.WithCancel(context.Background())
 	fmt.Println(ctxAll)
 	{
+
 		// 处理信号退出的handler
 		term := make(chan os.Signal, 1)
 		signal.Notify(term, os.Interrupt, syscall.SIGTERM)
@@ -120,42 +111,14 @@ func main() {
 	}
 
 	{
-		// rpc server
+		// 采集基础信息的
 		g.Add(func() error {
-			errChan := make(chan error, 1)
-			go func() {
-				errChan <- rpc.Start(sConfig.RpcAddr, logger)
-			}()
-			select {
-			case err := <-errChan:
-				level.Error(logger).Log("msg", "rpc server error", "err", err)
+			err := info.TickerInfoCollectAndReport(rpcCli, ctxAll, logger)
+			if err != nil {
+				level.Error(logger).Log("msg", "TickerInfoCollectAndReport.error", "err", err)
 				return err
-			case <-ctxAll.Done():
-				level.Info(logger).Log("msg", "receive_quit_signal_rpc_server_exit")
-				return nil
 			}
-
-		}, func(err error) {
-			cancelAll()
-		},
-		)
-	}
-
-	{
-		// http server
-		g.Add(func() error {
-			errChan := make(chan error, 1)
-			go func() {
-				errChan <- web.StartGin(sConfig.HttpAddr, logger)
-			}()
-			select {
-			case err := <-errChan:
-				level.Error(logger).Log("msg", "web server error", "err", err)
-				return err
-			case <-ctxAll.Done():
-				level.Info(logger).Log("msg", "receive_quit_signal_web_server_exit")
-				return nil
-			}
+			return err
 
 		}, func(err error) {
 			cancelAll()
@@ -163,4 +126,5 @@ func main() {
 		)
 	}
 	g.Run()
+
 }

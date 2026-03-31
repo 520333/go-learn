@@ -1,0 +1,9 @@
+mysql_s:
+  - name: stree
+    addr: root:123456@tcp(192.168.50.100:3306)/open_devops?charset=utf8mb3&parseTime=True&loc=Local
+    max: 128
+    idel: 16
+    debug: false
+rpc_addr: :8080
+
+http_addr: :8082
