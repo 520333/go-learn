@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"open-devops/src/models"
+	"open-devops/src/modules/server/cloudsync"
 	"open-devops/src/modules/server/config"
 	"open-devops/src/modules/server/rpc"
 	"open-devops/src/modules/server/web"
@@ -161,6 +162,24 @@ func main() {
 			cancelAll()
 		},
 		)
+	}
+	{
+		// 公有云同步
+		if sConfig.PCC.Enable {
+			cloudsync.Init(logger)
+			g.Add(func() error {
+				err := cloudsync.CloudSyncManager(ctxAll, logger)
+				if err != nil {
+					level.Error(logger).Log("msg", "cloudsync.CloudSyncManager.error", "err", err)
+
+				}
+				return err
+
+			}, func(err error) {
+				cancelAll()
+			},
+			)
+		}
 	}
 	g.Run()
 }

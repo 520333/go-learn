@@ -4,6 +4,8 @@ import (
 	"crypto/md5"
 	"encoding/hex"
 	"encoding/json"
+	"fmt"
+	"strings"
 	"time"
 )
 
@@ -95,4 +97,42 @@ func (rh *ResourceHost) Update() (bool, error) {
 		return true, nil
 	}
 	return false, nil
+}
+func GetHostUidAndHash() (map[string]string, error) {
+	var objs []ResourceHost
+	err := DB["stree"].Cols("uid", "hash").Find(&objs)
+	if err != nil {
+		return nil, err
+	}
+	m := make(map[string]string)
+	for _, h := range objs {
+		m[h.Uid] = h.Hash
+	}
+	return m, nil
+}
+
+func (rh *ResourceHost) UpdateByUid(uid string) (bool, error) {
+	rowAffected, err := DB["stree"].Where("uid=?", uid).Update(rh)
+	if err != nil {
+		return false, err
+	}
+	if rowAffected > 0 {
+		return true, nil
+	}
+	return false, err
+}
+
+func BatchDeleteResource(tableName string, idKey string, ids []string) (int64, error) {
+	rawSql := fmt.Sprintf(`delete from %s where %s in (%s)`,
+		tableName,
+		idKey,
+		strings.Join(ids, ","),
+	)
+	res, err := DB["stree"].Exec(rawSql)
+	if err != nil {
+		return 0, err
+	}
+	rowAffected, err := res.RowsAffected()
+	return rowAffected, err
+
 }
