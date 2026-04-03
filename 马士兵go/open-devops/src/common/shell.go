@@ -11,11 +11,6 @@ import (
 	"time"
 )
 
-func GetHostName() string {
-	name, _ := os.Hostname()
-	return name
-}
-
 func GetLocalIp() string {
 
 	conn, err := net.Dial("udp", "8.8.8.8:53")
@@ -27,6 +22,11 @@ func GetLocalIp() string {
 	conn.Close()
 	return localIp
 
+}
+
+func GetHostName() string {
+	name, _ := os.Hostname()
+	return name
 }
 
 func ShellCommand(shellStr string) (string, error) {

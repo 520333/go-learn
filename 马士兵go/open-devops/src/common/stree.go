@@ -1,6 +1,7 @@
 package common
 
-// NodeCommonReq 操作树结构的通用对象
+// 操作树结构的通用对象 :公用的意思是 增删改查都用这个
+// 各个字段在每个 verb 是不一样
 // 新增 删除 修改
 type NodeCommonReq struct {
 	Node        string `json:"node"`         // 服务节点名称 ：可以一段式 也可以是两段式 inf inf.mon

@@ -1,18 +1,24 @@
 package web
 
 import (
-	"net/http"
-	"time"
-
 	"github.com/gin-gonic/gin"
 	"github.com/go-kit/log"
 	"github.com/go-kit/log/level"
+	"github.com/zsais/go-gin-prometheus"
+	"net/http"
+	"time"
 )
 
 func StartGin(httpAddr string, logger log.Logger) error {
 	r := gin.New()
 
+	gin.SetMode(gin.ReleaseMode)
+	gin.DisableConsoleColor()
+
+	p := ginprometheus.NewPrometheus("gin")
+	p.Use(r)
 	r.Use(gin.Logger())
+
 	m := make(map[string]interface{})
 	m["logger"] = logger
 	r.Use(ConfigMiddleware(m))

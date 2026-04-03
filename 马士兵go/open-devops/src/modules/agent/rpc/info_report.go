@@ -1,9 +1,8 @@
 package rpc
 
 import (
-	"open-devops/src/models"
-
 	"github.com/go-kit/log/level"
+	"open-devops/src/models"
 )
 
 func (r *RpcCli) HostInfoReport(info models.AgentCollectInfo) {

@@ -2,16 +2,15 @@ package rpc
 
 import (
 	"bufio"
+	"github.com/go-kit/log"
+	"github.com/go-kit/log/level"
+	"github.com/toolkits/pkg/net/gobrpc"
+	"github.com/ugorji/go/codec"
 	"io"
 	"net"
 	"net/rpc"
 	"reflect"
 	"time"
-
-	"github.com/go-kit/log"
-	"github.com/go-kit/log/level"
-	"github.com/toolkits/pkg/net/gobrpc"
-	"github.com/ugorji/go/codec"
 )
 
 type RpcCli struct {
@@ -28,7 +27,7 @@ func InitRpcCli(serverAddr string, logger log.Logger) *RpcCli {
 	return r
 }
 
-// GetCli 如果cli存在就返回，如果不存在就new一个，复用
+// 如果cli存在就返回，如果不存在就new一个，复用
 func (r *RpcCli) GetCli() error {
 	if r.Cli != nil {
 		return nil
@@ -56,5 +55,6 @@ func (r *RpcCli) GetCli() error {
 func (r *RpcCli) CloseCli() {
 	if r.Cli != nil {
 		r.Cli.Close()
+		r.Cli = nil
 	}
 }

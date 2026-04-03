@@ -5,13 +5,12 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
+	"github.com/go-kit/log"
+	"github.com/go-kit/log/level"
 	"math/rand"
 	"open-devops/src/common"
 	"open-devops/src/models"
 	"time"
-
-	"github.com/go-kit/log"
-	"github.com/go-kit/log/level"
 )
 
 type HostSync struct {
@@ -78,7 +77,6 @@ func (this *HostSync) sync() {
 		}
 		suAddNum++
 	}
-
 	// 修改
 	for _, h := range toModSet {
 		isUpdate, err := h.UpdateByUid(h.Uid)
@@ -111,6 +109,7 @@ func (this *HostSync) sync() {
 }
 
 func genMockResourceHost() []models.ResourceHost {
+	rand.Seed(time.Now().UnixNano())
 	// g.p.a标签
 	randGs := []string{"inf", "ads", "web", "sys"}
 	randPs := []string{"monitor", "cicd", "k8s", "mq"}
@@ -134,12 +133,14 @@ func genMockResourceHost() []models.ResourceHost {
 	// 目的是4选1 返回0-3的数组
 	// 比如8-15 15-8 +8
 	frn := func(n int) int {
+		rand.Seed(time.Now().UnixNano())
 		return rand.Intn(n)
 	}
 
 	// 每次host数量 5-20个
 	frNum := func() int {
-		return int(rand.Int63n(60-25) + 25)
+		rand.Seed(time.Now().UnixNano())
+		return int(rand.Int63n(180-65) + 65)
 	}
 	hs := make([]models.ResourceHost, 0)
 	for i := 0; i < frNum(); i++ {

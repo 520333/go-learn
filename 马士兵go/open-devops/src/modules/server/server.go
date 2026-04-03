@@ -2,24 +2,28 @@ package main
 
 import (
 	"context"
-	"fmt"
+	"math/rand"
 	"open-devops/src/models"
 	"open-devops/src/modules/server/cloudsync"
 	"open-devops/src/modules/server/config"
+	mem_index "open-devops/src/modules/server/mem-index"
+	"open-devops/src/modules/server/metric"
 	"open-devops/src/modules/server/rpc"
+	"open-devops/src/modules/server/statistics"
+	"open-devops/src/modules/server/task"
 	"open-devops/src/modules/server/web"
+	"open-devops/src/modules/server/xprober"
 	"os"
 	"os/signal"
 	"path/filepath"
 	"syscall"
 	"time"
 
-	"github.com/oklog/run"
-
 	"github.com/alecthomas/kingpin/v2"
 	"github.com/go-kit/log"
 	"github.com/go-kit/log/level"
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/oklog/run"
 	"github.com/prometheus/common/promslog"
 	promlogflag "github.com/prometheus/common/promslog/flag"
 	"github.com/prometheus/common/version"
@@ -43,7 +47,6 @@ func main() {
 	promlogflag.AddFlags(app, &promlogConfig)
 	// 强制解析
 	kingpin.MustParse(app.Parse(os.Args[1:]))
-	//fmt.Println(*configFile)
 	// 设置logger
 	var logger log.Logger
 	logger = func(config *promslog.Config) log.Logger {
@@ -70,11 +73,12 @@ func main() {
 		l = level.NewFilter(l, le)
 		l = log.With(l, "ts", log.TimestampFormat(
 			func() time.Time { return time.Now().Local() },
-			"2006-01-02T15:04:05.000Z07:00",
+			"2006-01-02 15:04:05.000 ",
 		), "caller", log.DefaultCaller)
 		return l
 	}(&promlogConfig)
-	level.Info(logger).Log("msg", "using config.file", "file.path", *configFile)
+
+	level.Debug(logger).Log("debug.msg", "using config.file", "file.path", *configFile)
 
 	sConfig, err := config.LoadFile(*configFile)
 	if err != nil {
@@ -82,22 +86,35 @@ func main() {
 		return
 	}
 	level.Info(logger).Log("msg", "load.config.success", "file.path", *configFile, "content.mysql.num", len(sConfig.MysqlS))
+
+	rand.Seed(time.Now().UnixNano())
 	// 初始化mysql
 	models.InitMySQL(sConfig.MysqlS)
+
+	// 初始化内存倒排索引
+	mem_index.Init(logger, sConfig.IndexModules)
 	level.Info(logger).Log("msg", "load.mysql.success", "db.num", len(models.DB))
-	// TODO 本地测试node的添加，后续需要删掉
+	//models.AddResourceHostTest()
 	//models.StreePathAddTest(logger)
 	//models.StreePathQueryTest1(logger)
 	//models.StreePathQueryTest2(logger)
 	//models.StreePathQueryTest3(logger)
+	//time.Sleep(10 * time.Second)
 	//models.StreePathDelTest(logger)
-	//models.AddResourceHostTest()
+	//models.StreePathQueryTest1(logger)
+
+	// 注册stree 相关的metrics
+	metric.NewMetrics()
+	// 注册xprober相关的metrics
+	xprober.NewMetrics()
+	// 初始化task的本地cache map
+	task.TaskCacheInit()
 
 	// 编排开始
 	var g run.Group
 	ctxAll, cancelAll := context.WithCancel(context.Background())
-	fmt.Println(ctxAll)
 	{
+
 		// 处理信号退出的handler
 		term := make(chan os.Signal, 1)
 		signal.Notify(term, os.Interrupt, syscall.SIGTERM)
@@ -119,7 +136,6 @@ func main() {
 			},
 		)
 	}
-
 	{
 		// rpc server
 		g.Add(func() error {
@@ -163,10 +179,12 @@ func main() {
 		},
 		)
 	}
+
 	{
 		// 公有云同步
 		if sConfig.PCC.Enable {
 			cloudsync.Init(logger)
+
 			g.Add(func() error {
 				err := cloudsync.CloudSyncManager(ctxAll, logger)
 				if err != nil {
@@ -181,5 +199,80 @@ func main() {
 			)
 		}
 	}
+
+	{
+		// 刷新倒排索引
+		cloudsync.Init(logger)
+
+		g.Add(func() error {
+			err := mem_index.RevertedIndexSyncManager(ctxAll, logger)
+			if err != nil {
+				level.Error(logger).Log("msg", "mem_index.RevertedIndexSyncManager.error", "err", err)
+
+			}
+			return err
+
+		}, func(err error) {
+			cancelAll()
+		},
+		)
+	}
+	{
+		// 统计资源分布
+
+		g.Add(func() error {
+			err := statistics.TreeNodeStatisticsManager(ctxAll, logger)
+			if err != nil {
+				level.Error(logger).Log("msg", "statistics.TreeNodeStatisticsManager.error", "err", err)
+
+			}
+			return err
+
+		}, func(err error) {
+			cancelAll()
+		},
+		)
+	}
+	{
+		// 任务执行同步任务
+
+		g.Add(func() error {
+			err := task.SyncTaskManager(ctxAll, logger)
+			if err != nil {
+				level.Error(logger).Log("msg", "task.SyncTaskManager.error", "err", err)
+
+			}
+			return err
+
+		}, func(err error) {
+			cancelAll()
+		},
+		)
+	}
+
+	{
+		// 刷新探测目标池的任务
+		tfm := xprober.NewTargetFlushManager(logger, *configFile)
+		// target flush manager
+		g.Add(func() error {
+			err := tfm.Run(ctxAll)
+			return err
+		}, func(err error) {
+			cancelAll()
+		})
+	}
+
+	{
+
+		// data proceess.
+		g.Add(func() error {
+			err := xprober.DataProcess(ctxAll, logger)
+			return err
+		}, func(err error) {
+			cancelAll()
+		})
+	}
+
 	g.Run()
+
 }

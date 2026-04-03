@@ -2,11 +2,10 @@ package models
 
 import (
 	"fmt"
-	"open-devops/src/common"
-	"strings"
-
 	"github.com/go-kit/log"
 	"github.com/go-kit/log/level"
+	"open-devops/src/common"
+	"strings"
 )
 
 var availableResources = map[string]struct{}{

@@ -2,18 +2,17 @@ package web
 
 import (
 	"fmt"
+	"github.com/gin-gonic/gin"
+	"github.com/go-kit/log"
 	"open-devops/src/common"
 	"open-devops/src/models"
 	"strings"
-
-	"github.com/gin-gonic/gin"
-	"github.com/go-kit/log"
 )
 
 func NodePathAdd(c *gin.Context) {
 
 	var inputs common.NodeCommonReq
-	if err := c.Bind(&inputs); err != nil {
+	if err := c.BindJSON(&inputs); err != nil {
 		common.JSONR(c, 400, err)
 		return
 	}

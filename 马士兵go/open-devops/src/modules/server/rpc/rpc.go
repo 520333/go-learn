@@ -2,17 +2,15 @@ package rpc
 
 import (
 	"bufio"
-	"reflect"
-
 	"github.com/go-kit/log"
 	"github.com/go-kit/log/level"
+	"reflect"
 
+	"github.com/ugorji/go/codec"
 	"io"
 	"net"
 	"net/rpc"
 	"time"
-
-	"github.com/ugorji/go/codec"
 )
 
 type Server int

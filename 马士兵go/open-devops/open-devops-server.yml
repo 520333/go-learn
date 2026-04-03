@@ -9,4 +9,15 @@ rpc_addr: :8080
 http_addr: :8082
 
 public_cloud_sync:
-  enable: true
+#  enable: true
+  enable: false
+#  aliyun:
+#    access_key: "你的阿里云AK"
+#    secret_key: "你的阿里云SK"
+#    region: "cn-hangzhou"
+
+index_modules:
+  - resource_name: resource_host
+    enable: true
+    modulus: 0
+    num: 0

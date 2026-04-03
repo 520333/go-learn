@@ -3,13 +3,10 @@ package rpc
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"open-devops/src/models"
 )
 
 func (*Server) HostInfoReport(input models.AgentCollectInfo, output *string) error {
-	log.Printf("[HostInfoReport][input:%+v]", input)
-	*output = "i know 了"
 
 	// 统一字段
 
@@ -68,6 +65,7 @@ func (*Server) HostInfoReport(input models.AgentCollectInfo, output *string) err
 		}
 	}
 	// uid存在并且hash相等 啥都不需要做
+	//log.Printf("[host.info.same][HostInfoReport][input:%+v]", input)
 
 	return nil
 }

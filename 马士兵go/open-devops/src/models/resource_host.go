@@ -9,26 +9,28 @@ import (
 	"time"
 )
 
-// AgentCollectInfo 机器shell采集到的字段
+// 机器上shell 采集到的字段
+
 type AgentCollectInfo struct {
 	SN       string `json:"sn"`       // sn号
-	CPU      string `json:"cpu"`      // cpu核心数
+	CPU      string `json:"cpu"`      // cpu核数
 	Mem      string `json:"mem"`      // 内存g数
 	Disk     string `json:"disk"`     // 磁盘g数
 	IpAddr   string `json:"ip_addr"`  // ip
 	HostName string `json:"hostname"` // hostname
+
 }
 
 type ResourceHost struct {
 	// 公共字段
 	Id         int64           `json:"id"`
-	Uid        string          `json:"uid"`
+	Uid        string          `json:"uid"` // uid这个字段意思是肯定不会变的id值，
 	Hash       string          `json:"hash"`
 	Name       string          `json:"name"`
 	PrivateIps json.RawMessage `json:"private_ips"`
 	Tags       json.RawMessage `json:"tags"`
-
 	// 公有云字段
+
 	CloudProvider    string          `json:"cloud_provider"`
 	ChargingMode     string          `json:"charging_mode"`
 	Region           string          `json:"region"`
@@ -41,24 +43,21 @@ type ResourceHost struct {
 	PublicIps        json.RawMessage `json:"public_ips"`
 	AvailabilityZone string          `json:"availability_zone"`
 
-	// 服务树字段 (对应刚刚新增的数据库列)
-	StreeGroup   string `json:"stree_group" xorm:"stree_group"`
-	StreeProduct string `json:"stree_product" xorm:"stree_product"`
-	StreeApp     string `json:"stree_app" xorm:"stree_app"`
-
 	// 机器采集到的字段
-	SN       string `json:"sn" xorm:"-"`       // sn号
-	CPU      string `json:"cpu" xorm:"cpu"`    // cpu核数
-	Mem      string `json:"mem"`               // 内存g数
-	Disk     string `json:"disk"`              // 磁盘g数
-	IpAddr   string `json:"ip_addr" xorm:"-"`  // ip
-	HostName string `json:"hostname" xorm:"-"` // hostname
-
-	CreateTime time.Time `json:"create_time" xorm:"create_time created"`
-	UpdateTime time.Time `json:"update_time" xorm:"update_time updated"`
+	SN           string    `json:"sn" xorm:"-"`       // sn号
+	CPU          string    `json:"cpu" xorm:"cpu"`    // cpu核数
+	Mem          string    `json:"mem"`               // 内存g数
+	Disk         string    `json:"disk"`              // 磁盘g数
+	IpAddr       string    `json:"ip_addr" xorm:"-"`  // ip
+	HostName     string    `json:"hostname" xorm:"-"` // hostname
+	CreateTime   time.Time `json:"create_time" xorm:"create_time created"`
+	UpdateTime   time.Time `json:"update_time" xorm:"update_time updated"`
+	StreeGroup   string    `json:"stree_group"`
+	StreeProduct string    `json:"stree_product"`
+	StreeApp     string    `json:"stree_app"`
 }
 
-// GenHash 是判断这个资源是否发生变化的函数
+// 是判断这个资源是否发生变化的函数
 func (rh *ResourceHost) GenHash() string {
 	h := md5.New()
 	h.Write([]byte(rh.SN))
@@ -98,6 +97,7 @@ func (rh *ResourceHost) Update() (bool, error) {
 	}
 	return false, nil
 }
+
 func GetHostUidAndHash() (map[string]string, error) {
 	var objs []ResourceHost
 	err := DB["stree"].Cols("uid", "hash").Find(&objs)
@@ -135,4 +135,9 @@ func BatchDeleteResource(tableName string, idKey string, ids []string) (int64, e
 	rowAffected, err := res.RowsAffected()
 	return rowAffected, err
 
+}
+
+func (rh *ResourceHost) Count() int64 {
+	total, _ := DB["stree"].Where("id>0").Count(rh)
+	return total
 }

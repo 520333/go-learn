@@ -1,9 +1,8 @@
 package web
 
 import (
-	"time"
-
 	"github.com/gin-gonic/gin"
+	"time"
 )
 
 func configRoutes(r *gin.Engine) {
@@ -17,6 +16,16 @@ func configRoutes(r *gin.Engine) {
 		api.GET("/node-path", NodePathQuery)
 		api.POST("/resource-mount", ResourceMount)
 		api.DELETE("/resource-unmount", ResourceUnMount)
+		api.POST("/resource-query", ResourceQuery)
+		api.POST("/resource-distribution", GetLabelDistribution)
+		api.GET("/resource-group", ResourceGroup)
+		api.POST("/log-job", LogJobAdd)
+		api.GET("/log-job", LogJobGets)
+
+		api.POST("/task", TaskAdd)
+		api.GET("/task", TaskGets)
+		api.POST("/kill-task", TaskKill)
+
 	}
 }
 

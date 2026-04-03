@@ -31,18 +31,18 @@ func (rh *ResourceHostTest) GetOne() (*ResourceHostTest, error) {
 }
 
 func AddResourceHostTest() {
-	m := map[string]string{"region": "bj", "app": "live"}
-	ips := []string{"1.1.1.1", "2.2.2.2"}
-	mRaw, _ := json.Marshal(m)
-	ipRaw, _ := json.Marshal(ips)
+	//m := map[string]string{"region": "bj", "app": "live"}
+	//ips := []string{"1.1.1.1", "2.2.2.2"}
+	////mRaw, _ := json.Marshal(m)
+	////ipRaw, _ := json.Marshal(ips)
 
-	rh := ResourceHostTest{
-		Name:       "abc",
-		PrivateIps: ipRaw,
-		Tags:       mRaw,
-	}
-	err := rh.AddOne()
-	fmt.Println(err)
+	//rh := ResourceHostTest{
+	//	Name:       "abc",
+	//	PrivateIps: ipRaw,
+	//	Tags:       mRaw,
+	//}
+	//err := rh.AddOne()
+	//fmt.Println(err)
 	rhNew := ResourceHostTest{
 		Name: "abc",
 	}

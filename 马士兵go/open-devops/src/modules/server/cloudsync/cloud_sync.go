@@ -2,13 +2,11 @@ package cloudsync
 
 import (
 	"context"
-	"sync"
-	"time"
-
 	"github.com/go-kit/log"
 	"github.com/go-kit/log/level"
-
 	"open-devops/src/common"
+	"sync"
+	"time"
 )
 
 type CloudResource interface {
@@ -21,7 +19,7 @@ type CloudAlibaba struct {
 type CloudTencent struct {
 }
 
-// 接口容器
+// 接口容器 ，承载的是多个资源的同步接口
 var (
 	cloudResourceContainer = make(map[string]CloudResource)
 )
@@ -39,11 +37,11 @@ func Init(logger log.Logger) {
 	cRegister(common.RESOURCE_HOST, hs)
 }
 
-// CloudSyncManager 管理接口容器的管理端
+// 管理接口容器的管理端
 func CloudSyncManager(ctx context.Context, logger log.Logger) error {
 
 	level.Info(logger).Log("msg", "CloudSyncManager.start", "resource_num", len(cloudResourceContainer))
-	ticker := time.NewTicker(5 * time.Second)
+	ticker := time.NewTicker(15 * time.Second)
 	doCloudSync(logger)
 	defer ticker.Stop()
 	for {
